@@ -2,6 +2,9 @@
 #class based on the dpm wiki example
 #
 class dpm::headnode (
+  $configure_vos = $dpm::params::configure_vos,
+  $configure_gridmap = $dpm::params::configure_gridmap,
+  
   #cluster options
   $disk_nodes =  $dpm::params::disk_nodes,
   $localdomain =  $dpm::params::localdomain,
@@ -42,17 +45,20 @@ class dpm::headnode (
     Class[Lcgdm::Dpm::Service] -> Class[Dmlite::Plugins::Adapter::Install]
     Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Srm]
     Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Gridftp]
-    Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Dav]
     Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Srm]
     Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Gridftp]
-    Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Dav]
+
+    if($webdav_enabled){
+      Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Dav]
+      Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Dav]
+    }
+
     
 
     #
     # MySQL server setup - disable if it is not local
     #
     class{"mysql::server":
-#      service_enabled => true,
       root_password   => "${mysql_root_pass}"
     }
 
@@ -109,21 +115,23 @@ class dpm::headnode (
     # VOMS configuration (same VOs as above): implements all the voms classes in the vo list
     #
     #WARN!!!!: in 3.4 collect has been renamed "map"
-    class{ $volist.collect |$vo| {"voms::$vo"}:}
-    
-    
-    #Create the users: no pool accounts just one user per group
-    ensure_resource('user', values($groupmap), {ensure => present})
-
-    #setup the gridmap file
-    lcgdm::mkgridmap::file {"lcgdm-mkgridmap":
-      configfile   => "/etc/lcgdm-mkgridmap.conf",
-      localmapfile => "/etc/lcgdm-mapfile-local",
-      logfile      => "/var/log/lcgdm-mkgridmap.log",
-      groupmap     => $groupmap,
-      localmap     => {"nobody" => "nogroup"}
+    if($configure_vos){
+      class{ $volist.map |$vo| {"voms::$vo"}:}
+      #Create the users: no pool accounts just one user per group
+      ensure_resource('user', values($groupmap), {ensure => present})
     }
+    
 
+    if($configure_gridmap){
+      #setup the gridmap file
+      lcgdm::mkgridmap::file {"lcgdm-mkgridmap":
+        configfile   => "/etc/lcgdm-mkgridmap.conf",
+        localmapfile => "/etc/lcgdm-mapfile-local",
+        logfile      => "/var/log/lcgdm-mkgridmap.log",
+        groupmap     => $groupmap,
+        localmap     => {"nobody" => "nogroup"}
+      }
+    }
 
     #
     # dmlite configuration.
@@ -137,7 +145,9 @@ class dpm::headnode (
     #
     # Frontends based on dmlite.
     #
-    class{"dmlite::dav":}
+    if($webdav_enabled){
+      class{"dmlite::dav":}
+    }
     class{"dmlite::srm":}
     class{"dmlite::gridftp":
       dpmhost => "${::fqdn}"
@@ -159,6 +169,7 @@ class dpm::headnode (
       nodetype              => [ 'head' ],
       domain                => "${localdomain}",
       dpm_xrootd_debug      => $debug,
-      dpm_xrootd_sharedkey  => "${xrootd_sharedkey}"
+      dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
+      xrootd_use_voms	=> false
     }
 }

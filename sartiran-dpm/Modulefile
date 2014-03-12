@@ -3,9 +3,9 @@ version '0.0.1'
 source 'UNKNOWN'
 author 'sartiran'
 license 'Apache License, Version 2.0'
-summary 'Wrapping up dpm configuration puppet modules'
-description 'Wrapping up dpm configuration puppet modules'
-project_page 'UNKNOWN'
+summary 'Just a wrapper for the DPM modules of the lcgdm team'
+description 'Just a wrapper for the DPM modules of the lcgdm team'
+project_page 'https://github.com/sartiran/puppet'
 
 ## Add dependencies, if any:
 # dependency 'username/name', '>= 1.2.0'

@@ -1,5 +1,7 @@
 class dpm::params {
-
+  $configure_vos =  hiera("dpm::params::configure_vos", false)
+  $configure_gridmap =  hiera("dpm::params::configure_gridmap", false)
+  
   #cluster options
   $headnode_fqdn =  hiera("dpm::params::headnode_fqdn", "${::fqdn}")
   $disk_nodes =  hiera("dpm::params::disk_nodes","")

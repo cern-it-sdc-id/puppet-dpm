@@ -2,6 +2,9 @@
 #class based on the dpm wiki example
 #
 class dpm::disknode (
+  $configure_vos = $dpm::params::configure_vos,
+  $configure_gridmap = $dpm::params::configure_gridmap,
+  
   #cluster options
   $headnode_fqdn =  $dpm::params::headnode_fqdn,
   $disk_nodes =  $dpm::params::disk_nodes,
@@ -80,25 +83,25 @@ class dpm::disknode (
       component => "DPM",
       proto     => "rfio gsiftp http https xroot"
     }
-    
-    #
-    # VOMS configuration (same VOs as above): implements all the voms classes in the vo list
-    #
-    #WARN!!!!: in 3.4 collect has been renamed "map"
-    class{ $volist.collect |$vo| {"voms::$vo"}:}
-    
-    
-    #Create the users: no pool accounts just one user per group
-    ensure_resource('user', values($groupmap), {ensure => present})
 
-    #setup the gridmap file
-    lcgdm::mkgridmap::file {"lcgdm-mkgridmap":
-      configfile   => "/etc/lcgdm-mkgridmap.conf",
-      localmapfile => "/etc/lcgdm-mapfile-local",
-      logfile      => "/var/log/lcgdm-mkgridmap.log",
-      groupmap     => $groupmap,
-      localmap     => {"nobody" => "nogroup"}
+    if($configure_vos){
+      class{ $volist.map |$vo| {"voms::$vo"}:}
+      #Create the users: no pool accounts just one user per group
+      ensure_resource('user', values($groupmap), {ensure => present})
     }
+
+
+    if($configure_gridmap){
+      #setup the gridmap file
+      lcgdm::mkgridmap::file {"lcgdm-mkgridmap":
+        configfile   => "/etc/lcgdm-mkgridmap.conf",
+        localmapfile => "/etc/lcgdm-mapfile-local",
+        logfile      => "/var/log/lcgdm-mkgridmap.log",
+        groupmap     => $groupmap,
+        localmap     => {"nobody" => "nogroup"}
+      }
+    }
+    
     
     #
     # dmlite plugin configuration.
