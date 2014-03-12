@@ -2,32 +2,33 @@
 #class based on the dpm wiki example
 #
 class dpm::disknode (
-  $configure_vos = $dpm::params::configure_vos,
-  $configure_gridmap = $dpm::params::configure_gridmap,
-  
+  $configure_vos =  $dpm::params::configure_vos,
+  $configure_gridmap =  $dpm::params::configure_gridmap,
+
   #cluster options
   $headnode_fqdn =  $dpm::params::headnode_fqdn,
   $disk_nodes =  $dpm::params::disk_nodes,
   $localdomain =  $dpm::params::localdomain,
   $webdav_enabled = $dpm::params::webdav_enabled,
-  
+
   #dpmmgr user options
-  $dpmmgr_user =  $dpm::params::dpmmgr_user,
+  $dpmmgr_user = $dpm::params::dpmmgr_user,
   $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
   $dpmmgr_gid =  $dpm::params::dpmmgr_gid,
 
   #DB/Auth options
+  $db_user =  $dpm::params::db_user,
+  $db_pass =  $dpm::params::db_pass,
+  $mysql_root_pass =  $dpm::params::mysql_root_pass,
   $token_password =  $dpm::params::token_password,
   $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
-  
+
   #VOs parameters
   $volist =  $dpm::params::volist,
-  $groupmap = $dpm::params::groupmap,
-
+  $groupmap =  $dpm::params::groupmap,
+  
   #Debug Flag
   $debug = $dpm::params::debug,
-
-
 
   )inherits dpm::params {
 
