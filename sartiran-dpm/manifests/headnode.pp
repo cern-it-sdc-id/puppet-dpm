@@ -30,6 +30,9 @@ class dpm::headnode (
     #Debug Flag
     $debug = $dpm::params::debug,
 
+    #XRootd federations
+    $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
+  
   )inherits dpm::params {
 
     #some packages that should be present if we want things to run
@@ -170,5 +173,6 @@ class dpm::headnode (
       dpm_xrootd_debug      => $debug,
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
       xrootd_use_voms	=> false
+      dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs
     }
 }

@@ -27,4 +27,6 @@ class dpm::params {
   #Debug Flag
   $debug = hiera("dpm::params::debug",false)
 
+  #Xrootd Federations
+  $dpm_xrootd_fedredirs = hiera("dpm::params::dpm_xrootd_fedredirs",{})
 }
