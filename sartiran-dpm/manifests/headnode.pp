@@ -172,7 +172,7 @@ class dpm::headnode (
       domain                => "${localdomain}",
       dpm_xrootd_debug      => $debug,
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
-      xrootd_use_voms	=> false
-      dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs
+      xrootd_use_voms	=> false,
+      dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
     }
 }
