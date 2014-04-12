@@ -22,6 +22,7 @@ class dpm::headnode (
     $mysql_root_pass =  $dpm::params::mysql_root_pass,
     $token_password =  $dpm::params::token_password,
     $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
+    $xrootd_use_voms =  $dpm::params::xrootd_use_voms,
 
     #VOs parameters
     $volist =  $dpm::params::volist,
@@ -172,7 +173,7 @@ class dpm::headnode (
       domain                => "${localdomain}",
       dpm_xrootd_debug      => $debug,
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
-      xrootd_use_voms	=> false,
+      xrootd_use_voms	=> $xrootd_use_voms,
       dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
     }
 }

@@ -19,6 +19,7 @@ class dpm::params {
   $mysql_root_pass =  hiera("dpm::params::mysql_root_pass","")
   $token_password =  hiera("dpm::params::token_password","")
   $xrootd_sharedkey =  hiera("dpm::params::xrootd_sharedkey","")
+  $xrootd_use_voms = hiera("dpm::params::xrootd_use_voms",true)
   
   #VOs parameters
   $volist =  hiera("dpm::params::volist",[])

@@ -22,7 +22,8 @@ class dpm::disknode (
   $mysql_root_pass =  $dpm::params::mysql_root_pass,
   $token_password =  $dpm::params::token_password,
   $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
-
+  $xrootd_use_voms =  $dpm::params::xrootd_use_voms,
+  
   #VOs parameters
   $volist =  $dpm::params::volist,
   $groupmap =  $dpm::params::groupmap,
@@ -140,7 +141,7 @@ class dpm::disknode (
       domain                => "${localdomain}",
       dpm_xrootd_debug      => $debug,
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
-      xrootd_use_voms => false,
+      xrootd_use_voms => true,
     }
     
   }
