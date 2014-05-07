@@ -31,11 +31,19 @@ class dpm::disknode (
   #Debug Flag
   $debug = $dpm::params::debug,
 
-  #XRootd monitoring
-  $xrd_report = $dpm::params::xrd_report,
-  $xrootd_monitor = $dpm::params::xrd_monitor
-
   )inherits dpm::params {
+
+   #XRootd monitoring parameters
+    if($dpm::params::xrd_report){
+      $xrd_report = $dpm::params::xrd_report
+    }else{
+      $xrd_report  = undef
+    }
+    if($dpm::params::xrootd_monitor){
+        $xrootd_monitor = $dpm::params::xrootd_monitor
+    }else{
+      $xrootd_monitor = undef
+    }
 
     #some packages that should be present if we want things to run
 

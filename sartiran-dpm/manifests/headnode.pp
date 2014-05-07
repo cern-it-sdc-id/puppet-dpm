@@ -34,14 +34,21 @@ class dpm::headnode (
     #XRootd federations
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
 
-    #XRootd monitoring
-    $xrd_report = $dpm::params::xrd_report,
-    $xrootd_monitor = $dpm::params::xrd_monitor
-  
   )inherits dpm::params {
 
-    #some packages that should be present if we want things to run
+   #XRootd monitoring parameters
+    if($dpm::params::xrd_report){
+      $xrd_report = $dpm::params::xrd_report
+    }else{
+      $xrd_report  = undef
+    }
+    if($dpm::params::xrootd_monitor){
+        $xrootd_monitor = $dpm::params::xrootd_monitor
+    }else{
+      $xrootd_monitor = undef
+    }
 
+    #some packages that should be present if we want things to run
     ensure_resource('package',['openssh-server','openssh-clients','vim-minimal','cronie','policycoreutils','selinux-policy'],{ensure => present,before => Class[Lcgdm::Base::Config]})
 
     #
@@ -60,7 +67,7 @@ class dpm::headnode (
       Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Dav]
     }
 
-    
+
 
     #
     # MySQL server setup - disable if it is not local
@@ -75,8 +82,8 @@ class dpm::headnode (
             uid     => $dpmmgr_uid,
             gid     => $dpmmgr_gid,
           }
-          
-    
+
+
     #
     # DPM and DPNS daemon configuration.
     #
@@ -117,7 +124,7 @@ class dpm::headnode (
       proto     => "rfio gsiftp http https xroot"
     }
 
-    
+
     #
     # VOMS configuration (same VOs as above): implements all the voms classes in the vo list
     #
@@ -127,7 +134,7 @@ class dpm::headnode (
       #Create the users: no pool accounts just one user per group
       ensure_resource('user', values($groupmap), {ensure => present})
     }
-    
+
 
     if($configure_gridmap){
       #setup the gridmap file
@@ -164,7 +171,7 @@ class dpm::headnode (
     # The XrootD configuration is a bit more complicated and
     # the full config (incl. federations) will be explained here:
     # https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Xroot/PuppetSetup
-    
+
     #
     # The simplest xrootd configuration.
     #
@@ -172,14 +179,15 @@ class dpm::headnode (
       xrootd_user  => $dpmmgr_user,
       xrootd_group => $dpmmgr_user,
     }
+
     class{"dmlite::xrootd":
-    	  nodetype              => [ 'head' ],
-      	  domain                => "${localdomain}",
-      	  dpm_xrootd_debug      => $debug,
-      	  dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
-      	  xrootd_use_voms	=> $xrootd_use_voms,
-      	  dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-      	  xrd_report => $xrd_report,
-      	  xrootd_monitor => $xrootd_monitor
+          nodetype              => [ 'head' ],
+          domain                => "${localdomain}",
+          dpm_xrootd_debug      => $debug,
+          dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
+          xrootd_use_voms       => $xrootd_use_voms,
+          dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+          xrd_report => $xrd_report,
+          xrootd_monitor => $xrootd_monitor
    }
 }
