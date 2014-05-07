@@ -9,11 +9,11 @@ project_page 'https://github.com/sartiran/puppet'
 
 ## Add dependencies, if any:
 # dependency 'username/name', '>= 1.2.0'
-dependency 'lcgdm/gridftp' '0.0.2'
-dependency 'lcgdm/dmlite'  '0.1.1'
-dependency 'lcgdm/lcgdm'   '0.1.0'
-dependency 'lcgdm/xrootd'  '0.1.0'
-dependency 'puppetlabs/stdlib' 
-dependency 'rocha/voms'    '0.1.0'
-dependency 'puppetlabs/mysql'
+dependency 'lcgdm/gridftp', '0.0.2'
+dependency 'lcgdm/dmlite',  '0.1.1'
+dependency 'lcgdm/lcgdm',   '0.1.0'
+dependency 'lcgdm/xrootd',  '0.1.0'
+dependency 'puppetlabs/stdlib', '>= 0.0.0'
+dependency 'rocha/voms',    '0.1.0'
+dependency 'puppetlabs/mysql', '>= 0.0.0'
 
