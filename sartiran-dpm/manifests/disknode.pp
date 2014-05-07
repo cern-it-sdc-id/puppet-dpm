@@ -32,7 +32,6 @@ class dpm::disknode (
   $debug = $dpm::params::debug,
 
   #XRootd monitoring
-  $enable_monitoring = $dpm::params::enable_monitoring,
   $xrd_report = $dpm::params::xrd_report,
   $xrootd_monitor = $dpm::params::xrd_monitor
 
@@ -147,11 +146,8 @@ class dpm::disknode (
       dpm_xrootd_debug      => $debug,
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
       xrootd_use_voms => true,
-      if($enable_monitoring){
-            xrd_report => $xrd_report,
-            xrootd_monitor => $xrootd_monitor
-            }
-
+      xrd_report => $xrd_report,
+      xrootd_monitor => $xrootd_monitor
     }
     
   }

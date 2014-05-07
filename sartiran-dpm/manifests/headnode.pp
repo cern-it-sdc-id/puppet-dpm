@@ -35,7 +35,6 @@ class dpm::headnode (
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
 
     #XRootd monitoring
-    $enable_monitoring = $dpm::params::enable_monitoring,
     $xrd_report = $dpm::params::xrd_report,
     $xrootd_monitor = $dpm::params::xrd_monitor
   
@@ -174,15 +173,13 @@ class dpm::headnode (
       xrootd_group => $dpmmgr_user,
     }
     class{"dmlite::xrootd":
-      nodetype              => [ 'head' ],
-      domain                => "${localdomain}",
-      dpm_xrootd_debug      => $debug,
-      dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
-      xrootd_use_voms	=> $xrootd_use_voms,
-      dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-      if($enable_monitoring){
-            xrd_report => $xrd_report,
-      	    xrootd_monitor => $xrootd_monitor
-	    }       
-    }
+    	  nodetype              => [ 'head' ],
+      	  domain                => "${localdomain}",
+      	  dpm_xrootd_debug      => $debug,
+      	  dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
+      	  xrootd_use_voms	=> $xrootd_use_voms,
+      	  dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+      	  xrd_report => $xrd_report,
+      	  xrootd_monitor => $xrootd_monitor
+   }
 }

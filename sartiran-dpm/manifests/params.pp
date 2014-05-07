@@ -32,8 +32,7 @@ class dpm::params {
   $dpm_xrootd_fedredirs = hiera("dpm::params::dpm_xrootd_fedredirs",{})
 
   #Xrootd Monitoring
-  $enable_monitoring = hiera("dpm::params::enable_monitoring",false)
-  $xrd_report = hiera("dpm::params::xrd_report","")
-  $xrootd_monitor = hiera("dpm::params::xrd_monitor,"")
+  $xrd_report = hiera("dpm::params::xrd_report",undef)
+  $xrootd_monitor = hiera("dpm::params::xrd_monitor,undef)
 
 }
