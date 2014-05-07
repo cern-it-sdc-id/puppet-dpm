@@ -31,6 +31,11 @@ class dpm::disknode (
   #Debug Flag
   $debug = $dpm::params::debug,
 
+  #XRootd monitoring
+  $enable_monitoring = $dpm::params::enable_monitoring,
+  $xrd_report = $dpm::params::xrd_report,
+  $xrootd_monitor = $dpm::params::xrd_monitor
+
   )inherits dpm::params {
 
     #some packages that should be present if we want things to run
@@ -142,6 +147,11 @@ class dpm::disknode (
       dpm_xrootd_debug      => $debug,
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
       xrootd_use_voms => true,
+      if($enable_monitoring){
+            xrd_report => $xrd_report,
+            xrootd_monitor => $xrootd_monitor
+            }
+
     }
     
   }

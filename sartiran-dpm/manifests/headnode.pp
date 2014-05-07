@@ -33,6 +33,11 @@ class dpm::headnode (
 
     #XRootd federations
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
+
+    #XRootd monitoring
+    $enable_monitoring = $dpm::params::enable_monitoring,
+    $xrd_report = $dpm::params::xrd_report,
+    $xrootd_monitor = $dpm::params::xrd_monitor
   
   )inherits dpm::params {
 
@@ -175,5 +180,9 @@ class dpm::headnode (
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
       xrootd_use_voms	=> $xrootd_use_voms,
       dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+      if($enable_monitoring){
+            xrd_report => $xrd_report,
+      	    xrootd_monitor => $xrootd_monitor
+	    }       
     }
 }
