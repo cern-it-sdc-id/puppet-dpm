@@ -10,7 +10,7 @@ class dpm::headnode (
     $disk_nodes =  $dpm::params::disk_nodes,
     $localdomain =  $dpm::params::localdomain,
     $webdav_enabled = $dpm::params::webdav_enabled,
-
+   
     #dpmmgr user options
     $dpmmgr_user = $dpm::params::dpmmgr_user,
     $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
@@ -33,7 +33,7 @@ class dpm::headnode (
 
     #XRootd federations
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
-
+  
   )inherits dpm::params {
 
    #XRootd monitoring parameters
@@ -42,12 +42,21 @@ class dpm::headnode (
     }else{
       $xrd_report  = undef
     }
+
     if($dpm::params::xrootd_monitor){
         $xrootd_monitor = $dpm::params::xrootd_monitor
     }else{
       $xrootd_monitor = undef
     }
+    
+    if($dpm::params::site_name){
+        $site_name = $dpm::params::site_name
+    }else{
+      $site_name = undef
+    }
 
+
+    
     #some packages that should be present if we want things to run
     ensure_resource('package',['openssh-server','openssh-clients','vim-minimal','cronie','policycoreutils','selinux-policy'],{ensure => present,before => Class[Lcgdm::Base::Config]})
 
@@ -188,6 +197,7 @@ class dpm::headnode (
           xrootd_use_voms       => $xrootd_use_voms,
           dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
           xrd_report => $xrd_report,
-          xrootd_monitor => $xrootd_monitor
+          xrootd_monitor => $xrootd_monitor,
+          site_name => $site_name
    }
 }

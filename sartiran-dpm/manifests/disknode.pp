@@ -30,7 +30,7 @@ class dpm::disknode (
   
   #Debug Flag
   $debug = $dpm::params::debug,
-
+  
   )inherits dpm::params {
 
    #XRootd monitoring parameters
@@ -39,12 +39,20 @@ class dpm::disknode (
     }else{
       $xrd_report  = undef
     }
-    if($dpm::params::xrootd_monitor){
-        $xrootd_monitor = $dpm::params::xrootd_monitor
-    }else{
-      $xrootd_monitor = undef
-    }
 
+    if($dpm::params::xrootd_monitor){
+      $xrootd_monitor = $dpm::params::xrootd_monitor
+      }else{
+        $xrootd_monitor = undef
+      }
+
+    if($dpm::params::site_name){
+      $site_name = $dpm::params::site_name
+      }else{
+        $site_name = undef
+      }
+                
+    
     #some packages that should be present if we want things to run
 
     ensure_resource('package',['openssh-server','openssh-clients','vim-minimal','cronie','policycoreutils','selinux-policy'],{ensure => present,before => Class[Lcgdm::Base::Config]})
@@ -155,7 +163,8 @@ class dpm::disknode (
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
       xrootd_use_voms => true,
       xrd_report => $xrd_report,
-      xrootd_monitor => $xrootd_monitor
+      xrootd_monitor => $xrootd_monitor,
+      site_name => $site_name 
     }
     
   }
