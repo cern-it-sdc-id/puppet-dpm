@@ -1,5 +1,5 @@
 name    'sartiran-dpm'
-version '0.0.10'
+version '0.0.11'
 source 'UNKNOWN'
 author 'sartiran'
 license 'Apache License, Version 2.0'
