@@ -67,7 +67,7 @@ class dpm::disknode (
     class{"lcgdm::base":
       uid     => $dpmmgr_uid,
     }
-    class{"lcgdm::base::install":}
+   
     
     class{"lcgdm::ns::client":
       flavor  => "dpns",
