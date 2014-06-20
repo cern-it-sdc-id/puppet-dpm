@@ -9,9 +9,7 @@ class dpm::params {
   $webdav_enabled = hiera("dpm::params::webdav_enabled",false)
 
   #dpmmgr user options
-  $dpmmgr_user = hiera("dpm::params::dpmmgr_user",'dpmmgr')
   $dpmmgr_uid =  hiera("dpm::params::dpmmgr_uid",1000)
-  $dpmmgr_gid =  hiera("dpm::params::dpmmgr_gid",1000)
 
   #DB/Auth options
   $db_user =  hiera("dpm::params::db_user","dpmmgr")

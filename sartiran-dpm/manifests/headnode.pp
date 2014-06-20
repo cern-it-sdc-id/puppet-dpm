@@ -12,9 +12,7 @@ class dpm::headnode (
     $webdav_enabled = $dpm::params::webdav_enabled,
    
     #dpmmgr user options
-    $dpmmgr_user = $dpm::params::dpmmgr_user,
     $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
-    $dpmmgr_gid =  $dpm::params::dpmmgr_gid,
 
     #DB/Auth options
     $db_user =  $dpm::params::db_user,
@@ -86,10 +84,8 @@ class dpm::headnode (
     }
 
 
-    class{"lcgdm::base::config":
-            user    => $dpmmgr_user,
+    class{"lcgdm::base":
             uid     => $dpmmgr_uid,
-            gid     => $dpmmgr_gid,
           }
 
 
