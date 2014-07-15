@@ -7,6 +7,7 @@ class dpm::params {
   $disk_nodes =  hiera("dpm::params::disk_nodes","")
   $localdomain =  hiera("dpm::params::localdomain","")
   $webdav_enabled = hiera("dpm::params::webdav_enabled",false)
+  $memcached_enabled = hiera("dpm::params::webdav_enabled",false)
 
   #dpmmgr user options
   $dpmmgr_uid =  hiera("dpm::params::dpmmgr_uid",1000)
