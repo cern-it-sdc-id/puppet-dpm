@@ -10,7 +10,8 @@ class dpm::headnode (
     $disk_nodes =  $dpm::params::disk_nodes,
     $localdomain =  $dpm::params::localdomain,
     $webdav_enabled = $dpm::params::webdav_enabled,
-   
+    $memcached_enabled = $dpm::params::memcached_enabled,
+
     #dpmmgr user options
     $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
 
@@ -74,6 +75,11 @@ class dpm::headnode (
       Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Dav]
     }
 
+    if($memcached_enabled){
+       Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Dav::Service]
+       Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Gridftp]
+       Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Srm]
+    }
 
 
     #
@@ -196,4 +202,20 @@ class dpm::headnode (
           xrootd_monitor => $xrootd_monitor,
           site_name => $site_name
    }
+
+   if($memcached_enabled)
+   {
+     class{"memcached":
+       max_memory => 512,
+     }
+     ->
+     class{"dmlite::plugins::memcache":
+       expiration_limit => 600,
+       posix            => 'on',
+       func_counter     => 'on',
+     }
+   }
+
+
+
 }
