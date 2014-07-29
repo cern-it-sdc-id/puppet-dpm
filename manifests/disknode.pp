@@ -14,10 +14,7 @@ class dpm::disknode (
   #dpmmgr user options
   $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
 
-  #DB/Auth options
-  $db_user =  $dpm::params::db_user,
-  $db_pass =  $dpm::params::db_pass,
-  $mysql_root_pass =  $dpm::params::mysql_root_pass,
+  #Auth options
   $token_password =  $dpm::params::token_password,
   $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
   $xrootd_use_voms =  $dpm::params::xrootd_use_voms,
@@ -31,27 +28,6 @@ class dpm::disknode (
   
   )inherits dpm::params {
 
-   #XRootd monitoring parameters
-    if($dpm::params::xrd_report){
-      $xrd_report = $dpm::params::xrd_report
-    }else{
-      $xrd_report  = undef
-    }
-
-    if($dpm::params::xrootd_monitor){
-      $xrootd_monitor = $dpm::params::xrootd_monitor
-      }else{
-        $xrootd_monitor = undef
-      }
-
-    if($dpm::params::site_name){
-      $site_name = $dpm::params::site_name
-      }else{
-        $site_name = undef
-      }
-                
-    
-    
     Class[Lcgdm::Base::Install] -> Class[Lcgdm::Rfio::Install]
     if($webdav_enabled){
       Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Dav::Service]
@@ -98,11 +74,11 @@ class dpm::disknode (
       proto     => "rfio gsiftp http https xroot"
     }
 
-    if($configure_vos){
-      class{ $volist.map |$vo| {"voms::$vo"}:}
-      #Create the users: no pool accounts just one user per group
-      ensure_resource('user', values($groupmap), {ensure => present})
-    }
+    #if($configure_vos){
+    #  class{ $volist.map |$vo| {"voms::$vo"}:}
+    #  #Create the users: no pool accounts just one user per group
+    #  ensure_resource('user', values($groupmap), {ensure => present})
+    #}
 
 
     if($configure_gridmap){

@@ -1,5 +1,5 @@
 name    'lcgdm-dpm'
-version '0.0.3'
+version '0.0.4'
 source 'UNKNOWN'
 author 'lcgdm'
 license 'Apache License, Version 2.0'
