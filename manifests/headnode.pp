@@ -54,11 +54,6 @@ class dpm::headnode (
       $site_name = undef
     }
 
-
-    
-    #some packages that should be present if we want things to run
-    ensure_resource('package',['openssh-server','openssh-clients','vim-minimal','cronie','policycoreutils','selinux-policy'],{ensure => present,before => Class[Lcgdm::Base::Config]})
-
     #
     # Set inter-module dependencies
     #
@@ -69,11 +64,6 @@ class dpm::headnode (
     Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Gridftp]
     Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Srm]
     Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Gridftp]
-
-    if($webdav_enabled){
-      Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Dav]
-      Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Dav]
-    }
 
     if($memcached_enabled){
        Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Dav::Service]
@@ -140,11 +130,11 @@ class dpm::headnode (
     # VOMS configuration (same VOs as above): implements all the voms classes in the vo list
     #
     #WARN!!!!: in 3.4 collect has been renamed "map"
-    if($configure_vos){
-      class{ $volist.map |$vo| {"voms::$vo"}:}
-      #Create the users: no pool accounts just one user per group
-      ensure_resource('user', values($groupmap), {ensure => present})
-    }
+    #if($configure_vos){
+    #  class{ $volist.map |$vo| {"voms::$vo"}:}
+    #  #Create the users: no pool accounts just one user per group
+    #  ensure_resource('user', values($groupmap), {ensure => present})
+    #}
 
 
     if($configure_gridmap){
@@ -171,6 +161,10 @@ class dpm::headnode (
     # Frontends based on dmlite.
     #
     if($webdav_enabled){
+      Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Dav]
+      Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Dav]
+      Class[Dmlite::Install] ~> Class[Dmlite::Dav::Config]
+
       class{"dmlite::dav":}
     }
     class{"dmlite::srm":}
