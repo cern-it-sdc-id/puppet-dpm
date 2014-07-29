@@ -51,10 +51,6 @@ class dpm::disknode (
       }
                 
     
-    #some packages that should be present if we want things to run
-
-    ensure_resource('package',['openssh-server','openssh-clients','vim-minimal','cronie','policycoreutils','selinux-policy'],{ensure => present,before => Class[Lcgdm::Base::Config]})
-    
     
     Class[Lcgdm::Base::Install] -> Class[Lcgdm::Rfio::Install]
     if($webdav_enabled){
@@ -157,10 +153,6 @@ class dpm::disknode (
       domain                => "${localdomain}",
       dpm_xrootd_debug      => $debug,
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
-      xrootd_use_voms => true,
-      xrd_report => $xrd_report,
-      xrootd_monitor => $xrootd_monitor,
-      site_name => $site_name 
     }
     
   }

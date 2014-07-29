@@ -34,9 +34,6 @@ class dpm::headnode (
     #XRootd federations
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
 
-    #sitename 
-    $site_name = $dpm::params::site_name,
-  
 )inherits dpm::params {
 
    #XRootd monitoring parameters
@@ -55,7 +52,7 @@ class dpm::headnode (
     if($dpm::params::site_name){
         $site_name = $dpm::params::site_name
     }else{
-      $site_name = undef
+        $site_name = undef
     }
 
     #
@@ -195,10 +192,10 @@ class dpm::headnode (
           dpm_xrootd_debug      => $debug,
           dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
           xrootd_use_voms       => $xrootd_use_voms,
-          dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-          xrd_report => $xrd_report,
-          xrootd_monitor => $xrootd_monitor,
-          site_name => $site_name
+          dpm_xrootd_fedredirs  => $dpm_xrootd_fedredirs,
+          xrd_report 		=> $xrd_report,
+          xrootd_monitor 	=> $xrootd_monitor,
+          site_name 		=> $site_name
    }
 
    if($memcached_enabled)
