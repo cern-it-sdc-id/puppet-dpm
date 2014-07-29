@@ -4,7 +4,7 @@
 class dpm::headnode (
     $configure_vos =  $dpm::params::configure_vos,
     $configure_gridmap =  $dpm::params::configure_gridmap,
-    $condifure_bdii = $dpm::params::configure_bdii,
+    $configure_bdii = $dpm::params::configure_bdii,
 
     #cluster options
     $headnode_fqdn =  $dpm::params::headnode_fqdn,
@@ -34,6 +34,8 @@ class dpm::headnode (
     #XRootd federations
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
 
+    $site_name = $dpm::params::site_name,
+
 )inherits dpm::params {
 
    #XRootd monitoring parameters
@@ -49,12 +51,6 @@ class dpm::headnode (
       $xrootd_monitor = undef
     }
     
-    if($dpm::params::site_name){
-        $site_name = $dpm::params::site_name
-    }else{
-        $site_name = undef
-    }
-
     #
     # Set inter-module dependencies
     #
@@ -211,7 +207,7 @@ class dpm::headnode (
      }
    }
 
-   id ($configure_bdii)
+   if ($configure_bdii)
    {
     #bdii installation and configuration with default values
     include('bdii')
