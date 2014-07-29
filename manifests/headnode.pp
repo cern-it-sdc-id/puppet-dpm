@@ -4,6 +4,7 @@
 class dpm::headnode (
     $configure_vos =  $dpm::params::configure_vos,
     $configure_gridmap =  $dpm::params::configure_gridmap,
+    $condifure_bdii = $dpm::params::configure_bdii,
 
     #cluster options
     $headnode_fqdn =  $dpm::params::headnode_fqdn,
@@ -32,8 +33,11 @@ class dpm::headnode (
 
     #XRootd federations
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
+
+    #sitename 
+    $site_name = $dpm::params::site_name,
   
-  )inherits dpm::params {
+)inherits dpm::params {
 
    #XRootd monitoring parameters
     if($dpm::params::xrd_report){
@@ -208,6 +212,19 @@ class dpm::headnode (
        posix            => 'on',
        func_counter     => 'on',
      }
+   }
+
+   id ($configure_bdii)
+   {
+    #bdii installation and configuration with default values
+    include('bdii')
+
+    # GIP installation and configuration
+    class{"lcgdm::bdii::dpm":
+       sitename => "$site_name",
+       vos => [ $volist ],
+    }	
+
    }
 
 
