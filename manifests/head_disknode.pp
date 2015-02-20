@@ -96,10 +96,12 @@ class dpm::head_disknode (
       dbflavor => "mysql",
       dbuser   => "${db_user}",
       dbpass   => "${db_pass}",
-      dbhost   => "localhost",
+      dbhost   => "$ldb_host}",
       domain   => "${localdomain}",
       volist   => $volist,
       dbmanage => $local_db,
+      uid      => $dpmmgr_uid,
+      gid      => $dpmmgr_gid,
     }
 
     #
