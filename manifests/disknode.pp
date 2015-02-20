@@ -4,6 +4,7 @@
 class dpm::disknode (
   $configure_vos =  $dpm::params::configure_vos,
   $configure_gridmap =  $dpm::params::configure_gridmap,
+  $configure_firewall = $dpm::params::configure_firewall,
 
   #cluster options
   $headnode_fqdn =  $dpm::params::headnode_fqdn,
@@ -13,6 +14,7 @@ class dpm::disknode (
 
   #dpmmgr user options
   $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
+  $dpmmgr_gid =  $dpm::params::dpmmgr_gid,
 
   #Auth options
   $token_password =  $dpm::params::token_password,
@@ -38,8 +40,9 @@ class dpm::disknode (
     #
     class{"lcgdm::base":
       uid     => $dpmmgr_uid,
+      gid     => $dpmmgr_gid,
     }
-   
+
     
     class{"lcgdm::ns::client":
       flavor  => "dpns",
@@ -74,11 +77,9 @@ class dpm::disknode (
       proto     => "rfio gsiftp http https xroot"
     }
 
-    #if($configure_vos){
-    #  class{ $volist.map |$vo| {"voms::$vo"}:}
-    #  #Create the users: no pool accounts just one user per group
-    #  ensure_resource('user', values($groupmap), {ensure => present})
-    #}
+    if($configure_vos){
+      class{"voms::$volist":}
+    }
 
 
     if($configure_gridmap){
@@ -130,6 +131,66 @@ class dpm::disknode (
       dpm_xrootd_debug      => $debug,
       dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
     }
-    
+
+  #limit conf
+  $limits_config = {
+    "*" => {
+      nofile => { soft => 65000, hard => 65000 },
+      nproc  => { soft => 65000, hard => 65000 },
+    }
   }
+  class{'limits':
+    config    => $limits_config,
+    use_hiera => false
+  }
+
+if ($configure_firewall) {
+  	#
+	# The firewall configuration
+	#
+	firewall{"050 allow http and https":
+		proto  => "tcp",
+		dport  => [80, 443],
+		action => "accept"
+	}
+	firewall{"050 allow rfio":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "5001",
+	  action => "accept"
+	}
+	firewall{"050 allow rfio range":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "20000-25000",
+	  action => "accept"
+	}
+	firewall{"050 allow gridftp control":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "2811",
+	  action => "accept"
+	}
+	firewall{"050 allow gridftp range":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "20000-25000",
+	  action => "accept"
+	}
+	firewall{"050 allow xrootd":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "1095",
+	  action => "accept"
+	}
+	firewall{"050 allow cmsd":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "1094",
+	  action => "accept"
+	}
+  }
+
+    
+}
                                                                                                     

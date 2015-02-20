@@ -5,8 +5,10 @@ class dpm::headnode (
     $configure_vos =  $dpm::params::configure_vos,
     $configure_gridmap =  $dpm::params::configure_gridmap,
     $configure_bdii = $dpm::params::configure_bdii,
+    $configure_firewall = $dpm::params::configure_firewall,
 
     #cluster options
+    $local_db = $dpm::params::local_db,
     $headnode_fqdn =  $dpm::params::headnode_fqdn,
     $disk_nodes =  $dpm::params::disk_nodes,
     $localdomain =  $dpm::params::localdomain,
@@ -15,10 +17,13 @@ class dpm::headnode (
 
     #dpmmgr user options
     $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
+    $dpmmgr_gid =  $dpm::params::dpmmgr_gid,
+
 
     #DB/Auth options
     $db_user =  $dpm::params::db_user,
     $db_pass =  $dpm::params::db_pass,
+    $db_host =  $dpm::params::db_host,
     $mysql_root_pass =  $dpm::params::mysql_root_pass,
     $token_password =  $dpm::params::token_password,
     $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
@@ -54,13 +59,15 @@ class dpm::headnode (
     #
     # Set inter-module dependencies
     #
-    Class[Mysql::Server] -> Class[Lcgdm::Ns::Service]
-
+    
     Class[Lcgdm::Dpm::Service] -> Class[Dmlite::Plugins::Adapter::Install]
+    Class[Lcgdm::Ns::Config] -> Class[Dmlite::Srm::Service]
+    Class[Dmlite::Head] -> Class[Dmlite::Plugins::Adapter::Install]
     Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Srm]
     Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Gridftp]
     Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Srm]
     Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Gridftp]
+    Class[fetchcrl::service] -> Class[Xrootd::Config]
 
     if($memcached_enabled){
        Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Dav::Service]
@@ -70,17 +77,17 @@ class dpm::headnode (
 
 
     #
-    # MySQL server setup - disable if it is not local
+    # MySQL server setup 
     #
-    class{"mysql::server":
-      root_password   => "${mysql_root_pass}"
+    if ($local_db) {
+	    Class[Mysql::Server] -> Class[Lcgdm::Ns::Service]
+	    
+	    class{"mysql::server":
+		service_enabled => true,
+	    	root_password   => "${mysql_root_pass}"
+   	     }
     }
-
-
-    class{"lcgdm::base":
-            uid     => $dpmmgr_uid,
-          }
-
+   
 
     #
     # DPM and DPNS daemon configuration.
@@ -89,9 +96,12 @@ class dpm::headnode (
       dbflavor => "mysql",
       dbuser   => "${db_user}",
       dbpass   => "${db_pass}",
-      dbhost   => "localhost",
+      dbhost   => "${db_host}",
       domain   => "${localdomain}",
       volist   => $volist,
+      dbmanage => $local_db,
+      uid      => $dpmmgr_uid,
+      gid      => $dpmmgr_gid,
     }
 
     #
@@ -122,19 +132,11 @@ class dpm::headnode (
       proto     => "rfio gsiftp http https xroot"
     }
 
+    if($configure_vos){
+       class{"voms::$volist":}
+    }
 
-    #
-    # VOMS configuration (same VOs as above): implements all the voms classes in the vo list
-    #
-    #WARN!!!!: in 3.4 collect has been renamed "map"
-    #if($configure_vos){
-    #  class{ $volist.map |$vo| {"voms::$vo"}:}
-    #  #Create the users: no pool accounts just one user per group
-    #  ensure_resource('user', values($groupmap), {ensure => present})
-    #}
-
-
-    if($configure_gridmap){
+   if($configure_gridmap){
       #setup the gridmap file
       lcgdm::mkgridmap::file {"lcgdm-mkgridmap":
         configfile   => "/etc/lcgdm-mkgridmap.conf",
@@ -142,6 +144,10 @@ class dpm::headnode (
         logfile      => "/var/log/lcgdm-mkgridmap.log",
         groupmap     => $groupmap,
         localmap     => {"nobody" => "nogroup"}
+      }
+    
+       exec{"/usr/sbin/edg-mkgridmap --conf=/etc/lcgdm-mkgridmap.conf --safe --output=/etc/lcgdm-mapfile":
+        require => Lcgdm::Mkgridmap::File["lcgdm-mkgridmap"]
       }
     }
 
@@ -161,6 +167,7 @@ class dpm::headnode (
       Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Dav]
       Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Dav]
       Class[Dmlite::Install] ~> Class[Dmlite::Dav::Config]
+      Dmlite::Plugins::Adapter::Create_config <| |> -> Class[Dmlite::Dav::Install]
 
       class{"dmlite::dav":}
     }
@@ -220,6 +227,83 @@ class dpm::headnode (
 
    }
 
+  #limit conf
 
+   $limits_config = {
+    "*" => {
+      nofile => { soft => 65000, hard => 65000 },
+      nproc  => { soft => 65000, hard => 65000 },
+    }
+   }
+   class{'limits':
+    config    => $limits_config,
+    use_hiera => false
+  }
+
+  if ($configure_firewall) {
+	#
+	# The firewall configuration
+	#
+	firewall{"050 allow http and https":
+	  proto  => "tcp",
+	  dport  => [80, 443],
+	  action => "accept"
+	}
+	firewall{"050 allow rfio":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "5001",
+	  action => "accept"
+	}
+	firewall{"050 allow rfio range":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "20000-25000",
+	  action => "accept"
+	}
+	firewall{"050 allow gridftp control":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "2811",
+	  action => "accept"
+	}
+	firewall{"050 allow gridftp range":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "20000-25000",
+	  action => "accept"
+	}
+	firewall{"050 allow srmv2.2":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "8446",
+	  action => "accept"
+	}
+	firewall{"050 allow xrootd":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "1095",
+	  action => "accept"
+	}
+	firewall{"050 allow cmsd":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "1094",
+	  action => "accept"
+	}
+
+	firewall{"050 allow DPNS":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "5010",
+	  action => "accept"
+	}
+	firewall{"050 allow DPM":
+	  state  => "NEW",
+	  proto  => "tcp",
+	  dport  => "5015",
+	  action => "accept"
+	}
+    }
 
 }
