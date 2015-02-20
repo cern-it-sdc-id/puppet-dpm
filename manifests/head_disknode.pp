@@ -10,7 +10,7 @@ class dpm::head_disknode (
     $configure_default_filesystem = $dpm::params::configure_default_filesystem,
 
     #cluster options
-    $local_db = dpm::params::local_db,
+    $local_db = $dpm::params::local_db,
     $headnode_fqdn =  $dpm::params::headnode_fqdn,
     $disk_nodes =  $dpm::params::disk_nodes,
     $localdomain =  $dpm::params::localdomain,
@@ -96,7 +96,7 @@ class dpm::head_disknode (
       dbflavor => "mysql",
       dbuser   => "${db_user}",
       dbpass   => "${db_pass}",
-      dbhost   => "$ldb_host}",
+      dbhost   => "${db_host}",
       domain   => "${localdomain}",
       volist   => $volist,
       dbmanage => $local_db,
@@ -133,7 +133,7 @@ class dpm::head_disknode (
     }
 
     if($configure_vos){
-      class{ $volist.map |$vo| {"voms::$vo"}:}
+       class{"voms::$volist":}
     }
 
     if($configure_gridmap){
@@ -144,6 +144,10 @@ class dpm::head_disknode (
         logfile      => "/var/log/lcgdm-mkgridmap.log",
         groupmap     => $groupmap,
         localmap     => {"nobody" => "nogroup"}
+      }
+      
+       exec{"/usr/sbin/edg-mkgridmap --conf=/etc/lcgdm-mkgridmap.conf --safe --output=/etc/lcgdm-mapfile":
+        require => Lcgdm::Mkgridmap::File["lcgdm-mkgridmap"]
       }
     }
 
@@ -245,6 +249,7 @@ class dpm::head_disknode (
 	lcgdm::dpm::pool{"mypool":
 		def_filesize => "100M"
 	}
+  }
   #
   #
   # You can define your filesystems
@@ -273,9 +278,9 @@ class dpm::head_disknode (
   }
 
   if ($configure_firewall) {
-#
-# The firewall configuration
-#
+	#
+	# The firewall configuration
+	#
 	firewall{"050 allow http and https":
 	  proto  => "tcp",
 	  dport  => [80, 443],
@@ -337,5 +342,4 @@ class dpm::head_disknode (
 	  action => "accept"
 	}
     }
-
 }	
