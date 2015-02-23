@@ -68,3 +68,4 @@ puppet apply dpm.pp
 
 to have the DPM box configured
  
+Please note that it could be needed to run twice the puppet apply command in order to have all the changes correctly applied
