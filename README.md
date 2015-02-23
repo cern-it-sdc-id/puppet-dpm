@@ -60,6 +60,11 @@ class{"dpm::head_disknode":
 
 the same parameters can be configured via hiera ( see the dpm::params class)
 
+Having the code snippet saved in a file ( i.e.  dpm.pp), then it's just neeed to run:
 
- 
+```
+puppet apply dpm.pp
+```
+
+to have the DPM box configured
  
