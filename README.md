@@ -34,8 +34,9 @@ The following modules are needed in order to use this module, and they are autom
 
 The puppet-dpm module can be installed from puppetforge via
 
+```
 puppet module install puppet-dpm
-
+```
 
  
  
