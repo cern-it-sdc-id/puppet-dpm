@@ -41,7 +41,7 @@ puppet module install puppet-dpm
 Usage
 =====
 
-The module folder tests contains some examples, for instance you can set up a DPM box with both HEAD and DISK node with teh following code snippet
+The module folder tests contains some examples, for instance you can set up a DPM box with both HEAD and DISK nodes with the following code snippet
 
 ```
 class{"dpm::head_disknode":
