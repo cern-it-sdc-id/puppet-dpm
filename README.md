@@ -35,7 +35,7 @@ Installation
 The puppet-dpm module can be installed from puppetforge via
 
 ```
-puppet module install puppet-dpm
+puppet module install lcgdm-dpm
 ```
 
 Usage
