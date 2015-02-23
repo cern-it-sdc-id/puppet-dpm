@@ -57,5 +57,9 @@ class{"dpm::head_disknode":
    volist =>[dteam],
 }
 ```
+
+the same parameters can be configured via hiera ( see the dpm::params class)
+
+
  
  
