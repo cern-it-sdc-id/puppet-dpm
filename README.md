@@ -66,6 +66,6 @@ Having the code snippet saved in a file ( i.e.  dpm.pp), then it's just neeed to
 puppet apply dpm.pp
 ```
 
-to have the DPM box configured
+to have the DPM box installed and configured
  
 Please note that it could be needed to run twice the puppet apply command in order to have all the changes correctly applied
