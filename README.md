@@ -1,7 +1,7 @@
 puppet-dpm module
 ======
 
-The puppet-dpm module has been developed to easily set up a DPM installation via puppet.
+The puppet-dpm module has been developed to ease the set up of a DPM installation via puppet.
 
 It relies on several puppet modules, some of them developed @ CERN and some others available from puppetforge.
 
