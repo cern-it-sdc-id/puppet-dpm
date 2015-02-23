@@ -29,7 +29,7 @@ The following modules are needed in order to use this module, and they are autom
  - CERNOps-fetchcrl
  - erwbgy-limits
 
- Installation
+Installation
 =====
 
 The puppet-dpm module can be installed from puppetforge via
@@ -38,7 +38,7 @@ The puppet-dpm module can be installed from puppetforge via
 puppet module install puppet-dpm
 ```
 
-  Usage
+Usage
 =====
 
 The module folder tests contains some examples, for instance you can set up a DPM box with both HEAD and DISK node with teh following code snippet
