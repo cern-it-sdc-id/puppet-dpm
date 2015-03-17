@@ -81,23 +81,23 @@ class dpm::head_disknode (
     # MySQL server setup 
     #
     if ($local_db) {
-	    Class[Mysql::Server] -> Class[Lcgdm::Ns::Service]
-	    
-	    class{"mysql::server":
-		service_enabled => true,
-	    	root_password   => "${mysql_root_pass}"
-   	     }
+      Class[Mysql::Server] -> Class[Lcgdm::Ns::Service]
+      
+      class{'mysql::server':
+    service_enabled   => true,
+        root_password => $mysql_root_pass
+          }
     }
    
     #
     # DPM and DPNS daemon configuration.
     #
-    class{"lcgdm":
-      dbflavor => "mysql",
-      dbuser   => "${db_user}",
-      dbpass   => "${db_pass}",
-      dbhost   => "${db_host}",
-      domain   => "${localdomain}",
+    class{'lcgdm':
+      dbflavor => 'mysql',
+      dbuser   => $db_user,
+      dbpass   => $db_pass,
+      dbhost   => $db_host,
+      domain   => $localdomain,
       volist   => $volist,
       dbmanage => $local_db,
       uid      => $dpmmgr_uid,
@@ -107,8 +107,8 @@ class dpm::head_disknode (
     #
     # RFIO configuration.
     #
-    class{"lcgdm::rfio":
-      dpmhost => "${::fqdn}",
+    class{'lcgdm::rfio':
+      dpmhost => $::fqdn,
     }
 
     #
@@ -116,48 +116,48 @@ class dpm::head_disknode (
     # machines that the DPM should trust (if any).
     #
     lcgdm::shift::trust_value{
-      "DPM TRUST":
-        component => "DPM",
-        host      => "${disk_nodes}";
-      "DPNS TRUST":
-        component => "DPNS",
-        host      => "${disk_nodes}";
-      "RFIO TRUST":
-        component => "RFIOD",
-        host      => "${disk_nodes}",
+      'DPM TRUST':
+        component => 'DPM',
+        host      => $disk_nodes;
+      'DPNS TRUST':
+        component => 'DPNS',
+        host      => $disk_nodes;
+      'RFIO TRUST':
+        component => 'RFIOD',
+        host      => $disk_nodes,
         all       => true
     }
-    lcgdm::shift::protocol{"PROTOCOLS":
-      component => "DPM",
-      proto     => "rfio gsiftp http https xroot"
+    lcgdm::shift::protocol{'PROTOCOLS':
+      component => 'DPM',
+      proto     => 'rfio gsiftp http https xroot'
     }
 
     if($configure_vos){
-       class{"voms::$volist":}
+       class{"voms::${volist}":}
     }
 
     if($configure_gridmap){
       #setup the gridmap file
-      lcgdm::mkgridmap::file {"lcgdm-mkgridmap":
-        configfile   => "/etc/lcgdm-mkgridmap.conf",
-        localmapfile => "/etc/lcgdm-mapfile-local",
-        logfile      => "/var/log/lcgdm-mkgridmap.log",
+      lcgdm::mkgridmap::file {'lcgdm-mkgridmap':
+        configfile   => '/etc/lcgdm-mkgridmap.conf',
+        localmapfile => '/etc/lcgdm-mapfile-local',
+        logfile      => '/var/log/lcgdm-mkgridmap.log',
         groupmap     => $groupmap,
-        localmap     => {"nobody" => "nogroup"}
+        localmap     => {'nobody'        => 'nogroup'}
       }
       
-       exec{"/usr/sbin/edg-mkgridmap --conf=/etc/lcgdm-mkgridmap.conf --safe --output=/etc/lcgdm-mapfile":
-        require => Lcgdm::Mkgridmap::File["lcgdm-mkgridmap"]
+       exec{'/usr/sbin/edg-mkgridmap --conf=/etc/lcgdm-mkgridmap.conf --safe --output=/etc/lcgdm-mapfile':
+        require => Lcgdm::Mkgridmap::File['lcgdm-mkgridmap']
       }
     }
 
     #
     # dmlite configuration.
     #
-    class{"dmlite::head":
-      token_password => "${token_password}",
-      mysql_username => "${db_user}",
-      mysql_password => "${db_pass}",
+    class{'dmlite::head':
+      token_password => $token_password,
+      mysql_username => $db_user,
+      mysql_password => $db_pass,
     }
 
     #
@@ -169,11 +169,11 @@ class dpm::head_disknode (
       Class[Dmlite::Install] ~> Class[Dmlite::Dav::Config]
       Dmlite::Plugins::Adapter::Create_config <| |> -> Class[Dmlite::Dav::Install]
 
-      class{"dmlite::dav":}
+      class{'dmlite::dav':}
     }
-    class{"dmlite::srm":}
-    class{"dmlite::gridftp":
-      dpmhost => "${::fqdn}"
+    class{'dmlite::srm':}
+    class{'dmlite::gridftp':
+      dpmhost => $::fqdn
     }
 
 
@@ -184,30 +184,30 @@ class dpm::head_disknode (
     #
     # The simplest xrootd configuration.
     #
-    class{"xrootd::config":
+    class{'xrootd::config':
       xrootd_user  => $dpmmgr_user,
       xrootd_group => $dpmmgr_user,
     }
 
-    class{"dmlite::xrootd":
-          nodetype              => [ 'head','disk' ],
-          domain                => "${localdomain}",
-          dpm_xrootd_debug      => $debug,
-          dpm_xrootd_sharedkey  => "${xrootd_sharedkey}",
-          xrootd_use_voms       => $xrootd_use_voms,
-          dpm_xrootd_fedredirs  => $dpm_xrootd_fedredirs,
-          xrd_report 		=> $xrd_report,
-          xrootd_monitor 	=> $xrootd_monitor,
-          site_name 		=> $site_name
+    class{'dmlite::xrootd':
+          nodetype             => [ 'head','disk' ],
+          domain               => $localdomain,
+          dpm_xrootd_debug     => $debug,
+          dpm_xrootd_sharedkey => $xrootd_sharedkey,
+          xrootd_use_voms      => $xrootd_use_voms,
+          dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+          xrd_report           => $xrd_report,
+          xrootd_monitor       => $xrootd_monitor,
+          site_name            => $site_name
    }
 
    if($memcached_enabled)
    {
-     class{"memcached":
+     class{'memcached':
        max_memory => 512,
      }
      ->
-     class{"dmlite::plugins::memcache":
+     class{'dmlite::plugins::memcache':
        expiration_limit => 600,
        posix            => 'on',
        func_counter     => 'on',
@@ -222,17 +222,17 @@ class dpm::head_disknode (
     Class[Lcgdm::Bdii::Dpm] -> Class[Bdii::Service]
 
     # GIP installation and configuration
-    class{"lcgdm::bdii::dpm":
-       sitename => "$site_name",
-       vos => [ $volist ],
-    }	
+    class{'lcgdm::bdii::dpm':
+       sitename => $site_name,
+       vos      => [ $volist ],
+    }
 
    }
   
    #limit conf
 
    $limits_config = {
-    "*" => {
+    '*' => {
       nofile => { soft => 65000, hard => 65000 },
       nproc  => { soft => 65000, hard => 65000 },
     }
@@ -245,101 +245,101 @@ class dpm::head_disknode (
   #pools configuration
   #
   if ($configure_default_pool) {
-	Class[Lcgdm::Dpm::Service] -> Lcgdm::Dpm::Pool <| |>
-	lcgdm::dpm::pool{"mypool":
-		def_filesize => "100M"
-	}
+  Class[Lcgdm::Dpm::Service] -> Lcgdm::Dpm::Pool <| |>
+  lcgdm::dpm::pool{'mypool':
+    def_filesize => '100M'
+  }
   }
   #
   #
   # You can define your filesystems
   #
   if ($configure_default_filesystem) {
-	  Class[Lcgdm::Base::Config] ->
-	   file {
-	   "/srv/dpm":
-	   ensure => directory,
-	   owner => "dpmmgr",
-	   group => "dpmmgr",   
-	   mode =>  0775;
-	   "/srv/dpm/01":
-	   ensure => directory,
-	   owner => "dpmmgr",
-	   group => "dpmmgr",
-	   seltype => "httpd_sys_content_t",
-	   mode => 0775;
-	 }
-	  ->
-	  lcgdm::dpm::filesystem {"${fqdn}-myfsname":
-	  pool   => "mypool",
-	  server => "${fqdn}",
-	  fs     => "/srv/dpm"
-	 }
+    Class[Lcgdm::Base::Config] ->
+     file {
+     '/srv/dpm':
+     ensure => directory,
+     owner => 'dpmmgr',
+     group => 'dpmmgr',
+     mode =>  '0775';
+     '/srv/dpm/01':
+     ensure => directory,
+     owner => 'dpmmgr',
+     group => 'dpmmgr',
+     seltype => 'httpd_sys_content_t',
+     mode => '0775';
+   }
+    ->
+    lcgdm::dpm::filesystem {"${fqdn}-myfsname":
+    pool   => 'mypool',
+    server => $fqdn,
+    fs     => '/srv/dpm'
+   }
   }
 
   if ($configure_firewall) {
-	#
-	# The firewall configuration
-	#
-	firewall{"050 allow http and https":
-	  proto  => "tcp",
-	  dport  => [80, 443],
-	  action => "accept"
-	}
-	firewall{"050 allow rfio":
-	  state  => "NEW",
-	  proto  => "tcp",
-	  dport  => "5001",
-	  action => "accept"
-	}
-	firewall{"050 allow rfio range":
-	  state  => "NEW",
-	  proto  => "tcp",
-	  dport  => "20000-25000",
-	  action => "accept"
-	}
-	firewall{"050 allow gridftp control":
-	  state  => "NEW",
-	  proto  => "tcp",
-	  dport  => "2811",
-	  action => "accept"
-	}
-	firewall{"050 allow gridftp range":
-	  state  => "NEW",
-	  proto  => "tcp",
-	  dport  => "20000-25000",
-	  action => "accept"
-	}
-	firewall{"050 allow srmv2.2":
-	  state  => "NEW",
-	  proto  => "tcp",
-	  dport  => "8446",
-	  action => "accept"
-	}
-	firewall{"050 allow xrootd":
-	  state  => "NEW",
-	  proto  => "tcp",
-	  dport  => "1095",
-	  action => "accept"
-	}
-	firewall{"050 allow cmsd":
-	  state  => "NEW",
-	  proto  => "tcp",
-	  dport  => "1094",
-	  action => "accept"
-	}
+  #
+  # The firewall configuration
+  #
+  firewall{'050 allow http and https':
+    proto  => 'tcp',
+    dport  => [80, 443],
+    action => 'accept'
+  }
+  firewall{'050 allow rfio':
+    state  => 'NEW',
+    proto  => 'tcp',
+    dport  => '5001',
+    action => 'accept'
+  }
+  firewall{'050 allow rfio range':
+    state  => 'NEW',
+    proto  => 'tcp',
+    dport  => '20000-25000',
+    action => 'accept'
+  }
+  firewall{'050 allow gridftp control':
+    state  => 'NEW',
+    proto  => 'tcp',
+    dport  => '2811',
+    action => 'accept'
+  }
+  firewall{'050 allow gridftp range':
+    state  => 'NEW',
+    proto  => 'tcp',
+    dport  => '20000-25000',
+    action => 'accept'
+  }
+  firewall{'050 allow srmv2.2':
+    state  => 'NEW',
+    proto  => 'tcp',
+    dport  => '8446',
+    action => 'accept'
+  }
+  firewall{'050 allow xrootd':
+    state  => 'NEW',
+    proto  => 'tcp',
+    dport  => '1095',
+    action => 'accept'
+  }
+  firewall{'050 allow cmsd':
+    state  => 'NEW',
+    proto  => 'tcp',
+    dport  => '1094',
+    action => 'accept'
+  }
 
-	firewall{"050 allow DPNS":
-	  state  => "NEW",
-	  proto  => "tcp",
-	  dport  => "5010",
-	  action => "accept"
-	}
-	firewall{"050 allow DPM":
-	  state  => "NEW",
-	  proto  => "tcp",
-	  dport  => "5015",
-	  action => "accept"
-	}
+  firewall{'050 allow DPNS':
+    state  => 'NEW',
+    proto  => 'tcp',
+    dport  => '5010',
+    action => 'accept'
+  }
+  firewall{'050 allow DPM':
+    state  => 'NEW',
+    proto  => 'tcp',
+    dport  => '5015',
+    action => 'accept'
+  }
     }
-}	
+}
