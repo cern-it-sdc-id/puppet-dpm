@@ -133,7 +133,10 @@ class dpm::head_disknode (
     }
 
     if($configure_vos){
-       class{"voms::${volist}":}
+      define add_dpm_voms {
+        class{"voms::${title}":}
+      }
+      add_dpm_voms {$volist:}
     }
 
     if($configure_gridmap){
@@ -224,7 +227,7 @@ class dpm::head_disknode (
     # GIP installation and configuration
     class{'lcgdm::bdii::dpm':
        sitename => $site_name,
-       vos      => [ $volist ],
+       vos      => $volist,
     }
 
    }
