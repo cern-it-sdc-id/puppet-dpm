@@ -1,5 +1,7 @@
 puppet-dpm module
 ======
+[![Puppet Forge](http://img.shields.io/puppetforge/v/lcgdm/dpm.svg)](https://forge.puppetlabs.com/lcgdm/xrootd)
+[![Build Status](https://travis-ci.org/cern-it-sdc-id/puppet-dpm.svg?branch=master)]([https://travis-ci.org/cern-it-sdc-id/puppet-dpm.svg)
 
 The puppet-dpm module has been developed to ease the set up of a DPM installation via puppet.
 
