@@ -83,9 +83,9 @@ class dpm::headnode (
       Class[Mysql::Server] -> Class[Lcgdm::Ns::Service]
       
       class{'mysql::server':
-    service_enabled   => true,
+    	service_enabled   => true,
         root_password => $mysql_root_pass
-          }
+        }
     }
    
 
@@ -133,7 +133,7 @@ class dpm::headnode (
     }
 
     if($configure_vos){
-       class{"voms::${volist}":}
+	dpm::util::add_dpm_voms {$volist:}
     }
 
    if($configure_gridmap){
@@ -222,7 +222,7 @@ class dpm::headnode (
     # GIP installation and configuration
     class{'lcgdm::bdii::dpm':
        sitename => $site_name,
-       vos      => [ $volist ],
+       vos      => $volist ,
     }
 
    }

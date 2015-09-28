@@ -20,5 +20,5 @@ class{'dpm::head_disknode':
    token_password               => 'TOKEN_PASSWORD',
    xrootd_sharedkey             => 'A32TO64CHARACTERKEYTESTTESTTESTTEST',
    site_name                    => 'CNR_DPM_TEST',
-   volist                       =>[dteam],
+   volist                       => [dteam, lhcb],
 }

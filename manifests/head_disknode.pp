@@ -84,9 +84,9 @@ class dpm::head_disknode (
       Class[Mysql::Server] -> Class[Lcgdm::Ns::Service]
       
       class{'mysql::server':
-    service_enabled   => true,
+    	service_enabled   => true,
         root_password => $mysql_root_pass
-          }
+        }
     }
    
     #
@@ -133,10 +133,7 @@ class dpm::head_disknode (
     }
 
     if($configure_vos){
-      define add_dpm_voms {
-        class{"voms::${title}":}
-      }
-      add_dpm_voms {$volist:}
+      dpm::util::add_dpm_voms {$volist:}
     }
 
     if($configure_gridmap){
