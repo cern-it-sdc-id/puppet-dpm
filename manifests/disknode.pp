@@ -78,9 +78,8 @@ class dpm::disknode (
     }
 
     if($configure_vos){
-      class{"voms::${volist}":}
+      dpm::util::add_dpm_voms {$volist:}
     }
-
 
     if($configure_gridmap){
       #setup the gridmap file
