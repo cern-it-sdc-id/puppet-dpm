@@ -60,19 +60,19 @@ class dpm::headnode (
     # Set inter-module dependencies
     #
     
-    Class[Lcgdm::Dpm::Service] -> Class[Dmlite::Plugins::Adapter::Install]
-    Class[Lcgdm::Ns::Config] -> Class[Dmlite::Srm::Service]
-    Class[Dmlite::Head] -> Class[Dmlite::Plugins::Adapter::Install]
-    Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Srm]
-    Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Gridftp]
-    Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Srm]
-    Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Gridftp]
-    Class[fetchcrl::service] -> Class[Xrootd::Config]
+    Class[lcgdm::dpm::service] -> Class[dmlite::plugins::adapter::install]
+    Class[lcgdm::ns::config] -> Class[dmlite::srm::service]
+    Class[dmlite::head] -> Class[dmlite::plugins::adapter::install]
+    Class[dmlite::plugins::adapter::install] ~> Class[dmlite::srm]
+    Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
+    Class[dmlite::plugins::mysql::install] ~> Class[dmlite::srm]
+    Class[dmlite::plugins::mysql::install] ~> Class[dmlite::gridftp]
+    Class[fetchcrl::service] -> Class[xrootd::config]
 
     if($memcached_enabled){
-       Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Dav::Service]
-       Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Gridftp]
-       Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Srm]
+       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
+       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
+       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::srm]
     }
 
 
@@ -80,7 +80,7 @@ class dpm::headnode (
     # MySQL server setup 
     #
     if ($local_db) {
-      Class[Mysql::Server] -> Class[Lcgdm::Ns::Service]
+      Class[mysql::server] -> Class[lcgdm::ns::service]
       
       class{'mysql::server':
     	service_enabled   => true,
@@ -164,10 +164,10 @@ class dpm::headnode (
     # Frontends based on dmlite.
     #
     if($webdav_enabled){
-      Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Dav]
-      Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Dav]
-      Class[Dmlite::Install] ~> Class[Dmlite::Dav::Config]
-      Dmlite::Plugins::Adapter::Create_config <| |> -> Class[Dmlite::Dav::Install]
+      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::dav]
+      Class[dmlite::plugins::mysql::install] ~> Class[dmlite::dav]
+      Class[dmlite::install] ~> Class[dmlite::dav::config]
+      Dmlite::Plugins::Adapter::Create_config <| |> -> Class[dmlite::dav::install]
 
       class{'dmlite::dav':}
     }

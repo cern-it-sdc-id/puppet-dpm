@@ -30,11 +30,11 @@ class dpm::disknode (
   
   )inherits dpm::params {
 
-    Class[Lcgdm::Base::Install] -> Class[Lcgdm::Rfio::Install]
+    Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
     if($webdav_enabled){
-      Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Dav::Service]
+      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::dav::service]
     }
-    Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Gridftp]
+    Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
 
     # lcgdm configuration.
     #

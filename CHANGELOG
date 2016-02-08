@@ -1,3 +1,5 @@
+2016-02-08 Andrea Manzi  <andrea.manzi@cern.ch>
+        * puppet 4 support
 2016-01-06 Andrea Manzi  <andrea.manzi@cern.ch>
         * fixed handling of multiple vos on disknode
 2015-09-28 Andrea Manzi  <andrea.manzi@cern.ch>

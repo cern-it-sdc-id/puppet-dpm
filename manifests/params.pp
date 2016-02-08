@@ -10,7 +10,7 @@ class dpm::params {
   #cluster options
   $headnode_fqdn =  hiera('dpm::params::headnode_fqdn', $::fqdn)
   $disk_nodes =  hiera('dpm::params::disk_nodes','')
-  $localdomain =  hiera('dpm::params::localdomain','')
+  $localdomain =  hiera('dpm::params::localdomain',undef)
   $webdav_enabled = hiera('dpm::params::webdav_enabled',true)
   $memcached_enabled = hiera('dpm::params::webdav_enabled',true)
   $local_db = hiera('dpm::params::local_db',true)
@@ -21,11 +21,11 @@ class dpm::params {
 
   #DB/Auth options
   $db_user =  hiera('dpm::params::db_user','dpmmgr')
-  $db_pass =  hiera('dpm::params::db_pass','')
+  $db_pass =  hiera('dpm::params::db_pass',undef)
   $db_host =  hiera('dpm::params::db_host','localhost')
-  $mysql_root_pass =  hiera('dpm::params::mysql_root_pass','')
-  $token_password =  hiera('dpm::params::token_password','')
-  $xrootd_sharedkey =  hiera('dpm::params::xrootd_sharedkey','')
+  $mysql_root_pass =  hiera('dpm::params::mysql_root_pass',undef)
+  $token_password =  hiera('dpm::params::token_password',undef)
+  $xrootd_sharedkey =  hiera('dpm::params::xrootd_sharedkey',undef)
   $xrootd_use_voms = hiera('dpm::params::xrootd_use_voms',true)
 
   #VOs parameters

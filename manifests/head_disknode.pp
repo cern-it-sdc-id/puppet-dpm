@@ -61,19 +61,19 @@ class dpm::head_disknode (
     # Set inter-module dependencies
     #
 
-    Class[Lcgdm::Dpm::Service] -> Class[Dmlite::Plugins::Adapter::Install]
-    Class[Lcgdm::Ns::Config] -> Class[Dmlite::Srm::Service]
-    Class[Dmlite::Head] -> Class[Dmlite::Plugins::Adapter::Install]
-    Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Srm]
-    Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Gridftp]
-    Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Srm]
-    Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Gridftp]
-    Class[fetchcrl::service] -> Class[Xrootd::Config]
+    Class[lcgdm::dpm::service] -> Class[dmlite::plugins::adapter::install]
+    Class[lcgdm::ns::config] -> Class[dmlite::srm::service]
+    Class[dmlite::head] -> Class[dmlite::plugins::adapter::install]
+    Class[dmlite::plugins::adapter::install] ~> Class[dmlite::srm]
+    Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
+    Class[dmlite::plugins::mysql::install] ~> Class[dmlite::srm]
+    Class[dmlite::plugins::mysql::install] ~> Class[dmlite::gridftp]
+    Class[fetchcrl::service] -> Class[xrootd::config]
 
     if($memcached_enabled){
-       Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Dav::Service]
-       Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Gridftp]
-       Class[Dmlite::Plugins::Memcache::Install] ~> Class[Dmlite::Srm]
+       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
+       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
+       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::srm]
     }
 
 
@@ -81,7 +81,7 @@ class dpm::head_disknode (
     # MySQL server setup 
     #
     if ($local_db) {
-      Class[Mysql::Server] -> Class[Lcgdm::Ns::Service]
+      Class[mysql::server] -> Class[lcgdm::ns::service]
       
       class{'mysql::server':
     	service_enabled   => true,
@@ -164,10 +164,10 @@ class dpm::head_disknode (
     # Frontends based on dmlite.
     #
     if($webdav_enabled){
-      Class[Dmlite::Plugins::Adapter::Install] ~> Class[Dmlite::Dav]
-      Class[Dmlite::Plugins::Mysql::Install] ~> Class[Dmlite::Dav]
-      Class[Dmlite::Install] ~> Class[Dmlite::Dav::Config]
-      Dmlite::Plugins::Adapter::Create_config <| |> -> Class[Dmlite::Dav::Install]
+      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::dav]
+      Class[dmlite::plugins::mysql::install] ~> Class[dmlite::dav]
+      Class[dmlite::install] ~> Class[dmlite::dav::config]
+      Dmlite::Plugins::Adapter::Create_config <| |> -> Class[dmlite::dav::install]
 
       class{'dmlite::dav':}
     }
@@ -218,8 +218,8 @@ class dpm::head_disknode (
    {
     #bdii installation and configuration with default values
     include('bdii')
-    Class[Bdii::Install] -> Class[Lcgdm::Bdii::Dpm]
-    Class[Lcgdm::Bdii::Dpm] -> Class[Bdii::Service]
+    Class[bdii::install] -> Class[lcgdm::bdii::dpm]
+    Class[lcgdm::bdii::dpm] -> Class[bdii::service]
 
     # GIP installation and configuration
     class{'lcgdm::bdii::dpm':
@@ -245,7 +245,7 @@ class dpm::head_disknode (
   #pools configuration
   #
   if ($configure_default_pool) {
-  Class[Lcgdm::Dpm::Service] -> Lcgdm::Dpm::Pool <| |>
+  Class[lcgdm::dpm::service] -> Lcgdm::Dpm::Pool <| |>
   lcgdm::dpm::pool{'mypool':
     def_filesize => '100M'
   }
@@ -255,7 +255,7 @@ class dpm::head_disknode (
   # You can define your filesystems
   #
   if ($configure_default_filesystem) {
-    Class[Lcgdm::Base::Config] ->
+    Class[lcgdm::base::config] ->
      file {
      '/srv/dpm':
      ensure => directory,
