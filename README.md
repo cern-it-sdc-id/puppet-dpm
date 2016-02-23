@@ -146,6 +146,20 @@ Other parameters that are enabled by default are:
 
 ###Disknode
 
+The Disknode configuration is performed via the **dpm::disknode** class, as follows:
+
+```
+class{'dpm::disknode':
+   headnode_fqdn                => "HEADNODE",
+   disk_nodes                   => ['localhost'],
+   localdomain                  => 'cern.ch',
+   token_password               => 'TOKEN_PASSWORD',
+   xrootd_sharedkey             => 'A32TO64CHARACTERKEYTESTTESTTESTTEST',
+   volist                       => [dteam, lhcb],
+}
+```
+
+
 ###Common configuration
 
 ####VO list and mapfile
