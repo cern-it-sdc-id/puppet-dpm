@@ -12,7 +12,7 @@
 4. [Usage](#usage)
     * [Headnode](#headnode)
     * [Disknode](#disknode)
-    * [Common configuration](#common configuration)
+    * [Common configuration](#commonconfiguration)
 5. [Limitations - OS compatibility, etc.](#limitations)
 
 
