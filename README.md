@@ -6,13 +6,13 @@
 
 #### Table of Contents
 
-1. [Description](#Description)
-2. [Dependencies](#Dependencies)
-3. [Installation](#Installation)
-4. [Usage](#Usage)
-    * [Headnode](#Headnode)
-    * [Disknode](#Disknode)
-    * [Common configuration](#Common configuration)
+1. [Description](#description)
+2. [Dependencies](#dependencies)
+3. [Installation](#installation)
+4. [Usage](#usage)
+    * [Headnode](#headnode)
+    * [Disknode](#disknode)
+    * [Common configuration](#common configuration)
 5. [Limitations - OS compatibility, etc.](#limitations)
 
 
@@ -109,7 +109,7 @@ class{"dpm::headnode":
 ```
 The parameters descriptions is quite easy to guess from the name.
 
-#### DB configuration
+####DB configuration
 
 Depending on the DB installation ( local to the headnode or external ) there are different configuration parameters to set:
 
@@ -124,7 +124,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'HEADNODE' IDENTIFIED BY 'MYSQLROOT' WITH 
 
 **N.B.** In case of an upgrade of an existing DPM installation the **new_installation** parameter MUST be set to *false*
 
-#### Xrootd  configuration
+####Xrootd  configuration
 
 The basic Xrootd configuration requires only to sepcifies the **xrootd_sharedkey**, which should be a 32 to 64 char long string, the same for all the cluster.
 
@@ -132,7 +132,7 @@ In order to configure the Xrootd Fedarations and the Xrootd Monitoring via the p
 
 https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Xroot/PuppetSetup
 
-#### Other configuration
+####Other configuration
 
 The Headnode is configured with the Memcache server and the related DPM plugin. In order to disable it the parameter **memcached_enabled** should be set to *false*.
 
@@ -148,7 +148,7 @@ Other parameters that are enabled by default are:
 
 ###Common configuration
 
-#### VO list and mapfile
+####VO list and mapfile
 
 Both Head and Disk nodes should be configured vith the list of the VOs supported and the configuration input to generate the mapfile.
 
@@ -171,7 +171,7 @@ groupmap = {
 }
 ```
 
-#### Other coonfiguration:
+####Other coonfiguration:
 
 * **configure_vos** : enable/disable the configuration of the VOs ( default = true)
 * **configure_gridmap** : enable/disable the configuration of gridmap file ( default = true)
