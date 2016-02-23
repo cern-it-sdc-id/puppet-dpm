@@ -17,7 +17,6 @@ class{'dpm::head_disknode':
    localdomain                  => 'cern.ch',
    db_pass                      => 'MYSQLPASS',
    mysql_root_pass              => 'PASS',
-   dpmmgr_uid                   => 500,
    token_password               => 'TOKEN_PASSWORD',
    xrootd_sharedkey             => 'A32TO64CHARACTERKEYTESTTESTTESTTEST',
    site_name                    => 'CNR_DPM_TEST',
