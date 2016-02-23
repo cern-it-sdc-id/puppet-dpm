@@ -3,6 +3,21 @@
 [![Puppet Forge](http://img.shields.io/puppetforge/v/lcgdm/dpm.svg)](https://forge.puppetlabs.com/lcgdm/xrootd)
 [![Build Status](https://travis-ci.org/cern-it-sdc-id/puppet-dpm.svg?branch=master)]([https://travis-ci.org/cern-it-sdc-id/puppet-dpm.svg)
 
+
+#### Table of Contents
+
+1. [Description](#Description)
+2. [Dependencies](#Dependencies)
+3. [Installation](#Installation)
+4. [Usage](#Usage)
+    * [Headnode](#Headnode)
+    * [Disknode](#Disknode)
+    * [Common configuration](#Common configuration)
+5. [Limitations - OS compatibility, etc.](#limitations)
+
+
+##Description
+
 The puppet-dpm module has been developed to ease the set up of a DPM installation via puppet.
 
 It can be used to set up different DPM installations :
@@ -71,8 +86,6 @@ puppet apply dpm.pp
 to have the DPM box installed and configured
  
 Please note that it could be needed to run twice the puppet apply command in order to have all the changes correctly applied
-
-##Configuration Details
 
 ###Headnode
 
