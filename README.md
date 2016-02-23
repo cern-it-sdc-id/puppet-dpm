@@ -1,5 +1,5 @@
-puppet-dpm module
-======
+#puppet-dpm module
+
 [![Puppet Forge](http://img.shields.io/puppetforge/v/lcgdm/dpm.svg)](https://forge.puppetlabs.com/lcgdm/xrootd)
 [![Build Status](https://travis-ci.org/cern-it-sdc-id/puppet-dpm.svg?branch=master)]([https://travis-ci.org/cern-it-sdc-id/puppet-dpm.svg)
 
@@ -11,8 +11,8 @@ It can be used to set up different DPM installations :
  - DPM Disknode
  - DPM Head+Disk Node 
  
-Dependencies
-=====
+##Dependencies
+
 
 It relies on several puppet modules, some of them developed @ CERN and some others available from third party.
 
@@ -31,8 +31,8 @@ The following modules are needed in order to use this module, and they are autom
  - CERNOps-fetchcrl
  - erwbgy-limits
 
-Installation
-=====
+##Installation
+
 
 The puppet-dpm module can be installed from puppetforge via
 
@@ -40,8 +40,8 @@ The puppet-dpm module can be installed from puppetforge via
 puppet module install lcgdm-dpm
 ```
 
-Usage
-=====
+##Usage
+
 
 The module folder tests contains some examples, for instance you can set up a DPM box with both HEAD and DISK nodes with the following code snippet
 
@@ -72,11 +72,9 @@ to have the DPM box installed and configured
  
 Please note that it could be needed to run twice the puppet apply command in order to have all the changes correctly applied
 
-Configuration Details
-=====================
+##Configuration Details
 
-Headnode
---------
+###Headnode
 
 The Headnode configuration is performed via the 'dpm::headnode' class or in case of an installation of a Head+Disk node via the 'dpm::head_disknode' class
 
@@ -98,16 +96,27 @@ class{"dpm::headnode":
 ```
 The parameters descriptions is quite easy to guess from the name.
 
+#### DB configuration
+
 Depending on the DB installation ( local to the headnode or external ) there are different configuration parameters to set:
 
 In case of a local installation the **db_host** parameter should be configured as *localhost* together with the **local_db** parameter set to *true*.
 While for an external DB installation the **local_db** parameter should be set to *false*.
 
-**N.B.** the root DB grants for the headnode should be added manually to the DB in case of an expternal DB installation:
+**N.B.** the root DB grants for the headnode should be added manually to the DB in case of an external DB installation:
 
 ```
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'HEADNODE' IDENTIFIED BY 'MYSQLROOT' WITH GRANT OPTION;
 ```
 
-**N.B.** In case of an upgrade of an existing DPM Installation the **new_installation** MUST be set to *false*
+**N.B.** In case of an upgrade of an existing DPM installation the **new_installation** parameter MUST be set to *false*
+
+###Disknode
+
+###Common configuration
+
+Both Head and Disk nodes should be configured vith the list of the VOs supported and the configuration of the mapfile
+
+
+
 
