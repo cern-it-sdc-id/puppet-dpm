@@ -12,7 +12,7 @@ class dpm::disknode (
   $localdomain =  $dpm::params::localdomain,
   $webdav_enabled = $dpm::params::webdav_enabled,
   #GridFTP redirection
-  $gridftp_redir = $dpm::params::gridftp_redir,
+  $gridftp_redirect = $dpm::params::gridftp_redirect,
 
   #dpmmgr user options
   $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
