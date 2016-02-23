@@ -7,18 +7,19 @@ class dpm::headnode (
     $configure_bdii = $dpm::params::configure_bdii,
     $configure_firewall = $dpm::params::configure_firewall,
 
-    #cluster options
+    #Cluster options
     $local_db = $dpm::params::local_db,
     $headnode_fqdn =  $dpm::params::headnode_fqdn,
     $disk_nodes =  $dpm::params::disk_nodes,
     $localdomain =  $dpm::params::localdomain,
     $webdav_enabled = $dpm::params::webdav_enabled,
     $memcached_enabled = $dpm::params::memcached_enabled,
+    #GridFtp redirection
+    $gridftp_redirect = $dpm::params::gridftp_redirect,
 
     #dpmmgr user options
     $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
     $dpmmgr_gid =  $dpm::params::dpmmgr_gid,
-
 
     #DB/Auth options
     $db_user =  $dpm::params::db_user,
@@ -40,8 +41,17 @@ class dpm::headnode (
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
 
     $site_name = $dpm::params::site_name,
+  
+    #New DB installation vs upgrade
+    $new_installation = $dpm::params::new_installation,
 
 )inherits dpm::params {
+
+   validate_array($disk_nodes)
+   validate_bool($new_installation)
+   validate_array($volist)
+   
+   $disk_nodes_str=join($disk_nodes,' ')
 
    #XRootd monitoring parameters
     if($dpm::params::xrd_report){
@@ -81,10 +91,23 @@ class dpm::headnode (
     #
     if ($local_db) {
       Class[mysql::server] -> Class[lcgdm::ns::service]
+
+      $override_options = {
+      	'mysqld' => {
+            'max_connections'    => '1000',
+            'query_cache_size'   => '256M',
+            'query_cache_limit'  => '1MB',
+            'innodb_flush_method' => 'O_DIRECT',
+            'innodb_buffer_pool_size' => '1000000000',
+            'bind-address' => '0.0.0.0',
+          }
+    	}
       
       class{'mysql::server':
     	service_enabled   => true,
-        root_password => $mysql_root_pass
+        root_password => $mysql_root_pass,
+        override_options => $override_options,
+	create_root_user => $new_installation,
         }
     }
    
@@ -97,9 +120,9 @@ class dpm::headnode (
       dbuser   => $db_user,
       dbpass   => $db_pass,
       dbhost   => $db_host,
+      mysqlrootpass =>  $mysql_root_pass,
       domain   => $localdomain,
       volist   => $volist,
-      dbmanage => $local_db,
       uid      => $dpmmgr_uid,
       gid      => $dpmmgr_gid,
     }
@@ -118,18 +141,25 @@ class dpm::headnode (
     lcgdm::shift::trust_value{
       'DPM TRUST':
         component => 'DPM',
-        host      => $disk_nodes;
+        host      => "$disk_nodes_str $headnode_fqdn";
       'DPNS TRUST':
         component => 'DPNS',
-        host      => $disk_nodes;
+        host      => "$disk_nodes_str $headnode_fqdn";
       'RFIO TRUST':
         component => 'RFIOD',
-        host      => $disk_nodes,
+        host      => "$disk_nodes_str $headnode_fqdn",
         all       => true
     }
     lcgdm::shift::protocol{'PROTOCOLS':
       component => 'DPM',
       proto     => 'rfio gsiftp http https xroot'
+    }
+    if($gridftp_redirect){
+      lcgdm::shift::protocol_head{"GRIDFTP":
+             component => "DPM",
+             protohead => "FTPHEAD",
+             host      => "${::fqdn}",
+      }  
     }
 
     if($configure_vos){
@@ -146,9 +176,6 @@ class dpm::headnode (
         localmap     => {'nobody'        => 'nogroup'}
       }
     
-       exec{'/usr/sbin/edg-mkgridmap --conf=/etc/lcgdm-mkgridmap.conf --safe --output=/etc/lcgdm-mapfile':
-        require => Lcgdm::Mkgridmap::File['lcgdm-mkgridmap']
-      }
     }
 
     #
@@ -173,7 +200,11 @@ class dpm::headnode (
     }
     class{'dmlite::srm':}
     class{'dmlite::gridftp':
-      dpmhost => $::fqdn
+      dpmhost => $::fqdn, 
+      remote_nodes => $gridftp_redirect ? {
+        1 => join(suffix($disk_nodes, ':2811'), ','),
+        0 => undef,
+      },    
     }
 
 
@@ -188,7 +219,7 @@ class dpm::headnode (
       xrootd_user  => $dpmmgr_user,
       xrootd_group => $dpmmgr_user,
     }
-
+    ->
     class{'dmlite::xrootd':
           nodetype             => [ 'head' ],
           domain               => $localdomain,
@@ -205,6 +236,8 @@ class dpm::headnode (
    {
      class{'memcached':
        max_memory => 512,
+       listen_ip => '127.0.0.1',
+
      }
      ->
      class{'dmlite::plugins::memcache':

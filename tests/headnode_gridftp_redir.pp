@@ -10,16 +10,18 @@
 # http://docs.puppetlabs.com/guides/tests_smoke.html
 #
 
-class{'dpm::head_disknode':
-   configure_default_pool       => true,
-   configure_default_filesystem => true,
-   disk_nodes                   => ['localhost'],
+class{'dpm::headnode':
    localdomain                  => 'cern.ch',
-   db_pass                      => 'MYSQLPASS',
-   mysql_root_pass              => 'PASS',
+   db_user			=> 'dpmdbuser',
+   db_pass                      => 'PASS',
+   db_host 			=> 'localhost',
+   local_db 			=> true,
    dpmmgr_uid                   => 500,
-   token_password               => 'TOKEN_PASSWORD',
-   xrootd_sharedkey             => 'A32TO64CHARACTERKEYTESTTESTTESTTEST',
+   disk_nodes                   => ['dpm-disk01.cern.ch'],
+   mysql_root_pass              => 'MYSQLROOT',
+   token_password               => 'kwpoMyvcusgdbyyws6gfcxhntkLoh8jilwivnivel',
+   xrootd_sharedkey             => 'A32TO64CHARACTERA32TO64CHARACTER',
    site_name                    => 'CNR_DPM_TEST',
    volist                       => [dteam, lhcb],
+   gridftp_redirect		=> 1;
 }

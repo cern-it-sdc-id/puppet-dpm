@@ -11,6 +11,8 @@ class dpm::disknode (
   $disk_nodes =  $dpm::params::disk_nodes,
   $localdomain =  $dpm::params::localdomain,
   $webdav_enabled = $dpm::params::webdav_enabled,
+  #GridFTP redirection
+  $gridftp_redir = $dpm::params::gridftp_redir,
 
   #dpmmgr user options
   $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
@@ -29,6 +31,12 @@ class dpm::disknode (
   $debug = $dpm::params::debug,
   
   )inherits dpm::params {
+  
+    validate_array($disk_nodes)
+    validate_bool($new_installation)
+    validate_array($volist)
+
+    $disk_nodes_str=join($disk_nodes,' ')
 
     Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
     if($webdav_enabled){
@@ -63,13 +71,13 @@ class dpm::disknode (
     lcgdm::shift::trust_value{
       'DPM TRUST':
         component => 'DPM',
-        host      => "${headnode_fqdn} ${disk_nodes}";
+        host      => "$disk_nodes_str $headnode_fqdn";
       'DPNS TRUST':
         component => 'DPNS',
-        host      => "${headnode_fqdn} ${disk_nodes}";
+        host      => "$disk_nodes_str $headnode_fqdn";
       'RFIO TRUST':
         component => 'RFIOD',
-        host      => "${headnode_fqdn} ${disk_nodes}",
+        host      => "$disk_nodes_str $headnode_fqdn",
         all       => true
     }
     lcgdm::shift::protocol{'PROTOCOLS':
@@ -109,7 +117,8 @@ class dpm::disknode (
     }
     
     class{'dmlite::gridftp':
-      dpmhost => $headnode_fqdn
+      dpmhost => $headnode_fqdn,
+      data_node => $gridftp_redirect,
     }
 
     # The XrootD configuration is a bit more complicated and

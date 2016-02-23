@@ -9,15 +9,17 @@ class dpm::params {
 
   #cluster options
   $headnode_fqdn =  hiera('dpm::params::headnode_fqdn', $::fqdn)
-  $disk_nodes =  hiera('dpm::params::disk_nodes','')
+  $disk_nodes =  hiera('dpm::params::disk_nodes',[])
   $localdomain =  hiera('dpm::params::localdomain',undef)
   $webdav_enabled = hiera('dpm::params::webdav_enabled',true)
   $memcached_enabled = hiera('dpm::params::webdav_enabled',true)
   $local_db = hiera('dpm::params::local_db',true)
+  $gridftp_redirect =  hiera("dpm::params::gridftp_redirect",0)
 
   #dpmmgr user options
   $dpmmgr_uid =  hiera('dpm::params::dpmmgr_uid',151)
   $dpmmgr_gid =  hiera('dpm::params::dpmmgr_gid',151)
+  $dpmmgr_user = hiera('dpm::params::dpmmgr_user','dpmmgr')
 
   #DB/Auth options
   $db_user =  hiera('dpm::params::db_user','dpmmgr')
@@ -46,4 +48,6 @@ class dpm::params {
   $xrootd_monitor = hiera('dpm::params::xrootd_monitor',undef)
 
   $site_name = hiera('dpm::params::site_name',undef)
+
+  $new_installation = hiera('dpm::params::new_installation',true)
 }
