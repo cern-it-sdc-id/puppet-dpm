@@ -151,7 +151,7 @@ The Disknode configuration is performed via the **dpm::disknode** class, as foll
 ```
 class{'dpm::disknode':
    headnode_fqdn                => "HEADNODE",
-   disk_nodes                   => ['localhost'],
+   disk_nodes                   => ['$::fqdn'],
    localdomain                  => 'cern.ch',
    token_password               => 'TOKEN_PASSWORD',
    xrootd_sharedkey             => 'A32TO64CHARACTERKEYTESTTESTTESTTEST',
