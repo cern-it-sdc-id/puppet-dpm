@@ -49,7 +49,7 @@ The module folder tests contains some examples, for instance you can set up a DP
 class{"dpm::head_disknode":
    configure_default_pool => true,
    configure_default_filesystem => true,
-   disk_nodes => "localhost",
+   disk_nodes => ['localhost'],
    localdomain => "cern.ch",
    db_pass => "MYSQLPASS",
    mysql_root_pass => "PASS",
@@ -71,3 +71,43 @@ puppet apply dpm.pp
 to have the DPM box installed and configured
  
 Please note that it could be needed to run twice the puppet apply command in order to have all the changes correctly applied
+
+Configuration Details
+=====================
+
+Headnode
+--------
+
+The Headnode configuration is performed via the 'dpm::headnode' class or in case of an installation of a Head+Disk node via the 'dpm::head_disknode' class
+
+```
+class{"dpm::headnode":
+   localdomain                  => 'cern.ch',
+   db_user                      => 'dpmdbuser',
+   db_pass                      => 'PASS',
+   db_host                      => 'localhost',
+   disk_nodes                   => ['dpm-disk01.cern.ch'],
+   local_db                     => true,
+   mysql_root_pass              => 'MYSQLROOT',
+   token_password               => 'kwpoMyvcusgdbyyws6gfcxhntkLoh8jilwivnivel',
+   xrootd_sharedkey             => 'A32TO64CHARACTERA32TO64CHARACTER',
+   site_name                    => 'CNR_DPM_TEST',
+   volist                       => [dteam, lhcb],
+   new_installation             => true,
+}
+```
+The parameters descriptions is quite easy to guess from the name.
+
+Depending on the DB installation ( local to the headnode or external ) there are different configuration parameters to set:
+
+In case of a local installation the **db_host** parameter should be configured as *localhost* together with the **local_db** parameter set to *true*.
+While for an external DB installation the **local_db** parameter should be set to *false*.
+
+**N.B.** the root DB grants for the headnode should be added manually to the DB in case of an expternal DB installation:
+
+```
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'HEADNODE' IDENTIFIED BY 'MYSQLROOT' WITH GRANT OPTION;
+```
+
+**N.B.** In case of an upgrade of an existing DPM Installation the **new_installation** MUST be set to *false*
+
