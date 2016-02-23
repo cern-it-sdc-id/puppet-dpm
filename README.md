@@ -126,9 +126,9 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'HEADNODE' IDENTIFIED BY 'MYSQLROOT' WITH 
 
 ####Xrootd  configuration
 
-The basic Xrootd configuration requires only to sepcifies the **xrootd_sharedkey**, which should be a 32 to 64 char long string, the same for all the cluster.
+The basic Xrootd configuration requires only to specifies the **xrootd_sharedkey**, which should be a 32 to 64 char long string, the same for all the cluster.
 
-In order to configure the Xrootd Fedarations and the Xrootd Monitoring via the parameter **dpm_xrootd_fedredirs**, **xrd_report** and **xrd_monitor** please refer to the DPM-Xrootd puppet guide:
+In order to configure the Xrootd Federations and the Xrootd Monitoring via the parameter **dpm_xrootd_fedredirs**, **xrd_report** and **xrd_monitor** please refer to the DPM-Xrootd puppet guide:
 
 https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Xroot/PuppetSetup
 
@@ -144,6 +144,8 @@ Other parameters that are enabled by default are:
 * **configure_default_pool** : create a default pool, use for testing ( default = false)
 * **configure_default_filesystem** : create a default filesytem, use for testing ( default = false)
 
+see the Common Configuration section for the rest of configuration options
+
 ###Disknode
 
 The Disknode configuration is performed via the **dpm::disknode** class, as follows:
@@ -158,7 +160,7 @@ class{'dpm::disknode':
    volist                       => [dteam, lhcb],
 }
 ```
-
+see the Common Configuration section for the rest of configuration options
 
 ###Common configuration
 
