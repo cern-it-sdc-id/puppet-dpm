@@ -111,12 +111,57 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'HEADNODE' IDENTIFIED BY 'MYSQLROOT' WITH 
 
 **N.B.** In case of an upgrade of an existing DPM installation the **new_installation** parameter MUST be set to *false*
 
+#### Cluster  configuration
+
+The Headnode is configured with the Memcache server and the related DPM plugin. In order to disable it the parameter **memcached_enabled** should be set to *false*.
+
+As well for the WedDav frontend, installed and enabled by default but it can be disabled with **webdav_enabled** set to *false*
+
+Other parameters that are enabled by default are:
+
+* **configure_bdii** :  enabled/disabled the configuration of Resource BDII ( default = true)
+* **configure_default_pool** : create a default pool, use for testing ( default = false)
+* **configure_default_filesystem** : create a default filesytem, use for testing ( default = false)
+
+
+#### Xrootd  configuration
+
+Teh Xrootd configuration has 
+
 ###Disknode
 
 ###Common configuration
 
-Both Head and Disk nodes should be configured vith the list of the VOs supported and the configuration of the mapfile
+#### VO list and mapfile
 
+Both Head and Disk nodes should be configured vith the list of the VOs supported and the configuration input to generate the mapfile.
 
+The parameter **volist** is needed to specify the supported VOs, while the **groupmap** parameter specifies how to map VOMS users.By default the *dteam* VO mapping is given, an example for the whole LHC VOs mappings is as follows:
 
+```
+groupmap = {
+  "vomss://voms2.cern.ch:8443/voms/atlas?/atlas/"            => "atlas",
+  "vomss://lcg-voms2.cern.ch:8443/voms/atlas?/atlas/"      => "atlas",
+  "vomss://voms2.cern.ch:8443/voms/cms?/cms/"              => "cms", 
+  "vomss://lcg-voms2.cern.ch:8443/voms/cms?/cms/"        => "cms",
+  "vomss://voms2.cern.ch:8443/voms/lhcb?/lhcb/"              => "lhcb", 
+  "vomss://lcg-voms2.cern.ch:8443/voms/lhcb?/lhcb/"        => "lhcb",
+  "vomss://voms2.cern.ch:8443/voms/alice?/alice/"             => "alice", 
+  "vomss://lcg-voms2.cern.ch:8443/voms/alice?/alice/"      => "alice",
+  "vomss://voms2.cern.ch:8443/voms/ops?/ops/"               => "ops", 
+  "vomss://lcg-voms2.cern.ch:8443/voms/ops?/ops/"         => "ops",
+  "vomss://voms.hellasgrid.gr:8443/voms/dteam?/dteam"  => "dteam",
+  "vomss://voms2.hellasgrid.gr:8443/voms/dteam?/dteam"  => "dteam"
+}
+```
+
+#### Other coonfiguration:
+
+* **configure_vos** : enable/disable the configuration of the VOs ( default = true)
+* **configure_gridmap** : enable/disable the configuration of gridmap file ( default = true)
+* **configure_firewall** : enable/disable the configuration of the local firewall ( default = true)
+* **gridftp_redirect** : enabled/disabled the GridFTP redirection functionality ( default = 0)
+* **dpmmgr_uid** and **dpmmgr_gid** : the gid and uid for the dpmmgr user ( default = 151)
+* **debug** : enable/disable installation of the debuginfo packages ( default = false)
+* 
 
