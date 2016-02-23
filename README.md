@@ -171,7 +171,7 @@ groupmap = {
 }
 ```
 
-####Other coonfiguration:
+####Other configuration:
 
 * **configure_vos** : enable/disable the configuration of the VOs ( default = true)
 * **configure_gridmap** : enable/disable the configuration of gridmap file ( default = true)
