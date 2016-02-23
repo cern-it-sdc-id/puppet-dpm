@@ -89,7 +89,7 @@ Please note that it could be needed to run twice the puppet apply command in ord
 
 ###Headnode
 
-The Headnode configuration is performed via the 'dpm::headnode' class or in case of an installation of a Head+Disk node via the 'dpm::head_disknode' class
+The Headnode configuration is performed via the **dpm::headnode** class or in case of an installation of a Head+Disk node via the **dpm::head_disknode** class
 
 ```
 class{"dpm::headnode":
@@ -124,7 +124,15 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'HEADNODE' IDENTIFIED BY 'MYSQLROOT' WITH 
 
 **N.B.** In case of an upgrade of an existing DPM installation the **new_installation** parameter MUST be set to *false*
 
-#### Cluster  configuration
+#### Xrootd  configuration
+
+The basic Xrootd configuration requires only to sepcifies the **xrootd_sharedkey**, which should be a 32 to 64 char long string, the same for all the cluster.
+
+In order to configure the Xrootd Fedarations and the Xrootd Monitoring via the parameter **dpm_xrootd_fedredirs**, **xrd_report** and **xrd_monitor** please refer to the DPM-Xrootd puppet guide:
+
+https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Xroot/PuppetSetup
+
+#### Other configuration
 
 The Headnode is configured with the Memcache server and the related DPM plugin. In order to disable it the parameter **memcached_enabled** should be set to *false*.
 
@@ -135,11 +143,6 @@ Other parameters that are enabled by default are:
 * **configure_bdii** :  enabled/disabled the configuration of Resource BDII ( default = true)
 * **configure_default_pool** : create a default pool, use for testing ( default = false)
 * **configure_default_filesystem** : create a default filesytem, use for testing ( default = false)
-
-
-#### Xrootd  configuration
-
-Teh Xrootd configuration has 
 
 ###Disknode
 
@@ -176,5 +179,5 @@ groupmap = {
 * **gridftp_redirect** : enabled/disabled the GridFTP redirection functionality ( default = 0)
 * **dpmmgr_uid** and **dpmmgr_gid** : the gid and uid for the dpmmgr user ( default = 151)
 * **debug** : enable/disable installation of the debuginfo packages ( default = false)
-* 
+
 
