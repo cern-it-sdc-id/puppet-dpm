@@ -13,7 +13,7 @@
     * [Headnode](#headnode)
     * [Disknode](#disknode)
     * [Common configuration](#common-configuration)
-5. [Limitations - OS compatibility, etc.](#limitations)
+5. [OS compatibility](#os-compatibility)
 
 
 ##Description
@@ -196,4 +196,6 @@ groupmap = {
 * **dpmmgr_uid** and **dpmmgr_gid** : the gid and uid for the dpmmgr user ( default = 151)
 * **debug** : enable/disable installation of the debuginfo packages ( default = false)
 
+##OS compatibility
 
+The module can configure a DPM on SL5 and SL6, CentOS7/SL7 support is ongoing
