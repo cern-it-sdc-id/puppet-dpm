@@ -9,7 +9,7 @@
 1. [Description](#description)
 2. [Dependencies](#dependencies)
 3. [Installation](#installation)
-4. [Prerequisite](#prerequisites)
+4. [Prerequisites](#prerequisites)
 5. [Usage](#usage)
     * [Headnode](#headnode)
     * [Disknode](#disknode)
