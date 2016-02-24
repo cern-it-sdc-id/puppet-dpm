@@ -212,3 +212,4 @@ It has been tested with every version of puppet >= 2.7
 
 Puppet 4 is supported by the lcgdm* modules, but some dependencies are still not puppet 4 compatible.
 
+Mysql 5.1 and 5.5 are supported on SL5/Sl6
