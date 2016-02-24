@@ -14,7 +14,7 @@
     * [Headnode](#headnode)
     * [Disknode](#disknode)
     * [Common configuration](#common-configuration)
-6. [Compatibility](#Compatibility)
+6. [Compatibility](#compatibility)
 
 
 ##Description
