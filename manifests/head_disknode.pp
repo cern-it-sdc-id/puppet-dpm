@@ -109,6 +109,9 @@ class dpm::head_disknode (
 	override_options => $override_options,
         create_root_user => $new_installation,
         }
+    } else {
+      class{'mysql::server':
+        service_enabled   => false,
     }
    
     #
