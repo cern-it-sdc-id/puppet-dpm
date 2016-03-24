@@ -9,11 +9,12 @@
 1. [Description](#description)
 2. [Dependencies](#dependencies)
 3. [Installation](#installation)
-4. [Usage](#usage)
+4. [Prerequisites](#prerequisites)
+5. [Usage](#usage)
     * [Headnode](#headnode)
     * [Disknode](#disknode)
     * [Common configuration](#common-configuration)
-5. [Limitations - OS compatibility, etc.](#limitations)
+6. [Compatibility](#compatibility)
 
 
 ##Description
@@ -46,6 +47,7 @@ The following modules are needed in order to use this module, and they are autom
  - CERNOps-fetchcrl
  - erwbgy-limits
 
+
 ##Installation
 
 
@@ -54,6 +56,12 @@ The puppet-dpm module can be installed from puppetforge via
 ```
 puppet module install lcgdm-dpm
 ```
+
+##Prerequisites
+
+The DPM components need an X509 host certificate  (PEM format) to be installed on each host under */etc/grid-security/hostcert.pem* and */etc/grid-security/hostkey.pem*
+
+SELinux must be disabled on every hosts before the installation.
 
 ##Usage
 
@@ -196,4 +204,12 @@ groupmap = {
 * **dpmmgr_uid** and **dpmmgr_gid** : the gid and uid for the dpmmgr user ( default = 151)
 * **debug** : enable/disable installation of the debuginfo packages ( default = false)
 
+##Compatibility
 
+The module can configure a DPM on SL5 and SL6, CentOS7/SL7 support is ongoing
+
+It has been tested with every version of puppet >= 2.7
+
+Puppet 4 is supported by the lcgdm* modules, but some dependencies are still not puppet 4 compatible.
+
+Mysql 5.1 and 5.5 are supported on SL5/Sl6
