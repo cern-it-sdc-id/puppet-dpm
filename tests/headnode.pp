@@ -9,6 +9,17 @@
 # Learn more about module testing here:
 # http://docs.puppetlabs.com/guides/tests_smoke.html
 #
+class voms::km3net {
+  voms::client{
+'km3net.org':
+      servers  => [{server => 'voms02.scope.unina.it',
+                    port   => '15005',
+                    dn    => '/C=IT/O=INFN/OU=Host/L=Federico II/CN=voms02.scope.unina.it',
+                    ca_dn => '/C=IT/O=INFN/CN=INFN CA'
+                   }]
+ }
+}
+
 
 class{'dpm::headnode':
    localdomain                  => 'cern.ch',
@@ -22,6 +33,8 @@ class{'dpm::headnode':
    token_password               => 'kwpoMyvcusgdbyyws6gfcxhntkLoh8jilwivnivel',
    xrootd_sharedkey             => 'A32TO64CHARACTERA32TO64CHARACTER',
    site_name                    => 'CNR_DPM_TEST',
-   volist                       => [dteam, lhcb],
+   volist                       => ['dteam', 'lhcb','km3net.org'],
    new_installation 		=> true,
 }
+
+class{'voms::km3net':}
