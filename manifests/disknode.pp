@@ -11,6 +11,10 @@ class dpm::disknode (
   $disk_nodes =  $dpm::params::disk_nodes,
   $localdomain =  $dpm::params::localdomain,
   $webdav_enabled = $dpm::params::webdav_enabled,
+
+  #fs conf
+  $fslist = $dpm::params::fslist,
+
   #GridFTP redirection
   $gridftp_redirect = $dpm::params::gridftp_redirect,
 
@@ -35,6 +39,7 @@ class dpm::disknode (
     validate_array($disk_nodes)
     validate_bool($new_installation)
     validate_array($volist)
+    validate_array($fslist)
 
     $disk_nodes_str=join($disk_nodes,' ')
 
@@ -86,7 +91,8 @@ class dpm::disknode (
     }
 
     if($configure_vos){
-      dpm::util::add_dpm_voms {$volist:}
+      $newvolist = reject($volist,'.')
+      dpm::util::add_dpm_voms {$newvolist:}
     }
 
     if($configure_gridmap){
@@ -100,7 +106,14 @@ class dpm::disknode (
       }
     }
     
-    
+    Class[lcgdm::base::config] ->
+     file {
+    	 $fslist:
+	     ensure => directory,
+	     owner => 'dpmmgr',
+	     group => 'dpmmgr',
+	     mode =>  '0775';
+   	}
     #
     # dmlite plugin configuration.
     class{'dmlite::disk':

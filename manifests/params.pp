@@ -16,6 +16,9 @@ class dpm::params {
   $local_db = hiera('dpm::params::local_db',true)
   $gridftp_redirect =  hiera("dpm::params::gridftp_redirect",0)
 
+  #filstesytem list( for disknode conf)
+  $fslist =  hiera("dpm::params::fslist",[])
+
   #dpmmgr user options
   $dpmmgr_uid =  hiera('dpm::params::dpmmgr_uid',151)
   $dpmmgr_gid =  hiera('dpm::params::dpmmgr_gid',151)

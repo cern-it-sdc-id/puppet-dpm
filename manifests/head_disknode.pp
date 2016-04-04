@@ -1,6 +1,3 @@
-#
-#class based on the dpm wiki example
-#
 class dpm::head_disknode (
     $configure_vos =  $dpm::params::configure_vos,
     $configure_gridmap =  $dpm::params::configure_gridmap,
@@ -112,6 +109,7 @@ class dpm::head_disknode (
     } else {
       class{'mysql::server':
         service_enabled   => false,
+    	}
     }
    
     #
@@ -158,7 +156,8 @@ class dpm::head_disknode (
     }
 
     if($configure_vos){
-      dpm::util::add_dpm_voms {$volist:}
+      $newvolist = reject($volist,'.')
+      dpm::util::add_dpm_voms{$newvolist:}
     }
 
     if($configure_gridmap){
@@ -200,7 +199,6 @@ class dpm::head_disknode (
     class{'dmlite::gridftp':
       dpmhost => $::fqdn
     }
-
 
     # The XrootD configuration is a bit more complicated and
     # the full config (incl. federations) will be explained here:
