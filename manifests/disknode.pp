@@ -4,7 +4,6 @@
 class dpm::disknode (
   $configure_vos =  $dpm::params::configure_vos,
   $configure_gridmap =  $dpm::params::configure_gridmap,
-  $configure_firewall = $dpm::params::configure_firewall,
 
   #cluster options
   $headnode_fqdn =  $dpm::params::headnode_fqdn,
@@ -164,54 +163,6 @@ class dpm::disknode (
     config    => $limits_config,
     use_hiera => false
   }
-
-if ($configure_firewall) {
-    #
-  # The firewall configuration
-  #
-  firewall{'050 allow http and https':
-    proto  => 'tcp',
-    dport  => [80, 443],
-    action => 'accept'
-  }
-  firewall{'050 allow rfio':
-    state  => 'NEW',
-    proto  => 'tcp',
-    dport  => '5001',
-    action => 'accept'
-  }
-  firewall{'050 allow rfio range':
-    state  => 'NEW',
-    proto  => 'tcp',
-    dport  => '20000-25000',
-    action => 'accept'
-  }
-  firewall{'050 allow gridftp control':
-    state  => 'NEW',
-    proto  => 'tcp',
-    dport  => '2811',
-    action => 'accept'
-  }
-  firewall{'050 allow gridftp range':
-    state  => 'NEW',
-    proto  => 'tcp',
-    dport  => '20000-25000',
-    action => 'accept'
-  }
-  firewall{'050 allow xrootd':
-    state  => 'NEW',
-    proto  => 'tcp',
-    dport  => '1095',
-    action => 'accept'
-  }
-  firewall{'050 allow cmsd':
-    state  => 'NEW',
-    proto  => 'tcp',
-    dport  => '1094',
-    action => 'accept'
-  }
-  }
-
     
 }
                                                                                                     

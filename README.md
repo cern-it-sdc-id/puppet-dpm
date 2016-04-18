@@ -41,7 +41,6 @@ The following modules are needed in order to use this module, and they are autom
  - lcgdm-voms
  - puppetlabs-stdlib
  - puppetlabs-mysql
- - puppetlabs-firewall
  - saz-memcached
  - CERNOps-bdii
  - CERNOps-fetchcrl
@@ -199,7 +198,6 @@ groupmap = {
 
 * **configure_vos** : enable/disable the configuration of the VOs ( default = true)
 * **configure_gridmap** : enable/disable the configuration of gridmap file ( default = true)
-* **configure_firewall** : enable/disable the configuration of the local firewall ( default = true)
 * **gridftp_redirect** : enabled/disabled the GridFTP redirection functionality ( default = 0)
 * **dpmmgr_uid** and **dpmmgr_gid** : the gid and uid for the dpmmgr user ( default = 151)
 * **debug** : enable/disable installation of the debuginfo packages ( default = false)
