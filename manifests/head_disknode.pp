@@ -36,6 +36,10 @@ class dpm::head_disknode (
     #XRootd federations
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
 
+    #xrootd monitoring
+    $xrd_report = $dpm::params::xrd_report,
+    $xrootd_monitor = $dpm::params::xrootd_monitor,
+
     $site_name = $dpm::params::site_name,
 
     #New DB installation vs upgrade
@@ -49,19 +53,6 @@ class dpm::head_disknode (
   
    $disk_nodes_str=join($disk_nodes,' ')
 
-   #XRootd monitoring parameters
-    if($dpm::params::xrd_report){
-      $xrd_report = $dpm::params::xrd_report
-    }else{
-      $xrd_report  = undef
-    }
-
-    if($dpm::params::xrootd_monitor){
-        $xrootd_monitor = $dpm::params::xrootd_monitor
-    }else{
-      $xrootd_monitor = undef
-    }
-    
     #
     # Set inter-module dependencies
     #
