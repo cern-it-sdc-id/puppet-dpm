@@ -172,6 +172,7 @@ class dpm::head_disknode (
       token_password => $token_password,
       mysql_username => $db_user,
       mysql_password => $db_pass,
+      mysql_host     => $db_host,
     }
 
     #
