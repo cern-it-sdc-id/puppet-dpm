@@ -146,7 +146,7 @@ class dpm::head_disknode (
     }
 
     if($configure_vos){
-      $newvolist = reject($volist,'.')
+      $newvolist = reject($volist,'\.')
       dpm::util::add_dpm_voms{$newvolist:}
     }
 

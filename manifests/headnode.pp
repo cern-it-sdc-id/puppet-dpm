@@ -158,7 +158,7 @@ class dpm::headnode (
     }
 
     if($configure_vos){
-	$newvolist = reject($volist,'.')
+	$newvolist = reject($volist,'\.')
 	dpm::util::add_dpm_voms {$newvolist:}
     }
 
