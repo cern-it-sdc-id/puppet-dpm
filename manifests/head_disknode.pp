@@ -154,6 +154,7 @@ class dpm::head_disknode (
       #setup the gridmap file
       lcgdm::mkgridmap::file {'lcgdm-mkgridmap':
         configfile   => '/etc/lcgdm-mkgridmap.conf',
+	mapfile      => '/etc/lcgdm-mapfile',
         localmapfile => '/etc/lcgdm-mapfile-local',
         logfile      => '/var/log/lcgdm-mkgridmap.log',
         groupmap     => $groupmap,
