@@ -175,8 +175,8 @@ class dpm::headnode (
       #run the edg-gridmap for the first time( then the cron is populating it)
       exec{"/usr/sbin/edg-mkgridmap --conf=/etc/lcgdm-mkgridmap.conf --safe --output=/etc/lcgdm-mapfile":
         require => Lcgdm::Mkgridmap::File["lcgdm-mkgridmap"],
-        creates => '/etc/lcgdm-mapfile',
-      }      
+   	unless => '/usr/bin/test -s /etc/lcgdm-mapfile', 
+     }      
     
     }
 
