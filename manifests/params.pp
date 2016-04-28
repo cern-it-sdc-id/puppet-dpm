@@ -52,4 +52,8 @@ class dpm::params {
   $site_name = hiera('dpm::params::site_name',undef)
 
   $new_installation = hiera('dpm::params::new_installation',true)
+
+  #pools and filesystems
+  $pools = hiera('dpm::params::pools',[])
+  $filesystems = hiera('dpm::params::filesystems',[])
 }

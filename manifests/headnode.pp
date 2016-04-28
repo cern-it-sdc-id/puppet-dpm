@@ -47,7 +47,10 @@ class dpm::headnode (
   
     #New DB installation vs upgrade
     $new_installation = $dpm::params::new_installation,
-
+    
+    #pools and filesystems
+    $pools = $dpm::params::pools,
+    $filesystems = $dpm::params::filesystems,
 )inherits dpm::params {
 
    validate_array($disk_nodes)
@@ -261,6 +264,15 @@ class dpm::headnode (
        vos      => $volist ,
     }
 
+   }
+   if($configure_default_pool)
+   {
+     dpm::util::add_dpm_pool {$pools:}
+   }
+   
+   if($configure_default_filesystem)
+   {
+     dpm::util::add_dpm_fs {$fileystems:}
    }
 
   #limit conf
