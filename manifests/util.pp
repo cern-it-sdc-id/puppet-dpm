@@ -17,6 +17,7 @@ class dpm::util {
                 $pool   = $fsdef[0]
                 $server = $fsdef[1]
                 $fspath = $fsdef[2]
+                Lcgdm::Dpm::Pool[$pool]->
                 lcgdm::dpm::filesystem{$title:
                 	ensure  => present,
                 	pool    => $pool,

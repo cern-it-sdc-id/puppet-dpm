@@ -292,7 +292,7 @@ class dpm::head_disknode (
         group => $dpmmgr_user,
         mode =>  '0775';
      }
-     -> dpm::util::add_dpm_fs {$fileystems:}
+     -> dpm::util::add_dpm_fs {$filesystems:}
   }
 
 }
