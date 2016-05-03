@@ -30,7 +30,8 @@ class{'dpm::disknode':
    xrootd_sharedkey             => 'A32TO64CHARACTERKEYTESTTESTTESTTEST',
    volist                       => ['dteam', 'lhcb','km3net.org'],
    dpmmgr_uid                   => 500,
-   fslist			=> ['/data','/data/01']
+   mountpoints			=> ['/data','/data/01'],
+   configure_repos 		=> true,
 }
 
 class{'voms::km3net':}

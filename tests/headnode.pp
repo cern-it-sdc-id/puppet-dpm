@@ -35,6 +35,7 @@ class{'dpm::headnode':
    site_name                    => 'CNR_DPM_TEST',
    volist                       => ['dteam', 'lhcb','km3net.org'],
    new_installation 		=> true,
+   configure_repos		=> true,
 }
 
 class{'voms::km3net':}
