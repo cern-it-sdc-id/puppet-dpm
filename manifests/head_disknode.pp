@@ -52,6 +52,11 @@ class dpm::head_disknode (
 
     #New DB installation vs upgrade
     $new_installation = $dpm::params::new_installation,
+     
+    #pools filesystem 
+    $pools = $dpm::params::pools,
+    $filesystems = $dpm::params::filesystems,
+    $mountpoints = $dpm::params::mountpoints,
 
 )inherits dpm::params {
    
@@ -272,10 +277,7 @@ class dpm::head_disknode (
   #pools configuration
   #
   if ($configure_default_pool) {
-    Class[lcgdm::dpm::service] -> Lcgdm::Dpm::Pool <| |>
-    lcgdm::dpm::pool{'mypool':
-    def_filesize => '100M'
-  }
+    dpm::util::add_dpm_pool {$pools:}
   }
   #
   #
@@ -283,25 +285,14 @@ class dpm::head_disknode (
   #
   if ($configure_default_filesystem) {
     Class[lcgdm::base::config] ->
-     file {
-     '/srv/dpm':
-     ensure => directory,
-     owner => $dpmmgr_user,
-     group => $dpmmgr_user,
-     mode =>  '0775';
-     '/srv/dpm/01':
-     ensure => directory,
-     owner => $dpmmgr_user,
-     group => $dpmmgr_user,
-     seltype => 'httpd_sys_content_t',
-     mode => '0775';
-   }
-    ->
-    lcgdm::dpm::filesystem {"${fqdn}-myfsname":
-    pool   => 'mypool',
-    server => $fqdn,
-    fs     => '/srv/dpm/01'
-   }
+     file{
+      $mountpoints:
+        ensure => directory,
+        owner => $dpmmgr_user,
+        group => $dpmmgr_user,
+        mode =>  '0775';
+     }
+     -> dpm::util::add_dpm_fs {$fileystems:}
   }
 
 }
