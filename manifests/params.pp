@@ -4,6 +4,7 @@ class dpm::params {
   $configure_bdii =  hiera('dpm::params::configure_bdii', true)
   $configure_default_pool = hiera('dpm::params::configure_default_pool',false)
   $configure_default_filesystem = hiera('dpm::params::configure_default_filesystem',false)
+  $configure_repos =  hiera('dpm::params::configure_repos', false)
   
 
   #cluster options
@@ -15,8 +16,21 @@ class dpm::params {
   $local_db = hiera('dpm::params::local_db',true)
   $gridftp_redirect =  hiera("dpm::params::gridftp_redirect",0)
 
-  #filstesytem list( for disknode conf)
-  $fslist =  hiera("dpm::params::fslist",[])
+  #mountpoints list( for disknode mountpoint conf)
+  $mountpoints =  hiera("dpm::params::mountpoints",[])
+
+  #mysql options 
+  $mysql_override_options = hiera ("dpm::params::mysql_override_options", {
+        'mysqld' => {
+            'max_connections'    => '1000',
+            'query_cache_size'   => '256M',
+            'query_cache_limit'  => '1MB',
+            'innodb_flush_method' => 'O_DIRECT',
+            'innodb_buffer_pool_size' => '1000000000',
+            'bind-address' => '0.0.0.0',
+          }
+        })
+
 
   #dpmmgr user options
   $dpmmgr_uid =  hiera('dpm::params::dpmmgr_uid',151)
@@ -56,4 +70,29 @@ class dpm::params {
   #pools and filesystems
   $pools = hiera('dpm::params::pools',[])
   $filesystems = hiera('dpm::params::filesystems',[])
+ 
+  #repos 
+  $repos = hiera('dpm::params::repos', {
+    'epel' => {
+      'descr'    => 'Extra Packages for Enterprise Linux add-ons',
+      'baseurl'  => "http://linuxsoft.cern.ch/epel/${lsbmajdistrelease}/\$basearch",
+      'gpgcheck' => 0,
+      'enabled'  => 1,
+      'protect'  => 1,
+     },
+    'EGI-trustanchors' => {
+      'descr'    => 'EGI-trustanchors',
+      'baseurl'  => 'http://repository.egi.eu/sw/production/cas/1/current/',
+      'gpgcheck' => 0,
+      'enabled'  => 1,
+    },
+    'wlcg' => {
+      'descr'    => 'WLCG Repository',
+      'baseurl'  => 'http://linuxsoft.cern.ch/wlcg/sl6/\$basearch',
+      'protect'  => 1,
+      'enabled'  => 1,
+      'priority' => 20,
+      'gpgcheck' => 0,
+    }
+  })
 }

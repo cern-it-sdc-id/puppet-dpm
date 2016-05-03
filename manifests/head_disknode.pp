@@ -4,6 +4,10 @@ class dpm::head_disknode (
     $configure_bdii = $dpm::params::configure_bdii,
     $configure_default_pool = $dpm::params::configure_default_pool,
     $configure_default_filesystem = $dpm::params::configure_default_filesystem,
+    $configure_repos = $dpm::params::configure_repos,
+
+    #repo list
+    $repos =  $dpm::params::repos,
 
     #cluster options
     $local_db = $dpm::params::local_db,
@@ -16,6 +20,10 @@ class dpm::head_disknode (
     #dpmmgr user options
     $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
     $dpmmgr_gid =  $dpm::params::dpmmgr_gid,
+    $dpmmgr_user =  $dpm::params::dpmmgr_user,
+
+    #mysql override
+    $mysql_override_options =  $dpm::params::mysql_override_options,
 
     #DB/Auth options
     $db_user =  $dpm::params::db_user,
@@ -47,11 +55,16 @@ class dpm::head_disknode (
 
 )inherits dpm::params {
    
-   validate_array($disk_nodes)
-   validate_bool($new_installation)
-   validate_array($volist)
+    validate_array($disk_nodes)
+    validate_bool($new_installation)
+    validate_array($volist)
+    validate_hash($mysql_override_options)
   
-   $disk_nodes_str=join($disk_nodes,' ')
+    $disk_nodes_str=join($disk_nodes,' ')
+
+    if ($configure_repos){
+        yumrepo{$repos:} -> Package<| |>
+    }
 
     #
     # Set inter-module dependencies
@@ -78,24 +91,14 @@ class dpm::head_disknode (
     #
     if ($local_db) {
       Class[mysql::server] -> Class[lcgdm::ns::service]
-
-      $override_options = {
-      	'mysqld' => {
-            'max_connections'    => '1000',
-            'query_cache_size'   => '256M',
-            'query_cache_limit'  => '1MB',
-            'innodb_flush_method' => 'O_DIRECT',
-            'innodb_buffer_pool_size' => '1000000000',
-            'bind-address' => '0.0.0.0',
-          }
-     }
       
       class{'mysql::server':
     	service_enabled   => true,
         root_password => $mysql_root_pass,
-	override_options => $override_options,
+	override_options => $mysql_override_options,
         create_root_user => $new_installation,
         }
+
     } else {
       class{'mysql::server':
         service_enabled   => false,
@@ -216,6 +219,13 @@ class dpm::head_disknode (
           xrootd_monitor       => $xrootd_monitor,
           site_name            => $site_name
    }
+   #install n2n plugin in case of atlas fed
+   $array_feds =  keys($dpm_xrootd_fedredirs)
+   if member($array_feds, 'atlas') {
+        package{'xrootd-server-atlas-n2n-plugin':
+          ensure => present,
+        }
+   }
 
    if($memcached_enabled)
    {
@@ -276,13 +286,13 @@ class dpm::head_disknode (
      file {
      '/srv/dpm':
      ensure => directory,
-     owner => 'dpmmgr',
-     group => 'dpmmgr',
+     owner => $dpmmgr_user,
+     group => $dpmmgr_user,
      mode =>  '0775';
      '/srv/dpm/01':
      ensure => directory,
-     owner => 'dpmmgr',
-     group => 'dpmmgr',
+     owner => $dpmmgr_user,
+     group => $dpmmgr_user,
      seltype => 'httpd_sys_content_t',
      mode => '0775';
    }
@@ -290,7 +300,7 @@ class dpm::head_disknode (
     lcgdm::dpm::filesystem {"${fqdn}-myfsname":
     pool   => 'mypool',
     server => $fqdn,
-    fs     => '/srv/dpm'
+    fs     => '/srv/dpm/01'
    }
   }
 

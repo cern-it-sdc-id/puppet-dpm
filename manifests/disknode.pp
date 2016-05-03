@@ -4,6 +4,10 @@
 class dpm::disknode (
   $configure_vos =  $dpm::params::configure_vos,
   $configure_gridmap =  $dpm::params::configure_gridmap,
+  $configure_repos = $dpm::params::configure_repos,
+
+  #repo list
+  $repos =  $dpm::params::repos,
 
   #cluster options
   $headnode_fqdn =  $dpm::params::headnode_fqdn,
@@ -11,8 +15,8 @@ class dpm::disknode (
   $localdomain =  $dpm::params::localdomain,
   $webdav_enabled = $dpm::params::webdav_enabled,
 
-  #fs conf
-  $fslist = $dpm::params::fslist,
+  #mount points conf
+  $mountpoints = $dpm::params::mountpoints,
 
   #GridFTP redirection
   $gridftp_redirect = $dpm::params::gridftp_redirect,
@@ -20,6 +24,7 @@ class dpm::disknode (
   #dpmmgr user options
   $dpmmgr_uid =  $dpm::params::dpmmgr_uid,
   $dpmmgr_gid =  $dpm::params::dpmmgr_gid,
+  $dpmmgr_user =  $dpm::params::dpmmgr_user,
 
   #Auth options
   $token_password =  $dpm::params::token_password,
@@ -38,7 +43,11 @@ class dpm::disknode (
     validate_array($disk_nodes)
     validate_bool($new_installation)
     validate_array($volist)
-    validate_array($fslist)
+    validate_array($mountpoints)
+
+    if ($configure_repos){
+        yumrepo{$repos:} -> Package<||>
+    }
 
     $disk_nodes_str=join($disk_nodes,' ')
 
@@ -112,10 +121,10 @@ class dpm::disknode (
     
     Class[lcgdm::base::config] ->
      file {
-    	 $fslist:
+    	 $mountpoints:
 	     ensure => directory,
-	     owner => 'dpmmgr',
-	     group => 'dpmmgr',
+	     owner => $dpmmgr_user,
+	     group => $dpmmgr_user,
 	     mode =>  '0775';
    	}
     #
