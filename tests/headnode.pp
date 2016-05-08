@@ -9,33 +9,21 @@
 # Learn more about module testing here:
 # http://docs.puppetlabs.com/guides/tests_smoke.html
 #
-class voms::km3net {
-  voms::client{
-'km3net.org':
-      servers  => [{server => 'voms02.scope.unina.it',
-                    port   => '15005',
-                    dn    => '/C=IT/O=INFN/OU=Host/L=Federico II/CN=voms02.scope.unina.it',
-                    ca_dn => '/C=IT/O=INFN/CN=INFN CA'
-                   }]
- }
-}
-
 
 class{'dpm::headnode':
+   configure_repos		=> true,
+   configure_default_pool	=> true,
+   configure_default_filesystem => true,
    localdomain                  => 'cern.ch',
    db_user			=> 'dpmdbuser',
    db_pass                      => 'PASS',
-   db_host 			=> 'dpmdb01.cern.ch',
-   disk_nodes                   => ['dpm-disk01.cern.ch'],
-   local_db 			=> false,
-   dpmmgr_uid                   => 500,
-   mysql_root_pass              => 'MYSQLROOT',
+   db_host 			=> 'localhost',
+   mysql_root_pass              => 'ROOTPASS',
    token_password               => 'kwpoMyvcusgdbyyws6gfcxhntkLoh8jilwivnivel',
    xrootd_sharedkey             => 'A32TO64CHARACTERA32TO64CHARACTER',
    site_name                    => 'CNR_DPM_TEST',
-   volist                       => ['dteam', 'lhcb','km3net.org'],
-   new_installation 		=> true,
-   configure_repos		=> true,
+   volist                       => [dteam, lhcb],
+   new_installation		=> false,
+   pools 			=> ['mypool:100M'],
+   filesystems 			=> ["mypool:${fqdn}:/srv/dpm/01"],
 }
-
-class{'voms::km3net':}
