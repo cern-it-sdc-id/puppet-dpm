@@ -194,16 +194,16 @@ The parameter **volist** is needed to specify the supported VOs, while the **gro
 
 ```
 groupmap = {
-  "vomss://voms2.cern.ch:8443/voms/atlas?/atlas/"            => "atlas",
-  "vomss://lcg-voms2.cern.ch:8443/voms/atlas?/atlas/"      => "atlas",
-  "vomss://voms2.cern.ch:8443/voms/cms?/cms/"              => "cms", 
-  "vomss://lcg-voms2.cern.ch:8443/voms/cms?/cms/"        => "cms",
-  "vomss://voms2.cern.ch:8443/voms/lhcb?/lhcb/"              => "lhcb", 
-  "vomss://lcg-voms2.cern.ch:8443/voms/lhcb?/lhcb/"        => "lhcb",
-  "vomss://voms2.cern.ch:8443/voms/alice?/alice/"             => "alice", 
-  "vomss://lcg-voms2.cern.ch:8443/voms/alice?/alice/"      => "alice",
-  "vomss://voms2.cern.ch:8443/voms/ops?/ops/"               => "ops", 
-  "vomss://lcg-voms2.cern.ch:8443/voms/ops?/ops/"         => "ops",
+  "vomss://voms2.cern.ch:8443/voms/atlas?/atlas"            => "atlas",
+  "vomss://lcg-voms2.cern.ch:8443/voms/atlas?/atlas"      => "atlas",
+  "vomss://voms2.cern.ch:8443/voms/cms?/cms"              => "cms", 
+  "vomss://lcg-voms2.cern.ch:8443/voms/cms?/cms"        => "cms",
+  "vomss://voms2.cern.ch:8443/voms/lhcb?/lhcb"              => "lhcb", 
+  "vomss://lcg-voms2.cern.ch:8443/voms/lhcb?/lhcb"        => "lhcb",
+  "vomss://voms2.cern.ch:8443/voms/alice?/alice"             => "alice", 
+  "vomss://lcg-voms2.cern.ch:8443/voms/alice?/alice"      => "alice",
+  "vomss://voms2.cern.ch:8443/voms/ops?/ops"               => "ops", 
+  "vomss://lcg-voms2.cern.ch:8443/voms/ops?/ops"         => "ops",
   "vomss://voms.hellasgrid.gr:8443/voms/dteam?/dteam"  => "dteam",
   "vomss://voms2.hellasgrid.gr:8443/voms/dteam?/dteam"  => "dteam"
 }
