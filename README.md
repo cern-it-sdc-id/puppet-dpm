@@ -25,7 +25,7 @@ It can be used to set up different DPM installations :
 
  - DPM Headnode ( with or without a local MySql DB)
  - DPM Disknode
- - DPM Head+Disk Node 
+ - DPM Head+Disk Node ( with or without a local MySql DB)
  
 ##Dependencies
 
@@ -68,17 +68,23 @@ SELinux must be disabled on every hosts before the installation.
 The module folder tests contains some examples, for instance you can set up a DPM box with both HEAD and DISK nodes with the following code snippet
 
 ```
-class{"dpm::head_disknode":
-   configure_default_pool => true,
-   configure_default_filesystem => true,
-   disk_nodes => ['localhost'],
-   localdomain => "cern.ch",
-   db_pass => "MYSQLPASS",
-   mysql_root_pass => "PASS",
-   token_password => "TOKEN_PASSWORD",
-   xrootd_sharedkey => "A32TO64CHARACTERKEYTESTTESTTESTTEST",
-   site_name => "CERN_DPM_TEST",
-   volist =>[dteam],
+class{'dpm::head_disknode':
+   configure_repos		         => true,
+   configure_default_pool	      => true,
+   configure_default_filesystem  => true,
+   localdomain                   => 'cern.ch',
+   db_user			               => 'dpmdbuser',
+   db_pass                       => 'PASS',
+   db_host 			               => 'localhost',
+   mysql_root_pass               => 'ROOTPASS',
+   token_password                => 'kwpoMyvcusgdbyyws6gfcxhntkLoh8jilwivnivel',
+   xrootd_sharedkey              => 'A32TO64CHARACTERA32TO64CHARACTER',
+   site_name                     => 'CNR_DPM_TEST',
+   volist                        => [dteam, lhcb],
+   new_installation		         => true,
+   mountpoints                   => ['/srv/dpm','/srv/dpm/01'],
+   pools 			               => ['mypool:100M'],
+   filesystems 			         => ["mypool:${fqdn}:/srv/dpm/01"],
 }
 ```
 
@@ -112,9 +118,14 @@ class{"dpm::headnode":
    site_name                    => 'CNR_DPM_TEST',
    volist                       => [dteam, lhcb],
    new_installation             => true,
+   pools 			              => ['mypool:100M'],
+   filesystems 			        => ["mypool:${fqdn}:/srv/dpm/01"],
 }
 ```
-The parameters descriptions is quite easy to guess from the name.
+Each pool and filsystem specified in the pools and filesystems parameter should have the following syntax:
+
+* pools: <poolname>:<defaultSize>
+* filesystems : <popolname>:<servername>:<filesystem_path>
 
 ####DB configuration
 
@@ -130,6 +141,8 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'HEADNODE' IDENTIFIED BY 'MYSQLROOT' WITH 
 ```
 
 **N.B.** In case of an upgrade of an existing DPM installation the **new_installation** parameter MUST be set to *false*
+
+the *mysql_override_options* parameter can be used to override teh mysql server configuration. In general the values provided by default by the module ( $dpm::params::mysql_override_options vaar ) should be fine.
 
 ####Xrootd  configuration
 
@@ -148,8 +161,8 @@ As well for the WedDav frontend, installed and enabled by default but it can be 
 Other parameters that are enabled by default are:
 
 * **configure_bdii** :  enabled/disabled the configuration of Resource BDII ( default = true)
-* **configure_default_pool** : create a default pool, use for testing ( default = false)
-* **configure_default_filesystem** : create a default filesytem, use for testing ( default = false)
+* **configure_default_pool** : create the pools specified in the pools paramter ( default = false)
+* **configure_default_filesystem** : create the filesytems  specified in the filesystems parameter ( default = false)
 
 see the Common Configuration section for the rest of configuration options
 
@@ -165,9 +178,11 @@ class{'dpm::disknode':
    token_password               => 'TOKEN_PASSWORD',
    xrootd_sharedkey             => 'A32TO64CHARACTERKEYTESTTESTTESTTEST',
    volist                       => [dteam, lhcb],
+   mountpoints                  => ['/data','/data/01'],
 }
 ```
-see the Common Configuration section for the rest of configuration options
+In particular the mountpoints var should include the mountpoint paths for the filesystems and the related parent folders. 
+See the Common Configuration section for the rest of configuration options
 
 ###Common configuration
 
@@ -197,9 +212,10 @@ groupmap = {
 ####Other configuration:
 
 * **configure_vos** : enable/disable the configuration of the VOs ( default = true)
+* **configure_repos** : configure the yum repositories specified in the repos parameter ( default = false)
 * **configure_gridmap** : enable/disable the configuration of gridmap file ( default = true)
 * **gridftp_redirect** : enabled/disabled the GridFTP redirection functionality ( default = 0)
-* **dpmmgr_uid** and **dpmmgr_gid** : the gid and uid for the dpmmgr user ( default = 151)
+* **dpmmgr_user** , **dpmmgr_uid** and  **dpmmgr_gid** : the dpm user name , gid and uid ( default = dpmmgr, 151 and 151)
 * **debug** : enable/disable installation of the debuginfo packages ( default = false)
 
 ##Compatibility
