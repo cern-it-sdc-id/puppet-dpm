@@ -124,8 +124,8 @@ class{"dpm::headnode":
 ```
 Each pool and filsystem specified in the pools and filesystems parameter should have the following syntax:
 
-* pools: '<poolname>:<defaultSize>'
-* filesystems : '<poolname>:<servername>:<filesystem_path>'
+* pools: 'poolname:defaultSize'
+* filesystems : 'poolname:servername:filesystem_path'
 
 ####DB configuration
 
