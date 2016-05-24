@@ -49,10 +49,6 @@ class dpm::headnode (
     #XRootd federations
     $dpm_xrootd_fedredirs = $dpm::params::dpm_xrootd_fedredirs,
 
-    #xrootd monitoring
-    $xrd_report = $dpm::params::xrd_report,
-    $xrootd_monitor = $dpm::params::xrootd_monitor,
-
     $site_name = $dpm::params::site_name,
   
     #New DB installation vs upgrade
@@ -238,8 +234,6 @@ class dpm::headnode (
           dpm_xrootd_sharedkey => $xrootd_sharedkey,
           xrootd_use_voms      => $xrootd_use_voms,
           dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-          xrd_report           => $xrd_report,
-          xrootd_monitor       => $xrootd_monitor,
           site_name            => $site_name
    }
    #install n2n plugin in case of atlas fed

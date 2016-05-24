@@ -37,6 +37,10 @@ class dpm::disknode (
   
   #Debug Flag
   $debug = $dpm::params::debug,
+
+  #xrootd monitoring
+  $xrd_report = $dpm::params::xrd_report,
+  $xrootd_monitor = $dpm::params::xrootd_monitor,
   
   )inherits dpm::params {
   
@@ -164,6 +168,8 @@ class dpm::disknode (
       domain               => $localdomain,
       dpm_xrootd_debug     => $debug,
       dpm_xrootd_sharedkey => $xrootd_sharedkey,
+      xrd_report           => $xrd_report,
+      xrootd_monitor       => $xrootd_monitor,
     }
 
   #limit conf

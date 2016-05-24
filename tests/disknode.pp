@@ -32,6 +32,8 @@ class{'dpm::disknode':
    dpmmgr_uid                   => 500,
    mountpoints			=> ['/data','/data/01'],
    configure_repos 		=> true,
+   xrd_report			=> 'test test',
+   xrootd_monitor		=> 'test test'
 }
 
 class{'voms::km3net':}
