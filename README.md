@@ -90,7 +90,7 @@ class{'dpm::head_disknode':
 
 the same parameters can be configured via hiera ( see the dpm::params class)
 
-Having the code snippet saved in a file ( i.e.  dpm.pp), then it's just neeed to run:
+Having the code snippet saved in a file ( i.e.  dpm.pp), then you just need to run:
 
 ```
 puppet apply dpm.pp
@@ -142,7 +142,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'HEADNODE' IDENTIFIED BY 'MYSQLROOT' WITH 
 
 **N.B.** In case of an upgrade of an existing DPM installation the **new_installation** parameter MUST be set to *false*
 
-the *mysql_override_options* parameter can be used to override teh mysql server configuration. In general the values provided by default by the module ( $dpm::params::mysql_override_options vaar ) should be fine.
+the *mysql_override_options* parameter can be used to override the mysql server configuration. In general the values provided by default by the module ( via the $dpm::params::mysql_override_options var ) should be fine.
 
 ####Xrootd  configuration
 
@@ -158,7 +158,7 @@ The Headnode is configured with the Memcache server and the related DPM plugin. 
 
 As well for the WedDav frontend, installed and enabled by default but it can be disabled with **webdav_enabled** set to *false*
 
-Other parameters that are enabled by default are:
+Other parameters are:
 
 * **configure_bdii** :  enabled/disabled the configuration of Resource BDII ( default = true)
 * **configure_default_pool** : create the pools specified in the pools paramter ( default = false)
@@ -222,7 +222,7 @@ groupmap = {
 
 The module can configure a DPM on SL5 and SL6, CentOS7/SL7 support is ongoing
 
-It has been tested with every version of puppet >= 2.7
+It has been tested with every version of puppet >= 3.0
 
 Puppet 4 is supported by the lcgdm* modules, but some dependencies are still not puppet 4 compatible.
 
