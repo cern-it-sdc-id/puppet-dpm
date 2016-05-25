@@ -94,5 +94,6 @@ class dpm::params {
       'priority' => 20,
       'gpgcheck' => 0,
     }
-  })
+   }
+   )
 }

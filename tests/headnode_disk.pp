@@ -1,4 +1,5 @@
 class{"dpm::head_disknode":
+   configure_repos	=> true,
    configure_default_pool => true,
    configure_default_filesystem => true,
    disk_nodes => ['localhost'],

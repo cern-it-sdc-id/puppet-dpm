@@ -68,7 +68,7 @@ class dpm::head_disknode (
     $disk_nodes_str=join($disk_nodes,' ')
 
     if ($configure_repos){
-        yumrepo{$repos:} -> Package<| |>
+        create_resources(yumrepo,$repos)
     }
 
     #

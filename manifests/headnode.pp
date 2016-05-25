@@ -69,7 +69,7 @@ class dpm::headnode (
     $disk_nodes_str=join($disk_nodes,' ')
 	
     if ($configure_repos){
-	yumrepo{$repos:} -> Package<| |>	
+	create_resources(yumrepo,$repos)
     }
     #
     # Set inter-module dependencies

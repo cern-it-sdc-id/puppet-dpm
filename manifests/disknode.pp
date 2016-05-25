@@ -50,7 +50,7 @@ class dpm::disknode (
     validate_array($mountpoints)
 
     if ($configure_repos){
-        yumrepo{$repos:} -> Package<||>
+        create_resources(yumrepo,$repos)
     }
     	
     $disk_nodes_str=join($disk_nodes,' ')

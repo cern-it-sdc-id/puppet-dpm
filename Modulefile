@@ -1,5 +1,5 @@
 name    'lcgdm-dpm'
-version '0.4.1'
+version '0.4.2'
 source 'https://github.com/cern-it-sdc-id/puppet-dpm'
 author 'lcgdm'
 license 'Apache License, Version 2.0'
