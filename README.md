@@ -76,6 +76,7 @@ class{'dpm::head_disknode':
    db_user			               => 'dpmdbuser',
    db_pass                       => 'PASS',
    db_host 			               => 'localhost',
+   disk_nodes                    => ['$::fqdn'],
    mysql_root_pass               => 'ROOTPASS',
    token_password                => 'kwpoMyvcusgdbyyws6gfcxhntkLoh8jilwivnivel',
    xrootd_sharedkey              => 'A32TO64CHARACTERA32TO64CHARACTER',
