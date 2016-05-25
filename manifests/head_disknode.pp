@@ -64,7 +64,7 @@ class dpm::head_disknode (
     validate_bool($new_installation)
     validate_array($volist)
     validate_hash($mysql_override_options)
-  
+
     $disk_nodes_str=join($disk_nodes,' ')
 
     if ($configure_repos){
@@ -212,17 +212,30 @@ class dpm::head_disknode (
       xrootd_user  => $dpmmgr_user,
       xrootd_group => $dpmmgr_user,
     }
+    if $xrd_report or $xrootd_monitor {
+	    class{'dmlite::xrootd':
+        	  nodetype             => [ 'head','disk' ],
+	          domain               => $localdomain,
+	          dpm_xrootd_debug     => $debug,
+	          dpm_xrootd_sharedkey => $xrootd_sharedkey,
+	          xrootd_use_voms      => $xrootd_use_voms,
+	          dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+	          xrd_report           => $xrd_report,
+        	  xrootd_monitor       => $xrootd_monitor,
+	          site_name            => $site_name
+    	    } 
+    }
+    else {
+          class{'dmlite::xrootd':
+                  nodetype             => [ 'head','disk' ],
+                  domain               => $localdomain,
+                  dpm_xrootd_debug     => $debug,
+                  dpm_xrootd_sharedkey => $xrootd_sharedkey,
+                  xrootd_use_voms      => $xrootd_use_voms,
+                  dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+                  site_name            => $site_name
 
-    class{'dmlite::xrootd':
-          nodetype             => [ 'head','disk' ],
-          domain               => $localdomain,
-          dpm_xrootd_debug     => $debug,
-          dpm_xrootd_sharedkey => $xrootd_sharedkey,
-          xrootd_use_voms      => $xrootd_use_voms,
-          dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-          xrd_report           => $xrd_report,
-          xrootd_monitor       => $xrootd_monitor,
-          site_name            => $site_name
+    	}
    }
    #install n2n plugin in case of atlas fed
    $array_feds =  keys($dpm_xrootd_fedredirs)

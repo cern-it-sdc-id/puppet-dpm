@@ -52,7 +52,7 @@ class dpm::disknode (
     if ($configure_repos){
         yumrepo{$repos:} -> Package<||>
     }
-
+    	
     $disk_nodes_str=join($disk_nodes,' ')
 
     Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
@@ -162,27 +162,36 @@ class dpm::disknode (
       xrootd_user  => $dpmmgr_user,
       xrootd_group => $dpmmgr_user
     }
-    
-    class{'dmlite::xrootd':
-      nodetype             => [ 'disk' ],
-      domain               => $localdomain,
-      dpm_xrootd_debug     => $debug,
-      dpm_xrootd_sharedkey => $xrootd_sharedkey,
-      xrd_report           => $xrd_report,
-      xrootd_monitor       => $xrootd_monitor,
-    }
+    if $xrd_report or $xrootd_monitor {
 
-  #limit conf
-  $limits_config = {
+	    class{'dmlite::xrootd':
+	      nodetype             => [ 'disk' ],
+	      domain               => $localdomain,
+	      dpm_xrootd_debug     => $debug,
+	      dpm_xrootd_sharedkey => $xrootd_sharedkey,
+	      xrd_report           => $xrd_report,
+	      xrootd_monitor       => $xrootd_monitor,
+    	    }
+     } else {
+  	    class{'dmlite::xrootd':
+              nodetype             => [ 'disk' ],
+              domain               => $localdomain,
+              dpm_xrootd_debug     => $debug,
+              dpm_xrootd_sharedkey => $xrootd_sharedkey,
+            }
+     }
+
+    #limit conf
+    $limits_config = {
     '*' => {
       nofile => { soft => 65000, hard => 65000 },
       nproc  => { soft => 65000, hard => 65000 },
     }
-  }
-  class{'limits':
-    config    => $limits_config,
-    use_hiera => false
-  }
+    }
+    class{'limits':
+      config    => $limits_config,
+      use_hiera => false
+    }
     
 }
                                                                                                     
