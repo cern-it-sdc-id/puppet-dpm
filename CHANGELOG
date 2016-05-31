@@ -1,3 +1,7 @@
+2016-05-31 Andrea Manzi  <andrea.manzi@cern.ch>
+        * added new deps
+        * removed limits conf and deps
+        * raised memcahced max memory
 2016-05-25 Andrea Manzi  <andrea.manzi@cern.ch>
         * moved xrd_report and xrd_monitoring to the disknodes
         * fixed configuration of repositories

@@ -246,7 +246,7 @@ class dpm::headnode (
    if($memcached_enabled)
    {
      class{'memcached':
-       max_memory => 512,
+       max_memory => 2000,
        listen_ip => '127.0.0.1',
 
      }
@@ -279,18 +279,5 @@ class dpm::headnode (
    {
      dpm::util::add_dpm_fs {$filesystems:}
    }
-
-  #limit conf
-
-   $limits_config = {
-    '*' => {
-      nofile => { soft => 65000, hard => 65000 },
-      nproc  => { soft => 65000, hard => 65000 },
-    }
-   }
-   class{'limits':
-    config    => $limits_config,
-    use_hiera => false
-  }
 
 }
