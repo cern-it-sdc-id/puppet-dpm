@@ -44,7 +44,6 @@ The following modules are needed in order to use this module, and they are autom
  - saz-memcached
  - CERNOps-bdii
  - CERNOps-fetchcrl
- - erwbgy-limits
 
 
 ##Installation
