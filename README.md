@@ -61,6 +61,10 @@ The DPM components need an X509 host certificate  (PEM format) to be installed o
 
 SELinux must be disabled on every hosts before the installation.
 
+The local firewall is not managed by the module, please check the DPM wiki for information on which ports to open:
+
+https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Admin/InstallationConfigurationPuppetSimple#FirewallConfiguration
+
 ##Usage
 
 
