@@ -208,12 +208,13 @@ groupmap = {
   "vomss://voms2.hellasgrid.gr:8443/voms/dteam?/dteam"  => "dteam"
 }
 ```
-**N.B. The VOMS configuraton of VO namse with "." is not supported with this class ( it will be ignored) therefore each vo of this type should be explicetly added to your manifest as follows:
+**N.B. The VOMS configuraton of VO names with "." is not supported with this class (it will be ignored) therefore each vo of this type should be explicetly added to your manifest as follows:**
 ``` 
-voms{"vo.name":}
+voms{"voms::voname":}
 
 ```
-**
+**and declared as a class like documented at https://forge.puppet.com/lcgdm/voms** 
+
 
 
 ####Other configuration:
