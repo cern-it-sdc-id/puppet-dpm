@@ -1,3 +1,6 @@
+2016-06-22 Andrea Manzi  <andrea.manzi@cern.ch>
+        * moved to metadata.json 
+        * removed stdlib strict deps
 2016-05-31 Andrea Manzi  <andrea.manzi@cern.ch>
         * added new deps
         * removed limits conf and deps
