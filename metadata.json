@@ -19,7 +19,7 @@
     },
     {
       "name": "lcgdm/voms",
-      "version_requirement": ">=0.3.0 <=0.3.0"
+      "version_requirement": ">=0.3.1 <=0.3.1"
     },
     {
       "name": "puppetlabs/mysql",
@@ -43,5 +43,5 @@
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",
   "tags": [],
-  "version": "0.4.5"
+  "version": "0.4.6"
 }

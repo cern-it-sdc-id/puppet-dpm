@@ -1,3 +1,5 @@
+2016-06-29 Andrea Manzi  <andrea.manzi@cern.ch>
+        * update lcgdm-voms deps
 2016-06-22 Andrea Manzi  <andrea.manzi@cern.ch>
         * moved to metadata.json 
         * removed stdlib strict deps
