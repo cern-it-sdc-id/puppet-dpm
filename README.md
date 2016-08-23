@@ -43,7 +43,7 @@ The following modules are needed in order to use this module, and they are autom
  - puppetlabs-mysql
  - saz-memcached
  - CERNOps-bdii
- - CERNOps-fetchcrl
+ - puppet-fetchcrl
 
 
 ##Installation
