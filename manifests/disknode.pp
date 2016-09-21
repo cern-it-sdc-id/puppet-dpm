@@ -5,6 +5,7 @@ class dpm::disknode (
   $configure_vos =  $dpm::params::configure_vos,
   $configure_gridmap =  $dpm::params::configure_gridmap,
   $configure_repos = $dpm::params::configure_repos,
+  $configure_dome  = $dpm::params::configure_dome,
 
   #repo list
   $repos =  $dpm::params::repos,
@@ -137,6 +138,7 @@ class dpm::disknode (
       token_password => $token_password,
       dpmhost        => $headnode_fqdn,
       nshost         => $headnode_fqdn,
+      enable_dome    => $configure_dome,
     }
     
     #

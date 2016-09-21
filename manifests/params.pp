@@ -5,7 +5,7 @@ class dpm::params {
   $configure_default_pool = hiera('dpm::params::configure_default_pool',false)
   $configure_default_filesystem = hiera('dpm::params::configure_default_filesystem',false)
   $configure_repos =  hiera('dpm::params::configure_repos', false)
-  
+  $configure_dome = hiera('dpm::params::configure_dome', false)
 
   #cluster options
   $headnode_fqdn =  hiera('dpm::params::headnode_fqdn', $::fqdn)

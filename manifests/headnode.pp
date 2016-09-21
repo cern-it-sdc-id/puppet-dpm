@@ -8,6 +8,7 @@ class dpm::headnode (
     $configure_default_pool = $dpm::params::configure_default_pool,
     $configure_default_filesystem = $dpm::params::configure_default_filesystem,
     $configure_repos = $dpm::params::configure_repos,
+    $configure_dome =  $dpm::params::configure_dome,
    	
     #repo list
     $repos =  $dpm::params::repos,
@@ -192,6 +193,7 @@ class dpm::headnode (
       mysql_username => $db_user,
       mysql_password => $db_pass,
       mysql_host     => $db_host,
+      enable_dome    => $configure_dome,
     }
 
     #
