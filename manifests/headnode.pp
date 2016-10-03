@@ -43,6 +43,7 @@ class dpm::headnode (
     #VOs parameters
     $volist =  $dpm::params::volist,
     $groupmap =  $dpm::params::groupmap,
+    $localmap = $dpm::params::localmap,
 
     #Debug Flag
     $debug = $dpm::params::debug,
@@ -175,7 +176,7 @@ class dpm::headnode (
         localmapfile => '/etc/lcgdm-mapfile-local',
         logfile      => '/var/log/lcgdm-mkgridmap.log',
         groupmap     => $groupmap,
-        localmap     => {'nobody'        => 'nogroup'}
+        localmap     => $localmap
       }
       #run the edg-gridmap for the first time( then the cron is populating it)
       exec{"/usr/sbin/edg-mkgridmap --conf=/etc/lcgdm-mkgridmap.conf --safe --output=/etc/lcgdm-mapfile":

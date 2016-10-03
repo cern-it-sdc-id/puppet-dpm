@@ -52,7 +52,7 @@ class dpm::params {
         'vomss://voms.hellasgrid.gr:8443/voms/dteam?/dteam'                 => 'dteam',
       'vomss://voms2.hellasgrid.gr:8443/voms/dteam?/dteam'                 => 'dteam',
       })
-
+  $localmap =  hiera('dpm::params::localmap',{'nobody'        => 'nogroup'})
   #Debug Flag
   $debug = hiera('dpm::params::debug',false)
 

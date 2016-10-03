@@ -35,7 +35,8 @@ class dpm::disknode (
   #VOs parameters
   $volist =  $dpm::params::volist,
   $groupmap =  $dpm::params::groupmap,
-  
+  $localmap = $dpm::params::localmap,
+
   #Debug Flag
   $debug = $dpm::params::debug,
 
@@ -116,7 +117,7 @@ class dpm::disknode (
         localmapfile => '/etc/lcgdm-mapfile-local',
         logfile      => '/var/log/lcgdm-mkgridmap.log',
         groupmap     => $groupmap,
-        localmap     => {'nobody'        => 'nogroup'}
+        localmap     => $localmap
       }
       exec{'/usr/sbin/edg-mkgridmap --conf=/etc/lcgdm-mkgridmap.conf --safe --output=/etc/lcgdm-mapfile':
         require => Lcgdm::Mkgridmap::File['lcgdm-mkgridmap'],
