@@ -6,6 +6,7 @@ class dpm::head_disknode (
     $configure_default_filesystem = $dpm::params::configure_default_filesystem,
     $configure_repos = $dpm::params::configure_repos,
     $configure_dome =  $dpm::params::configure_dome,
+    $configure_domeadapter = $dpm::params::configure_domeadapter,
 
     #repo list
     $repos =  $dpm::params::repos,
@@ -76,12 +77,17 @@ class dpm::head_disknode (
     #
     # Set inter-module dependencies
     #
+    if $configure_domeadapter {
+      Class[dmlite::head] -> Class[dmlite::plugins::domeadapter::install]
+      Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::gridftp]
+    }else {
+      Class[lcgdm::dpm::service] -> Class[dmlite::plugins::adapter::install]
+      Class[dmlite::head] -> Class[dmlite::plugins::adapter::install]
+      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::srm]
+      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
+    }
 
-    Class[lcgdm::dpm::service] -> Class[dmlite::plugins::adapter::install]
     Class[lcgdm::ns::config] -> Class[dmlite::srm::service]
-    Class[dmlite::head] -> Class[dmlite::plugins::adapter::install]
-    Class[dmlite::plugins::adapter::install] ~> Class[dmlite::srm]
-    Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
     Class[dmlite::plugins::mysql::install] ~> Class[dmlite::srm]
     Class[dmlite::plugins::mysql::install] ~> Class[dmlite::gridftp]
     Class[fetchcrl::service] -> Class[xrootd::config]
@@ -187,16 +193,22 @@ class dpm::head_disknode (
       mysql_host     => $db_host,
       enable_dome    => $configure_dome,
       enable_disknode => true,
+      enable_domeadapter => $configure_domeadapter,
     }
 
     #
     # Frontends based on dmlite.
     #
     if($webdav_enabled){
-      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::dav]
+       if $configure_domeadapter {
+        Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::dav]
+        Dmlite::Plugins::Domeadapter::Create_config <| |> -> Class[dmlite::dav::install]
+      } else {
+        Class[dmlite::plugins::adapter::install] ~> Class[dmlite::dav]
+        Dmlite::Plugins::Adapter::Create_config <| |> -> Class[dmlite::dav::install]
+      }
       Class[dmlite::plugins::mysql::install] ~> Class[dmlite::dav]
       Class[dmlite::install] ~> Class[dmlite::dav::config]
-      Dmlite::Plugins::Adapter::Create_config <| |> -> Class[dmlite::dav::install]
 
       class{'dmlite::dav':}
     }

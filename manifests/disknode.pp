@@ -6,6 +6,7 @@ class dpm::disknode (
   $configure_gridmap =  $dpm::params::configure_gridmap,
   $configure_repos = $dpm::params::configure_repos,
   $configure_dome  = $dpm::params::configure_dome,
+  $configure_domeadapter = $dpm::params::configure_domeadapter,
 
   #repo list
   $repos =  $dpm::params::repos,
@@ -59,10 +60,17 @@ class dpm::disknode (
 
     Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
     if($webdav_enabled){
-      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::dav::service]
+      if $configure_domeadapter {
+        Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::dav::service]
+      } else {
+        Class[dmlite::plugins::adapter::install] ~> Class[dmlite::dav::service]
+      }
     }
-    Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
-
+    if $configure_domeadapter {
+      Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::gridftp]
+    } else {
+      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
+    }
     # lcgdm configuration.
     #
     class{'lcgdm::base':
@@ -140,6 +148,7 @@ class dpm::disknode (
       dpmhost        => $headnode_fqdn,
       nshost         => $headnode_fqdn,
       enable_dome    => $configure_dome,
+      enable_domeadapter => $configure_domedapter,
     }
     
     #
