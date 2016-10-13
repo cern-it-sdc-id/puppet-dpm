@@ -214,7 +214,8 @@ class dpm::head_disknode (
     }
     class{'dmlite::srm':}
     class{'dmlite::gridftp':
-      dpmhost => $::fqdn
+      dpmhost => $::fqdn,
+      enable_dome_checksum => $configure_domeadapter,
     }
 
     # The XrootD configuration is a bit more complicated and

@@ -225,7 +225,8 @@ class dpm::headnode (
       remote_nodes => $gridftp_redirect ? {
         1 => join(suffix($disk_nodes, ':2811'), ','),
         0 => undef,
-      },    
+      },
+      enable_dome_checksum => $configure_domeadapter,  
     }
 
 
