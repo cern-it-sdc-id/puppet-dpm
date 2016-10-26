@@ -295,4 +295,6 @@ class dpm::headnode (
      dpm::util::add_dpm_fs {$filesystems:}
    }
 
-}
+   include dmlite::shell
+   
+} 

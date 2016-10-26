@@ -311,5 +311,6 @@ class dpm::head_disknode (
      }
      -> dpm::util::add_dpm_fs {$filesystems:}
   }
-
+  
+ include dmlite::shell
 }
