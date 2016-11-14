@@ -148,7 +148,7 @@ class dpm::disknode (
       dpmhost        => $headnode_fqdn,
       nshost         => $headnode_fqdn,
       enable_dome    => $configure_dome,
-      enable_domeadapter => $configure_domedapter,
+      enable_domeadapter => $configure_domeadapter,
     }
     
     #
