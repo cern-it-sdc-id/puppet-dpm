@@ -160,7 +160,7 @@ class dpm::headnode (
       component => 'DPM',
       proto     => 'rfio gsiftp http https xroot'
     }
-    if($gridftp_redirect){
+    if(num2bool($gridftp_redirect)){
       lcgdm::shift::protocol_head{"GRIDFTP":
              component => "DPM",
              protohead => "FTPHEAD",

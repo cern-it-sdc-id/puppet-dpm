@@ -1,3 +1,5 @@
+2016-10-28 Andrea Manzi  <andrea.manzi@cern.ch>
+        * use num2bool
 2016-08-23 Andrea Manzi  <andrea.manzi@cern.ch>
         * updated DPM deps
 2016-07-12 Andrea Manzi  <andrea.manzi@cern.ch>
