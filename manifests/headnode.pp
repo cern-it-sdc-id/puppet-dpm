@@ -167,7 +167,7 @@ class dpm::headnode (
              component => "DPM",
              protohead => "FTPHEAD",
              host      => "${::fqdn}",
-      }  
+      } ~>  Class[dmlite::srm::service]
     }
 
     if($configure_vos){
