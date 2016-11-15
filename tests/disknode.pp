@@ -33,7 +33,6 @@ class{'dpm::disknode':
    mountpoints			=> ['/data','/data/01'],
    configure_repos 		=> true,
    configure_dome               => true,
-   configure_domeadapter        => true,
 }
 
 class{'voms::km3net':}
