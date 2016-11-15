@@ -23,5 +23,5 @@ class{'dpm::headnode':
    xrootd_sharedkey             => 'A32TO64CHARACTERA32TO64CHARACTER',
    site_name                    => 'CNR_DPM_TEST',
    volist                       => [dteam, lhcb],
-   gridftp_redirect		=> 1;
+   gridftp_redirect		=> 0;
 }

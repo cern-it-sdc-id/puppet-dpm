@@ -58,6 +58,8 @@ class dpm::disknode (
     	
     $disk_nodes_str=join($disk_nodes,' ')
 
+    $_gridftp_redirect = num2bool($gridftp_redirect) or $configure_domeadapter
+
     Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
     if($webdav_enabled){
       if $configure_domeadapter {
@@ -160,13 +162,12 @@ class dpm::disknode (
     
     class{'dmlite::gridftp':
       dpmhost => $headnode_fqdn,
-      data_node => $gridftp_redirect,
+      data_node => $_gridftp_redirect ? {
+        true => 1,
+        false => 0,
+      },
     }
 
-    # The XrootD configuration is a bit more complicated and
-    # the full config (incl. federations) will be explained here:
-    # https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Xroot/PuppetSetup
-    
     #
     # The simplest xrootd configuration.
     #

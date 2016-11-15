@@ -218,10 +218,6 @@ class dpm::head_disknode (
       enable_dome_checksum => $configure_domeadapter,
     }
 
-    # The XrootD configuration is a bit more complicated and
-    # the full config (incl. federations) will be explained here:
-    # https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Xroot/PuppetSetup
-
     #
     # The simplest xrootd configuration.
     #

@@ -69,6 +69,8 @@ class dpm::headnode (
     validate_hash($mysql_override_options)
    
     $disk_nodes_str=join($disk_nodes,' ')
+
+    $_gridftp_redirect = num2bool($gridftp_redirect) or $configure_domeadapter
 	
     if ($configure_repos){
 	create_resources(yumrepo,$repos)
@@ -160,7 +162,7 @@ class dpm::headnode (
       component => 'DPM',
       proto     => 'rfio gsiftp http https xroot'
     }
-    if(num2bool($gridftp_redirect)){
+    if($_gridftp_redirect){
       lcgdm::shift::protocol_head{"GRIDFTP":
              component => "DPM",
              protohead => "FTPHEAD",
@@ -222,17 +224,13 @@ class dpm::headnode (
     class{'dmlite::srm':}
     class{'dmlite::gridftp':
       dpmhost => $::fqdn, 
-      remote_nodes => $gridftp_redirect ? {
-        1 => join(suffix($disk_nodes, ':2811'), ','),
-        0 => undef,
+      remote_nodes => $_gridftp_redirect ? {
+        true => join(suffix($disk_nodes, ':2811'), ','),
+        false => undef,
       },
       enable_dome_checksum => $configure_domeadapter,  
     }
 
-
-    # The XrootD configuration is a bit more complicated and
-    # the full config (incl. federations) will be explained here:
-    # https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Xroot/PuppetSetup
 
     #
     # The simplest xrootd configuration.
