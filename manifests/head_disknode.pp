@@ -8,6 +8,9 @@ class dpm::head_disknode (
     $configure_dome =  $dpm::params::configure_dome,
     $configure_domeadapter = $dpm::params::configure_domeadapter,
 
+    #install and configure legacy stask
+    $configure_legacy =   $dpm::params::configure_legacy,
+    
     #repo list
     $repos =  $dpm::params::repos,
 
@@ -81,21 +84,23 @@ class dpm::head_disknode (
       Class[dmlite::head] -> Class[dmlite::plugins::domeadapter::install]
       Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::gridftp]
     }else {
-      Class[lcgdm::dpm::service] -> Class[dmlite::plugins::adapter::install]
-      Class[dmlite::head] -> Class[dmlite::plugins::adapter::install]
-      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::srm]
-      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
+    if $configure_legacy {
+        Class[lcgdm::dpm::service] -> Class[dmlite::plugins::adapter::install]
+        Class[dmlite::head] -> Class[dmlite::plugins::adapter::install]
+        Class[dmlite::plugins::adapter::install] ~> Class[dmlite::srm]
+        Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
+      }
     }
-
-    Class[lcgdm::ns::config] -> Class[dmlite::srm::service]
-    Class[dmlite::plugins::mysql::install] ~> Class[dmlite::srm]
+    if $configure_legacy {
+      Class[lcgdm::ns::config] -> Class[dmlite::srm::service]
+      Class[dmlite::plugins::mysql::install] ~> Class[dmlite::srm]
+    }
     Class[dmlite::plugins::mysql::install] ~> Class[dmlite::gridftp]
     Class[fetchcrl::service] -> Class[xrootd::config]
 
     if($memcached_enabled){
        Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
        Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
-       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::srm]
     }
 
 
@@ -103,8 +108,9 @@ class dpm::head_disknode (
     # MySQL server setup 
     #
     if ($local_db) {
-      Class[mysql::server] -> Class[lcgdm::ns::service]
-      
+      if $configure_legacy {
+        Class[mysql::server] -> Class[lcgdm::ns::service]
+      } 
       class{'mysql::server':
     	service_enabled   => true,
         root_password => $mysql_root_pass,
@@ -136,29 +142,33 @@ class dpm::head_disknode (
     #
     # RFIO configuration.
     #
-    class{'lcgdm::rfio':
-      dpmhost => $::fqdn,
-    }
+    if $configure_legacy {
+      class{'lcgdm::rfio':
+        dpmhost => $::fqdn,
+      }
+     
+      class{'dmlite::srm':}
 
-    #
-    # Entries in the shift.conf file, you can add in 'host' below the list of
-    # machines that the DPM should trust (if any).
-    #
-    lcgdm::shift::trust_value{
-      'DPM TRUST':
+      #
+      # Entries in the shift.conf file, you can add in 'host' below the list of
+      # machines that the DPM should trust (if any).
+      #
+      lcgdm::shift::trust_value{
+        'DPM TRUST':
+          component => 'DPM',
+          host      => "$disk_nodes_str $headnode_fqdn";
+        'DPNS TRUST':
+          component => 'DPNS',
+          host      => "$disk_nodes_str $headnode_fqdn";
+        'RFIO TRUST':
+          component => 'RFIOD',
+          host      => "$disk_nodes_str $headnode_fqdn",
+          all       => true
+      }
+      lcgdm::shift::protocol{'PROTOCOLS':
         component => 'DPM',
-        host      => "$disk_nodes_str $headnode_fqdn";
-      'DPNS TRUST':
-        component => 'DPNS',
-        host      => "$disk_nodes_str $headnode_fqdn";
-      'RFIO TRUST':
-        component => 'RFIOD',
-        host      => "$disk_nodes_str $headnode_fqdn",
-        all       => true
-    }
-    lcgdm::shift::protocol{'PROTOCOLS':
-      component => 'DPM',
-      proto     => 'rfio gsiftp http https xroot'
+        proto     => 'rfio gsiftp http https xroot'
+      }
     }
 
     if($configure_vos){
@@ -212,7 +222,6 @@ class dpm::head_disknode (
 
       class{'dmlite::dav':}
     }
-    class{'dmlite::srm':}
     class{'dmlite::gridftp':
       dpmhost => $::fqdn,
       enable_dome_checksum => $configure_domeadapter,
@@ -276,8 +285,6 @@ class dpm::head_disknode (
    {
     #bdii installation and configuration with default values
     include('bdii')
-    Class[bdii::install] -> Class[lcgdm::bdii::dpm]
-    Class[lcgdm::bdii::dpm] -> Class[bdii::service]
 
     # GIP installation and configuration
     class{'lcgdm::bdii::dpm':

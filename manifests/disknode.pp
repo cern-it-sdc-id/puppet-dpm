@@ -7,6 +7,9 @@ class dpm::disknode (
   $configure_repos = $dpm::params::configure_repos,
   $configure_dome  = $dpm::params::configure_dome,
   $configure_domeadapter = $dpm::params::configure_domeadapter,
+  
+  #install and configure legacy stask
+  $configure_legacy =   $dpm::params::configure_legacy,  
 
   #repo list
   $repos =  $dpm::params::repos,
@@ -59,8 +62,10 @@ class dpm::disknode (
     $disk_nodes_str=join($disk_nodes,' ')
 
     $_gridftp_redirect = (num2bool($gridftp_redirect) or $configure_domeadapter)
-
-    Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
+    
+    if $configure_legacy {
+      Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
+    }
     if($webdav_enabled){
       if $configure_domeadapter {
         Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::dav::service]
@@ -80,40 +85,40 @@ class dpm::disknode (
       gid => $dpmmgr_gid,
     }
 
-    
-    class{'lcgdm::ns::client':
-      flavor  => 'dpns',
-      dpmhost => $headnode_fqdn
-    }
+    if $configure_legacy {
+      class{'lcgdm::ns::client':
+        flavor  => 'dpns',
+        dpmhost => $headnode_fqdn
+      }
 
-    #
-    # RFIO configuration.
-    #
-    class{'lcgdm::rfio':
-      dpmhost => $headnode_fqdn,
-    }
+      #
+      # RFIO configuration.
+      #
+      class{'lcgdm::rfio':
+        dpmhost => $headnode_fqdn,
+      }
     
-    #
-    # Entries in the shift.conf file, you can add in 'host' below the list of
-    # machines that the DPM should trust (if any).
-    #
-    lcgdm::shift::trust_value{
-      'DPM TRUST':
+      #
+      # Entries in the shift.conf file, you can add in 'host' below the list of
+      # machines that the DPM should trust (if any).
+      #
+      lcgdm::shift::trust_value{
+        'DPM TRUST':
+          component => 'DPM',
+          host      => "$disk_nodes_str $headnode_fqdn";
+        'DPNS TRUST':
+          component => 'DPNS',
+          host      => "$disk_nodes_str $headnode_fqdn";
+        'RFIO TRUST':
+          component => 'RFIOD',
+          host      => "$disk_nodes_str $headnode_fqdn",
+          all       => true
+      }
+      lcgdm::shift::protocol{'PROTOCOLS':
         component => 'DPM',
-        host      => "$disk_nodes_str $headnode_fqdn";
-      'DPNS TRUST':
-        component => 'DPNS',
-        host      => "$disk_nodes_str $headnode_fqdn";
-      'RFIO TRUST':
-        component => 'RFIOD',
-        host      => "$disk_nodes_str $headnode_fqdn",
-        all       => true
+        proto     => 'rfio gsiftp http https xroot'
+      }
     }
-    lcgdm::shift::protocol{'PROTOCOLS':
-      component => 'DPM',
-      proto     => 'rfio gsiftp http https xroot'
-    }
-
     if($configure_vos){
       $newvolist = reject($volist,'\.')
       dpm::util::add_dpm_voms {$newvolist:}
