@@ -32,7 +32,7 @@ class{'dpm::disknode':
    dpmmgr_uid                   => 500,
    mountpoints			=> ['/data','/data/01'],
    configure_repos 		=> true,
-   configure_dome               => true,
+   configure_dome               => false,
 }
 
 class{'voms::km3net':}

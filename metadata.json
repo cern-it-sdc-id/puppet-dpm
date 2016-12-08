@@ -35,10 +35,10 @@
     }
   ],
   "description": "A wrapper for the DPM modules",
-  "license": "Apache License, Version 2.0",
+  "license": "Apache-2.0",
   "name": "lcgdm-dpm",
   "operatingsystem_support":[],
-  "project_page": "https://svnweb.cern.ch/trac/lcgdm",
+  "project_page": "http://lcgdm.web.cern.ch/dpm",
   "requirements": [],
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",
