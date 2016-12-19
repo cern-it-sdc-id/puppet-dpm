@@ -128,26 +128,25 @@ class dpm::headnode (
 		
     }
    
-
-    #
-    # DPM and DPNS daemon configuration.
-    #
-    class{'lcgdm':
-      dbflavor => 'mysql',
-      dbuser   => $db_user,
-      dbpass   => $db_pass,
-      dbhost   => $db_host,
-      mysqlrootpass =>  $mysql_root_pass,
-      domain   => $localdomain,
-      volist   => $volist,
-      uid      => $dpmmgr_uid,
-      gid      => $dpmmgr_gid,
-    }
-
-    #
-    # RFIO configuration.
-    #
     if $configure_legacy {
+      #
+      # DPM and DPNS daemon configuration.
+      #
+      class{'lcgdm':
+        dbflavor => 'mysql',
+        dbuser   => $db_user,
+        dbpass   => $db_pass,
+        dbhost   => $db_host,
+        mysqlrootpass =>  $mysql_root_pass,
+        domain   => $localdomain,
+        volist   => $volist,
+        uid      => $dpmmgr_uid,
+        gid      => $dpmmgr_gid,
+      }
+
+      #
+      # RFIO configuration.
+      #
       class{'lcgdm::rfio':
         dpmhost => $::fqdn,
       }
@@ -182,6 +181,7 @@ class dpm::headnode (
         } ~>  Class[dmlite::srm::service]
       }
     }
+   
     if($configure_vos){
 	$newvolist = reject($volist,'\.')
 	dpm::util::add_dpm_voms {$newvolist:}
@@ -209,6 +209,12 @@ class dpm::headnode (
     # dmlite configuration.
     #
     class{'dmlite::head':
+      legacy         => $configure_legacy,
+      mysqlrootpass  =>  $mysql_root_pass,
+      domain         => $localdomain,
+      volist         => $volist,
+      uid            => $dpmmgr_uid,
+      gid            => $dpmmgr_gid,
       token_password => $token_password,
       mysql_username => $db_user,
       mysql_password => $db_pass,
@@ -283,7 +289,7 @@ class dpm::headnode (
      }
    }
 
-   if ($configure_bdii)
+   if ($configure_bdii and $configure_legacy)
    {
     #bdii installation and configuration with default values
     include('bdii')
@@ -295,15 +301,15 @@ class dpm::headnode (
     }
 
    }
-   if($configure_default_pool)
-   {
-     dpm::util::add_dpm_pool {$pools:}
-   }
+   #if($configure_default_pool)
+   #{
+   #  dpm::util::add_dpm_pool {$pools:}
+   #}
    
-   if($configure_default_filesystem)
-   {
-     dpm::util::add_dpm_fs {$filesystems:}
-   }
+   #if($configure_default_filesystem)
+   #{
+   #  dpm::util::add_dpm_fs {$filesystems:}
+   #}
 
    include dmlite::shell
    

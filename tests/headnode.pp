@@ -18,7 +18,7 @@ class{'dpm::headnode':
    db_user			=> 'dpmdbuser',
    db_pass                      => 'PASS',
    db_host 			=> 'localhost',
-   mysql_root_pass              => 'ROOTPASS',
+   mysql_root_pass              => 'mysqlroot',
    token_password               => 'kwpoMyvcusgdbyyws6gfcxhntkLoh8jilwivnivel',
    xrootd_sharedkey             => 'A32TO64CHARACTERA32TO64CHARACTER',
    site_name                    => 'CNR_DPM_TEST',
@@ -30,4 +30,5 @@ class{'dpm::headnode':
    configure_dome		=> true,
    configure_domeadapter        => true,
    dpmmgr_uid                   => 500,
+   configure_legacy             => false,
 }
