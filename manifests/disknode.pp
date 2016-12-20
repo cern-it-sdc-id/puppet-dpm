@@ -78,14 +78,14 @@ class dpm::disknode (
     } else {
       Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
     }
-    # lcgdm configuration.
-    #
-    class{'lcgdm::base':
-      uid => $dpmmgr_uid,
-      gid => $dpmmgr_gid,
-    }
 
     if $configure_legacy {
+      # lcgdm configuration.
+      #
+      class{'lcgdm::base':
+        uid => $dpmmgr_uid,
+        gid => $dpmmgr_gid,
+      }
       class{'lcgdm::ns::client':
         flavor  => 'dpns',
         dpmhost => $headnode_fqdn
