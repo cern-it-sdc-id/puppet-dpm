@@ -12,7 +12,7 @@ class dpm::params {
   $disk_nodes =  hiera('dpm::params::disk_nodes',[])
   $localdomain =  hiera('dpm::params::localdomain',undef)
   $webdav_enabled = hiera('dpm::params::webdav_enabled',true)
-  $memcached_enabled = hiera('dpm::params::webdav_enabled',true)
+  $memcached_enabled = hiera('dpm::params::memcached_enabled',true)
   $local_db = hiera('dpm::params::local_db',true)
   $gridftp_redirect =  hiera("dpm::params::gridftp_redirect",0)
 
