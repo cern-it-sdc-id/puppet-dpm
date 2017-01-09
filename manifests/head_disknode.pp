@@ -123,26 +123,25 @@ class dpm::head_disknode (
         service_enabled   => false,
     	}
     }
-   
-    #
-    # DPM and DPNS daemon configuration.
-    #
-    class{'lcgdm':
-      dbflavor => 'mysql',
-      dbuser   => $db_user,
-      dbpass   => $db_pass,
-      dbhost   => $db_host,
-      mysqlrootpass => $mysql_root_pass,
-      domain   => $localdomain,
-      volist   => $volist,
-      uid      => $dpmmgr_uid,
-      gid      => $dpmmgr_gid,
-    }
-
-    #
-    # RFIO configuration.
-    #
     if $configure_legacy {
+      #
+      # DPM and DPNS daemon configuration.
+      #
+      class{'lcgdm':
+        dbflavor => 'mysql',
+        dbuser   => $db_user,
+        dbpass   => $db_pass,
+        dbhost   => $db_host,
+        mysqlrootpass => $mysql_root_pass,
+        domain   => $localdomain,
+        volist   => $volist,
+        uid      => $dpmmgr_uid,
+        gid      => $dpmmgr_gid,
+      }
+
+      #
+      # RFIO configuration.
+      #
       class{'lcgdm::rfio':
         dpmhost => $::fqdn,
       }
@@ -197,13 +196,19 @@ class dpm::head_disknode (
     # dmlite configuration.
     #
     class{'dmlite::head':
+      legacy         => $configure_legacy,
+      mysqlrootpass  => $mysql_root_pass,
+      domain         => $localdomain,
+      volist         => $volist,
+      uid            => $dpmmgr_uid,
+      gid            => $dpmmgr_gid,
       token_password => $token_password,
       mysql_username => $db_user,
       mysql_password => $db_pass,
       mysql_host     => $db_host,
       enable_dome    => $configure_dome,
-      enable_disknode => true,
       enable_domeadapter => $configure_domeadapter,
+      enable_disknode => true,
     }
 
     #
@@ -281,7 +286,7 @@ class dpm::head_disknode (
      }
    }
 
-   if ($configure_bdii)
+   if ($configure_bdii and $configure_legacy)
    {
     #bdii installation and configuration with default values
     include('bdii')
@@ -297,14 +302,15 @@ class dpm::head_disknode (
   #pools configuration
   #
   if ($configure_default_pool) {
-    dpm::util::add_dpm_pool {$pools:}
+    dpm::util::add_dpm_pool {$pools:
+        legacy => $configure_legacy,
+    }
   }
   #
   #
   # You can define your filesystems
   #
   if ($configure_default_filesystem) {
-    Class[lcgdm::base::config] ->
      file{
       $mountpoints:
         ensure => directory,
@@ -312,7 +318,9 @@ class dpm::head_disknode (
         group => $dpmmgr_user,
         mode =>  '0775';
      }
-     -> dpm::util::add_dpm_fs {$filesystems:}
+     -> dpm::util::add_dpm_fs {$filesystems:
+            legacy => $configure_legacy,
+        }
   }
   
  include dmlite::shell

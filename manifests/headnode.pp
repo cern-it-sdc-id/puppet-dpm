@@ -301,15 +301,19 @@ class dpm::headnode (
     }
 
    }
-   #if($configure_default_pool)
-   #{
-   #  dpm::util::add_dpm_pool {$pools:}
-   #}
+   if($configure_default_pool)
+   {
+       dpm::util::add_dpm_pool {$pools: 
+           legacy => $configure_legacy,   
+       }
+   }
    
-   #if($configure_default_filesystem)
-   #{
-   #  dpm::util::add_dpm_fs {$filesystems:}
-   #}
+   if($configure_default_filesystem)
+   {
+       dpm::util::add_dpm_fs {$filesystems:
+           legacy => $configure_legacy,
+       }
+   }
 
    include dmlite::shell
    

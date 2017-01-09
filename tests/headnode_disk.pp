@@ -1,7 +1,7 @@
 class{"dpm::head_disknode":
    configure_repos	=> true,
    configure_default_pool => true,
-   configure_default_filesystem => false,
+   configure_default_filesystem => true,
    disk_nodes => ['localhost'],
    localdomain => "cern.ch",
    db_pass => "MYSQLPASS",
