@@ -246,10 +246,9 @@ class dpm::headnode (
         true => join(suffix($disk_nodes, ':2811'), ','),
         false => undef,
       },
-      enable_dome_checksum => $configure_domeadapter,  
+      enable_dome_checksum => $configure_domeadapter, 
+      legacy               => $configure_legacy, 
     }
-
-
     #
     # The simplest xrootd configuration.
     #
@@ -259,20 +258,21 @@ class dpm::headnode (
     }
     ->
     class{'dmlite::xrootd':
-          nodetype             => [ 'head' ],
-          domain               => $localdomain,
-          dpm_xrootd_debug     => $debug,
-          dpm_xrootd_sharedkey => $xrootd_sharedkey,
-          xrootd_use_voms      => $xrootd_use_voms,
-          dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-          site_name            => $site_name
+      nodetype             => [ 'head' ],
+      domain               => $localdomain,
+      dpm_xrootd_debug     => $debug,
+      dpm_xrootd_sharedkey => $xrootd_sharedkey,
+      xrootd_use_voms      => $xrootd_use_voms,
+      dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+      site_name            => $site_name,
+      legacy               => $configure_legacy,
    }
    #install n2n plugin in case of atlas fed
    $array_feds =  keys($dpm_xrootd_fedredirs)
    if member($array_feds, 'atlas') {
-	package{'xrootd-server-atlas-n2n-plugin':
-	  ensure => present,
-	}
+     package{'xrootd-server-atlas-n2n-plugin': 
+       ensure => present,
+     }
    }
    if($memcached_enabled)
    {

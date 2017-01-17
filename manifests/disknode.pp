@@ -145,7 +145,7 @@ class dpm::disknode (
       }
     }
     
-    if $legacy {
+    if $configure_legacy {
      Class[lcgdm::base::config] ->
      file {
     	 $mountpoints:
@@ -189,6 +189,7 @@ class dpm::disknode (
         true => 1,
         false => 0,
       },
+      legacy  => $configure_legacy,
     }
 
     #
@@ -199,22 +200,23 @@ class dpm::disknode (
       xrootd_group => $dpmmgr_user
     }
     if $xrd_report or $xrootd_monitor {
-
-	    class{'dmlite::xrootd':
-	      nodetype             => [ 'disk' ],
-	      domain               => $localdomain,
-	      dpm_xrootd_debug     => $debug,
-	      dpm_xrootd_sharedkey => $xrootd_sharedkey,
-	      xrd_report           => $xrd_report,
-	      xrootd_monitor       => $xrootd_monitor,
-    	    }
+      class{'dmlite::xrootd':
+        nodetype             => [ 'disk' ],
+	domain               => $localdomain,
+	dpm_xrootd_debug     => $debug,
+	dpm_xrootd_sharedkey => $xrootd_sharedkey,
+	xrd_report           => $xrd_report,
+	xrootd_monitor       => $xrootd_monitor,
+        legacy               => $configure_legacy,
+      }
      } else {
-  	    class{'dmlite::xrootd':
-              nodetype             => [ 'disk' ],
-              domain               => $localdomain,
-              dpm_xrootd_debug     => $debug,
-              dpm_xrootd_sharedkey => $xrootd_sharedkey,
-            }
+       class{'dmlite::xrootd':
+          nodetype             => [ 'disk' ],
+          domain               => $localdomain,
+          dpm_xrootd_debug     => $debug,
+          dpm_xrootd_sharedkey => $xrootd_sharedkey,
+          legacy               => $configure_legacy,
+       }
      }
 
 }
