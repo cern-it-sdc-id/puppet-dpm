@@ -118,6 +118,11 @@ class dpm::disknode (
         component => 'DPM',
         proto     => 'rfio gsiftp http https xroot'
       }
+    } else {
+      class{'dmlite::base':
+        uid => $dpmmgr_uid,
+        gid => $dpmmgr_gid,
+      }
     }
     if($configure_vos){
       $newvolist = reject($volist,'\.')
@@ -140,7 +145,8 @@ class dpm::disknode (
       }
     }
     
-    Class[lcgdm::base::config] ->
+    if $legacy {
+     Class[lcgdm::base::config] ->
      file {
     	 $mountpoints:
 	     ensure => directory,
@@ -148,6 +154,17 @@ class dpm::disknode (
 	     group => $dpmmgr_user,
 	     mode =>  '0775';
    	}
+    } else {
+      Class[dmlite::base::config] ->
+       file {
+         $mountpoints:
+             ensure => directory,
+             owner => $dpmmgr_user,
+             group => $dpmmgr_user,
+             mode =>  '0775';
+        }
+
+    }
     #
     # dmlite plugin configuration.
     class{'dmlite::disk':
@@ -156,6 +173,7 @@ class dpm::disknode (
       nshost         => $headnode_fqdn,
       enable_dome    => $configure_dome,
       enable_domeadapter => $configure_domeadapter,
+      legacy         => $configure_legacy,
     }
     
     #
