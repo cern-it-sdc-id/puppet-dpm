@@ -52,6 +52,9 @@ class dpm::head_disknode (
     $xrootd_monitor = $dpm::params::xrootd_monitor,
 
     $site_name = $dpm::params::site_name,
+ 
+    #admin DN
+    $admin_dn = $dpm::params::admin_dn,
 
     #New DB installation vs upgrade
     $new_installation = $dpm::params::new_installation,
@@ -187,6 +190,7 @@ class dpm::head_disknode (
     # dmlite configuration.
     #
     class{'dmlite::head':
+      adminuser      => $admin_dn,
       token_password => $token_password,
       mysql_username => $db_user,
       mysql_password => $db_pass,

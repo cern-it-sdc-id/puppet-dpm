@@ -56,6 +56,9 @@ class dpm::headnode (
     #New DB installation vs upgrade
     $new_installation = $dpm::params::new_installation,
     
+    #admin DN
+    $admin_dn = $dpm::params::admin_dn,
+
     #pools and filesystems
     $pools = $dpm::params::pools,
     $filesystems = $dpm::params::filesystems,
@@ -197,6 +200,7 @@ class dpm::headnode (
     # dmlite configuration.
     #
     class{'dmlite::head':
+      adminuser      => $admin_dn,
       token_password => $token_password,
       mysql_username => $db_user,
       mysql_password => $db_pass,
