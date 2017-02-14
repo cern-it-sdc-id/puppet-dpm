@@ -41,6 +41,7 @@ class dpm::params {
   $db_user =  hiera('dpm::params::db_user','dpmmgr')
   $db_pass =  hiera('dpm::params::db_pass',undef)
   $db_host =  hiera('dpm::params::db_host','localhost')
+  $db_manage = hiera('dpm::params::db_manage',true) 
   $mysql_root_pass =  hiera('dpm::params::mysql_root_pass',undef)
   $token_password =  hiera('dpm::params::token_password',undef)
   $xrootd_sharedkey =  hiera('dpm::params::xrootd_sharedkey',undef)
