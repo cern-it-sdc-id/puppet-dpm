@@ -3,15 +3,15 @@
   "dependencies": [
     {
       "name": "lcgdm/gridftp",
-      "version_requirement": ">= 0.2.2 <= 0.2.2"
+      "version_requirement": ">= 0.2.3 <= 0.2.3"
     },
     {
       "name": "lcgdm/dmlite",
-      "version_requirement": ">= 0.5.0 <= 0.5.0"
+      "version_requirement": ">= 0.5.1 <= 0.5.1"
     },
     {
       "name": "lcgdm/lcgdm",
-      "version_requirement": ">= 0.3.6 <= 0.3.6"
+      "version_requirement": ">= 0.3.7 <= 0.3.7"
     },
     {
       "name": "lcgdm/xrootd",
@@ -43,5 +43,5 @@
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",
   "tags": [],
-  "version": "0.5.1"
+  "version": "0.5.2"
 }
