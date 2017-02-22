@@ -34,6 +34,7 @@ class dpm::head_disknode (
     $db_user =  $dpm::params::db_user,
     $db_pass =  $dpm::params::db_pass,
     $db_host =  $dpm::params::db_host,
+    $db_manage = $dpm::params::db_manage,
     $mysql_root_pass =  $dpm::params::mysql_root_pass,
     $token_password =  $dpm::params::token_password,
     $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
@@ -55,6 +56,9 @@ class dpm::head_disknode (
     $xrootd_monitor = $dpm::params::xrootd_monitor,
 
     $site_name = $dpm::params::site_name,
+ 
+    #admin DN
+    $admin_dn = $dpm::params::admin_dn,
 
     #New DB installation vs upgrade
     $new_installation = $dpm::params::new_installation,
@@ -132,6 +136,7 @@ class dpm::head_disknode (
         dbuser   => $db_user,
         dbpass   => $db_pass,
         dbhost   => $db_host,
+        dbmanage => $db_manage
         mysqlrootpass => $mysql_root_pass,
         domain   => $localdomain,
         volist   => $volist,
@@ -202,6 +207,7 @@ class dpm::head_disknode (
       volist         => $volist,
       uid            => $dpmmgr_uid,
       gid            => $dpmmgr_gid,
+      adminuser      => $admin_dn,
       token_password => $token_password,
       mysql_username => $db_user,
       mysql_password => $db_pass,

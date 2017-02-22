@@ -35,6 +35,7 @@ class{'dpm::disknode':
    configure_dome               => true,
    configure_domeadapter        => true,
    configure_legacy             => false,
+   configure_dome               => false,
 }
 
 class{'voms::km3net':}

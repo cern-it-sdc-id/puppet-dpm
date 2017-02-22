@@ -28,8 +28,8 @@ class{'dpm::headnode':
    pools 			=> ['mypool:100M'],
    filesystems 			=> ["mypool:${fqdn}:/srv/dpm/01"],
    disk_nodes                   => ['dpmdisk01.cern.ch'],
-   configure_dome		=> true,
-   configure_domeadapter        => true,
+   configure_dome		=> false,
+   configure_domeadapter        => false,
    dpmmgr_uid                   => 500,
    configure_legacy             => false,
 }

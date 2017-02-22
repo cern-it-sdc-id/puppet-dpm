@@ -3,7 +3,7 @@
   "dependencies": [
     {
       "name": "lcgdm/gridftp",
-      "version_requirement": ">=0.2.2 <=0.2.2"
+      "version_requirement": ">= 0.2.3 <= 0.2.3"
     },
     {
       "name": "lcgdm/dmlite",
@@ -11,34 +11,34 @@
     },
     {
       "name": "lcgdm/lcgdm",
-      "version_requirement": ">=0.3.4 <=0.3.4"
+      "version_requirement": ">= 0.3.7 <= 0.3.7"
     },
     {
       "name": "lcgdm/xrootd",
-      "version_requirement": ">=0.2.3 <=0.2.3"
+      "version_requirement": ">= 0.2.3 <= 0.2.3"
     },
     {
       "name": "lcgdm/voms",
-      "version_requirement": ">=0.3.2 <=0.3.2"
+      "version_requirement": ">= 0.3.2 <= 0.3.2"
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">=3.4.0 <=3.4.0"
+      "version_requirement": ">= 3.4.0 <= 3.4.0"
     },
     {
       "name": "saz/memcached",
-      "version_requirement": ">=2.8.1 <=2.8.1"
+      "version_requirement": ">= 2.8.1 <= 2.8.1"
     },
     {
       "name": "CERNOps/bdii",
-      "version_requirement": ">=0.1.0 <=0.1.0"
+      "version_requirement": ">= 0.1.0 <= 0.1.0"
     }
   ],
   "description": "A wrapper for the DPM modules",
-  "license": "Apache License, Version 2.0",
+  "license": "Apache-2.0",
   "name": "lcgdm-dpm",
   "operatingsystem_support":[],
-  "project_page": "https://svnweb.cern.ch/trac/lcgdm",
+  "project_page": "http://lcgdm.web.cern.ch/dpm",
   "requirements": [],
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",

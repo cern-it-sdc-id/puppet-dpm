@@ -12,7 +12,7 @@ class dpm::params {
   $disk_nodes =  hiera('dpm::params::disk_nodes',[])
   $localdomain =  hiera('dpm::params::localdomain',undef)
   $webdav_enabled = hiera('dpm::params::webdav_enabled',true)
-  $memcached_enabled = hiera('dpm::params::webdav_enabled',true)
+  $memcached_enabled = hiera('dpm::params::memcached_enabled',true)
   $local_db = hiera('dpm::params::local_db',true)
   $gridftp_redirect =  hiera("dpm::params::gridftp_redirect",0)
 
@@ -44,6 +44,7 @@ class dpm::params {
   $db_user =  hiera('dpm::params::db_user','dpmmgr')
   $db_pass =  hiera('dpm::params::db_pass',undef)
   $db_host =  hiera('dpm::params::db_host','localhost')
+  $db_manage = hiera('dpm::params::db_manage',true) 
   $mysql_root_pass =  hiera('dpm::params::mysql_root_pass',undef)
   $token_password =  hiera('dpm::params::token_password',undef)
   $xrootd_sharedkey =  hiera('dpm::params::xrootd_sharedkey',undef)
@@ -70,6 +71,8 @@ class dpm::params {
 
   $new_installation = hiera('dpm::params::new_installation',true)
 
+  #admin dn( needed for http replication/drain)
+  $admin_dn = hiera('dpm::params::admin_dn', '') 
   #pools and filesystems
   $pools = hiera('dpm::params::pools',[])
   $filesystems = hiera('dpm::params::filesystems',[])
