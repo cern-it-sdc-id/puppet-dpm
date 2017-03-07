@@ -136,7 +136,7 @@ class dpm::head_disknode (
         dbuser   => $db_user,
         dbpass   => $db_pass,
         dbhost   => $db_host,
-        dbmanage => $db_manage
+        dbmanage => $db_manage,
         mysqlrootpass => $mysql_root_pass,
         domain   => $localdomain,
         volist   => $volist,
