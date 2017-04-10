@@ -32,6 +32,10 @@
     {
       "name": "CERNOps/bdii",
       "version_requirement": ">= 0.1.0 <= 0.1.0"
+    },
+    { 
+      "name": "puppetlabs-stdlib",
+      "version_requirement": "<= 4.15.0"
     }
   ],
   "description": "A wrapper for the DPM modules",
@@ -43,5 +47,5 @@
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",
   "tags": [],
-  "version": "0.5.2"
+  "version": "0.5.3"
 }
