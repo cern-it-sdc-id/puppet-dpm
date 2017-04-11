@@ -106,7 +106,7 @@ class dpm::head_disknode (
     #
     # MySQL server setup 
     #
-    if ($local_db) {
+    if ($local_db and $db_manage) {
       Class[mysql::server] -> Class[lcgdm::ns::service]
       
       class{'mysql::server':
