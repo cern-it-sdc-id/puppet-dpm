@@ -79,7 +79,7 @@ class dpm::headnode (
    
     $disk_nodes_str=join($disk_nodes,' ')
 
-    $_gridftp_redirect = (num2bool($gridftp_redirect) or $configure_domeadapter)
+    $_gridftp_redirect = num2bool($gridftp_redirect)
 	
     if ($configure_repos){
 	create_resources(yumrepo,$repos)
@@ -115,7 +115,7 @@ class dpm::headnode (
     #
     # MySQL server setup 
     #
-    if ($local_db) {
+    if ($local_db and $db_manage) {
       if $configure_legacy {
         Class[mysql::server] -> Class[lcgdm::ns::service]
       }

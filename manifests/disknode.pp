@@ -61,7 +61,7 @@ class dpm::disknode (
     	
     $disk_nodes_str=join($disk_nodes,' ')
 
-    $_gridftp_redirect = (num2bool($gridftp_redirect) or $configure_domeadapter)
+    $_gridftp_redirect = num2bool($gridftp_redirect)
     
     if $configure_legacy {
       Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
