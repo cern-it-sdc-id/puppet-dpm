@@ -1,3 +1,5 @@
+2017-04-12 Andrea Manzi  <andrea.manzi@cern.ch
+        * don't configure gridftp redirection if DOME is enabled
 2017-04-10 Andrea Manzi  <andrea.manzi@cern.ch
         * force stdlib version to be <= 4.15
 2017-02-15 Andrea Manzi  <andrea.manzi@cern.ch
