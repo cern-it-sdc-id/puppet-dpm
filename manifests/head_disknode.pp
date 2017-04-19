@@ -296,7 +296,7 @@ class dpm::head_disknode (
        package_ensure => 'absent',
      }
      class{'dmlite::plugins::memcache':
-       uninstall      => true,
+       enable_memcache => false,
      }
    }
 
