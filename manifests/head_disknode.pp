@@ -102,19 +102,14 @@ class dpm::head_disknode (
     Class[dmlite::plugins::mysql::install] ~> Class[dmlite::gridftp]
     Class[fetchcrl::service] -> Class[xrootd::config]
 
-    if($memcached_enabled){
-       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
-       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
-    }
-
 
     #
     # MySQL server setup 
     #
-    if ($local_db and $db_manage {
+    if ($local_db and $db_manage ){
       if $configure_legacy {
-        Class[mysql::server] -> Class[lcgdm::ns::service]
-      } 
+       Class[mysql::server] -> Class[lcgdm::ns::service]
+      }  
       class{'mysql::server':
     	service_enabled   => true,
         root_password => $mysql_root_pass,
@@ -282,15 +277,26 @@ class dpm::head_disknode (
 
    if($memcached_enabled)
    {
+     Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
+     Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
+
      class{'memcached':
        max_memory => 2000,
        listen_ip => '127.0.0.1',
+
      }
      ->
      class{'dmlite::plugins::memcache':
        expiration_limit => 600,
        posix            => 'on',
        func_counter     => 'on',
+     }
+   } else {
+     class{'memcached':
+       package_ensure => 'absent',
+     }
+     class{'dmlite::plugins::memcache':
+       uninstall      => true,
      }
    }
 

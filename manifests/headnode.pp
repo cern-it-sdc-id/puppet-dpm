@@ -106,12 +106,6 @@ class dpm::headnode (
     Class[dmlite::plugins::mysql::install] ~> Class[dmlite::gridftp]
     Class[fetchcrl::service] -> Class[xrootd::config]
     
-    if($memcached_enabled){
-       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
-       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
-    }
-
-
     #
     # MySQL server setup 
     #
@@ -280,8 +274,12 @@ class dpm::headnode (
        ensure => present,
      }
    }
+
    if($memcached_enabled)
    {
+     Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
+     Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
+     
      class{'memcached':
        max_memory => 2000,
        listen_ip => '127.0.0.1',
@@ -292,6 +290,13 @@ class dpm::headnode (
        expiration_limit => 600,
        posix            => 'on',
        func_counter     => 'on',
+     }
+   } else {
+     class{'memcached':
+       package_ensure => 'absent',
+     }
+     class{'dmlite::plugins::memcache':
+       uninstall      => true,
      }
    }
 
