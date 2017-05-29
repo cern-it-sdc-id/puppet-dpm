@@ -1,3 +1,5 @@
+2017-05-29 Andrea Manzi  <andrea.manzi@cern.ch
+        * update dependencies
 2017-04-12 Andrea Manzi  <andrea.manzi@cern.ch
         * don't configure gridftp redirection if DOME is enabled
 2017-04-10 Andrea Manzi  <andrea.manzi@cern.ch
