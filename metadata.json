@@ -11,7 +11,7 @@
     },
     {
       "name": "lcgdm/lcgdm",
-      "version_requirement": ">= 0.3.7 <= 0.3.7"
+      "version_requirement": ">= 0.3.8 <= 0.3.8"
     },
     {
       "name": "lcgdm/xrootd",
@@ -47,5 +47,5 @@
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",
   "tags": [],
-  "version": "0.5.5"
+  "version": "0.5.6"
 }

@@ -44,7 +44,7 @@ The following modules are needed in order to use this module, and they are autom
  - saz-memcached
  - CERNOps-bdii
  - puppet-fetchcrl
-
+ - puppetlabs-firewall
 
 ##Installation
 
