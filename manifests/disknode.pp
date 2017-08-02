@@ -48,6 +48,9 @@ class dpm::disknode (
   $xrd_report = $dpm::params::xrd_report,
   $xrootd_monitor = $dpm::params::xrootd_monitor,
   
+  #host dn
+  $host_dn = $dpm::params::host_dn
+
   )inherits dpm::params {
   
     validate_array($disk_nodes)
@@ -174,6 +177,7 @@ class dpm::disknode (
       enable_dome    => $configure_dome,
       enable_domeadapter => $configure_domeadapter,
       legacy         => $configure_legacy,
+      host_dn        => $host_dn,
     }
     
     #
@@ -208,6 +212,8 @@ class dpm::disknode (
 	xrd_report           => $xrd_report,
 	xrootd_monitor       => $xrootd_monitor,
         legacy               => $configure_legacy,
+        dpm_enable_dome      => $configure_dome,
+        dpm_xrdhttp_secret_key => $token_password
       }
      } else {
        class{'dmlite::xrootd':
@@ -216,6 +222,8 @@ class dpm::disknode (
           dpm_xrootd_debug     => $debug,
           dpm_xrootd_sharedkey => $xrootd_sharedkey,
           legacy               => $configure_legacy,
+          dpm_enable_dome      => $configure_dome,
+          dpm_xrdhttp_secret_key => $token_password
        }
      }
 

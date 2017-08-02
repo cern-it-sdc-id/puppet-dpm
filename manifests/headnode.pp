@@ -62,9 +62,10 @@ class dpm::headnode (
     #New DB installation vs upgrade
     $new_installation = $dpm::params::new_installation,
     
-    #admin DN
+    #DN
     $admin_dn = $dpm::params::admin_dn,
 
+    $host_dn = $dpm::params::host_dn, 
     #pools and filesystems
     $pools = $dpm::params::pools,
     $filesystems = $dpm::params::filesystems,
@@ -221,6 +222,7 @@ class dpm::headnode (
       mysql_host     => $db_host,
       enable_dome    => $configure_dome,
       enable_domeadapter => $configure_domeadapter,
+      host_dn        => $host_dn
     }
 
     #
@@ -266,6 +268,8 @@ class dpm::headnode (
       dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
       site_name            => $site_name,
       legacy               => $configure_legacy,
+      dpm_enable_dome      => $configure_dome,
+      dpm_xrdhttp_secret_key => $token_password
    }
    #install n2n plugin in case of atlas fed
    $array_feds =  keys($dpm_xrootd_fedredirs)

@@ -60,6 +60,9 @@ class dpm::head_disknode (
     #admin DN
     $admin_dn = $dpm::params::admin_dn,
 
+    #admin DN
+    $host_dn = $dpm::params::host_dn,
+
     #New DB installation vs upgrade
     $new_installation = $dpm::params::new_installation,
      
@@ -210,6 +213,7 @@ class dpm::head_disknode (
       enable_dome    => $configure_dome,
       enable_domeadapter => $configure_domeadapter,
       enable_disknode => true,
+      host_dn        => $host_dn
     }
 
     #
@@ -253,6 +257,8 @@ class dpm::head_disknode (
         xrootd_monitor       => $xrootd_monitor,
 	site_name            => $site_name,
 	legacy               => $configure_legacy,
+        dpm_enable_dome      => $configure_dome,
+        dpm_xrdhttp_secret_key => $token_password
       } 
     }
     else {
@@ -265,6 +271,8 @@ class dpm::head_disknode (
         dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
         site_name            => $site_name,
         legacy               => $configure_legacy,
+        dpm_enable_dome      => $configure_dome,
+        dpm_xrdhttp_secret_key => $token_password
       }
    }
    #install n2n plugin in case of atlas fed

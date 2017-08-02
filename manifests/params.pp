@@ -73,6 +73,8 @@ class dpm::params {
 
   #admin dn( needed for http replication/drain)
   $admin_dn = hiera('dpm::params::admin_dn', '') 
+  #host dn
+  $host_dn = hiera('dpm::params::host_dn', '')
   #pools and filesystems
   $pools = hiera('dpm::params::pools',[])
   $filesystems = hiera('dpm::params::filesystems',[])
