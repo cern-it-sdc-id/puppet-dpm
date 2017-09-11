@@ -8,6 +8,9 @@ class dpm::head_disknode (
     $configure_dome =  $dpm::params::configure_dome,
     $configure_domeadapter = $dpm::params::configure_domeadapter,
 
+    #install and configure legacy stask
+    $configure_legacy =   $dpm::params::configure_legacy,
+    
     #repo list
     $repos =  $dpm::params::repos,
 
@@ -57,6 +60,9 @@ class dpm::head_disknode (
     #admin DN
     $admin_dn = $dpm::params::admin_dn,
 
+    #admin DN
+    $host_dn = $dpm::params::host_dn,
+
     #New DB installation vs upgrade
     $new_installation = $dpm::params::new_installation,
      
@@ -85,30 +91,28 @@ class dpm::head_disknode (
       Class[dmlite::head] -> Class[dmlite::plugins::domeadapter::install]
       Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::gridftp]
     }else {
-      Class[lcgdm::dpm::service] -> Class[dmlite::plugins::adapter::install]
-      Class[dmlite::head] -> Class[dmlite::plugins::adapter::install]
-      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::srm]
-      Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
+    if $configure_legacy {
+        Class[lcgdm::dpm::service] -> Class[dmlite::plugins::adapter::install]
+        Class[dmlite::head] -> Class[dmlite::plugins::adapter::install]
+        Class[dmlite::plugins::adapter::install] ~> Class[dmlite::srm]
+        Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
+      }
     }
-
-    Class[lcgdm::ns::config] -> Class[dmlite::srm::service]
-    Class[dmlite::plugins::mysql::install] ~> Class[dmlite::srm]
+    if $configure_legacy {
+      Class[lcgdm::ns::config] -> Class[dmlite::srm::service]
+      Class[dmlite::plugins::mysql::install] ~> Class[dmlite::srm]
+    }
     Class[dmlite::plugins::mysql::install] ~> Class[dmlite::gridftp]
     Class[fetchcrl::service] -> Class[xrootd::config]
-
-    if($memcached_enabled){
-       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
-       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
-       Class[dmlite::plugins::memcache::install] ~> Class[dmlite::srm]
-    }
 
 
     #
     # MySQL server setup 
     #
-    if ($local_db and $db_manage) {
-      Class[mysql::server] -> Class[lcgdm::ns::service]
-      
+    if ($local_db and $db_manage ){
+      if $configure_legacy {
+       Class[mysql::server] -> Class[lcgdm::ns::service]
+      }  
       class{'mysql::server':
     	service_enabled   => true,
         root_password => $mysql_root_pass,
@@ -121,49 +125,52 @@ class dpm::head_disknode (
         service_enabled   => false,
     	}
     }
-   
-    #
-    # DPM and DPNS daemon configuration.
-    #
-    class{'lcgdm':
-      dbflavor => 'mysql',
-      dbuser   => $db_user,
-      dbpass   => $db_pass,
-      dbhost   => $db_host,
-      dbmanage => $db_manage,
-      mysqlrootpass => $mysql_root_pass,
-      domain   => $localdomain,
-      volist   => $volist,
-      uid      => $dpmmgr_uid,
-      gid      => $dpmmgr_gid,
-    }
+    if $configure_legacy {
+      #
+      # DPM and DPNS daemon configuration.
+      #
+      class{'lcgdm':
+        dbflavor => 'mysql',
+        dbuser   => $db_user,
+        dbpass   => $db_pass,
+        dbhost   => $db_host,
+        dbmanage => $db_manage,
+        mysqlrootpass => $mysql_root_pass,
+        domain   => $localdomain,
+        volist   => $volist,
+        uid      => $dpmmgr_uid,
+        gid      => $dpmmgr_gid,
+      }
 
-    #
-    # RFIO configuration.
-    #
-    class{'lcgdm::rfio':
-      dpmhost => $::fqdn,
-    }
+      #
+      # RFIO configuration.
+      #
+      class{'lcgdm::rfio':
+        dpmhost => $::fqdn,
+      }
+     
+      class{'dmlite::srm':}
 
-    #
-    # Entries in the shift.conf file, you can add in 'host' below the list of
-    # machines that the DPM should trust (if any).
-    #
-    lcgdm::shift::trust_value{
-      'DPM TRUST':
+      #
+      # Entries in the shift.conf file, you can add in 'host' below the list of
+      # machines that the DPM should trust (if any).
+      #
+      lcgdm::shift::trust_value{
+        'DPM TRUST':
+          component => 'DPM',
+          host      => "$disk_nodes_str $headnode_fqdn";
+        'DPNS TRUST':
+          component => 'DPNS',
+          host      => "$disk_nodes_str $headnode_fqdn";
+        'RFIO TRUST':
+          component => 'RFIOD',
+          host      => "$disk_nodes_str $headnode_fqdn",
+          all       => true
+      }
+      lcgdm::shift::protocol{'PROTOCOLS':
         component => 'DPM',
-        host      => "$disk_nodes_str $headnode_fqdn";
-      'DPNS TRUST':
-        component => 'DPNS',
-        host      => "$disk_nodes_str $headnode_fqdn";
-      'RFIO TRUST':
-        component => 'RFIOD',
-        host      => "$disk_nodes_str $headnode_fqdn",
-        all       => true
-    }
-    lcgdm::shift::protocol{'PROTOCOLS':
-      component => 'DPM',
-      proto     => 'rfio gsiftp http https xroot'
+        proto     => 'rfio gsiftp http https xroot'
+      }
     }
 
     if($configure_vos){
@@ -192,14 +199,21 @@ class dpm::head_disknode (
     # dmlite configuration.
     #
     class{'dmlite::head':
+      legacy         => $configure_legacy,
+      mysqlrootpass  => $mysql_root_pass,
+      domain         => $localdomain,
+      volist         => $volist,
+      uid            => $dpmmgr_uid,
+      gid            => $dpmmgr_gid,
       adminuser      => $admin_dn,
       token_password => $token_password,
       mysql_username => $db_user,
       mysql_password => $db_pass,
       mysql_host     => $db_host,
       enable_dome    => $configure_dome,
-      enable_disknode => true,
       enable_domeadapter => $configure_domeadapter,
+      enable_disknode => true,
+      host_dn        => $host_dn
     }
 
     #
@@ -218,10 +232,10 @@ class dpm::head_disknode (
 
       class{'dmlite::dav':}
     }
-    class{'dmlite::srm':}
     class{'dmlite::gridftp':
       dpmhost => $::fqdn,
       enable_dome_checksum => $configure_domeadapter,
+      legacy               => $configure_legacy,
     }
 
     #
@@ -232,29 +246,34 @@ class dpm::head_disknode (
       xrootd_group => $dpmmgr_user,
     }
     if $xrd_report or $xrootd_monitor {
-	    class{'dmlite::xrootd':
-        	  nodetype             => [ 'head','disk' ],
-	          domain               => $localdomain,
-	          dpm_xrootd_debug     => $debug,
-	          dpm_xrootd_sharedkey => $xrootd_sharedkey,
-	          xrootd_use_voms      => $xrootd_use_voms,
-	          dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-	          xrd_report           => $xrd_report,
-        	  xrootd_monitor       => $xrootd_monitor,
-	          site_name            => $site_name
-    	    } 
+      class{'dmlite::xrootd':
+        nodetype             => [ 'head','disk' ],
+	domain               => $localdomain,
+	dpm_xrootd_debug     => $debug,
+	dpm_xrootd_sharedkey => $xrootd_sharedkey,
+	xrootd_use_voms      => $xrootd_use_voms,
+	dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+	xrd_report           => $xrd_report,
+        xrootd_monitor       => $xrootd_monitor,
+	site_name            => $site_name,
+	legacy               => $configure_legacy,
+        dpm_enable_dome      => $configure_dome,
+        dpm_xrdhttp_secret_key => $token_password
+      } 
     }
     else {
-          class{'dmlite::xrootd':
-                  nodetype             => [ 'head','disk' ],
-                  domain               => $localdomain,
-                  dpm_xrootd_debug     => $debug,
-                  dpm_xrootd_sharedkey => $xrootd_sharedkey,
-                  xrootd_use_voms      => $xrootd_use_voms,
-                  dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-                  site_name            => $site_name
-
-    	}
+      class{'dmlite::xrootd':
+        nodetype             => [ 'head','disk' ],
+        domain               => $localdomain,
+        dpm_xrootd_debug     => $debug,
+        dpm_xrootd_sharedkey => $xrootd_sharedkey,
+        xrootd_use_voms      => $xrootd_use_voms,
+        dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+        site_name            => $site_name,
+        legacy               => $configure_legacy,
+        dpm_enable_dome      => $configure_dome,
+        dpm_xrdhttp_secret_key => $token_password
+      }
    }
    #install n2n plugin in case of atlas fed
    $array_feds =  keys($dpm_xrootd_fedredirs)
@@ -266,9 +285,13 @@ class dpm::head_disknode (
 
    if($memcached_enabled)
    {
+     Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
+     Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
+
      class{'memcached':
        max_memory => 2000,
        listen_ip => '127.0.0.1',
+
      }
      ->
      class{'dmlite::plugins::memcache':
@@ -276,14 +299,19 @@ class dpm::head_disknode (
        posix            => 'on',
        func_counter     => 'on',
      }
+   } else {
+     class{'memcached':
+       package_ensure => 'absent',
+     }
+     class{'dmlite::plugins::memcache':
+       enable_memcache => false,
+     }
    }
 
-   if ($configure_bdii)
+   if ($configure_bdii and $configure_legacy)
    {
     #bdii installation and configuration with default values
     include('bdii')
-    Class[bdii::install] -> Class[lcgdm::bdii::dpm]
-    Class[lcgdm::bdii::dpm] -> Class[bdii::service]
 
     # GIP installation and configuration
     class{'lcgdm::bdii::dpm':
@@ -296,14 +324,15 @@ class dpm::head_disknode (
   #pools configuration
   #
   if ($configure_default_pool) {
-    dpm::util::add_dpm_pool {$pools:}
+    dpm::util::add_dpm_pool {$pools:
+        legacy => $configure_legacy,
+    }
   }
   #
   #
   # You can define your filesystems
   #
   if ($configure_default_filesystem) {
-    Class[lcgdm::base::config] ->
      file{
       $mountpoints:
         ensure => directory,
@@ -311,7 +340,9 @@ class dpm::head_disknode (
         group => $dpmmgr_user,
         mode =>  '0775';
      }
-     -> dpm::util::add_dpm_fs {$filesystems:}
+     -> dpm::util::add_dpm_fs {$filesystems:
+            legacy => $configure_legacy,
+        }
   }
   
  include dmlite::shell

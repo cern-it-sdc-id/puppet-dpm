@@ -7,6 +7,9 @@ class dpm::disknode (
   $configure_repos = $dpm::params::configure_repos,
   $configure_dome  = $dpm::params::configure_dome,
   $configure_domeadapter = $dpm::params::configure_domeadapter,
+  
+  #install and configure legacy stask
+  $configure_legacy =   $dpm::params::configure_legacy,  
 
   #repo list
   $repos =  $dpm::params::repos,
@@ -45,6 +48,9 @@ class dpm::disknode (
   $xrd_report = $dpm::params::xrd_report,
   $xrootd_monitor = $dpm::params::xrootd_monitor,
   
+  #host dn
+  $host_dn = $dpm::params::host_dn
+
   )inherits dpm::params {
   
     validate_array($disk_nodes)
@@ -59,8 +65,10 @@ class dpm::disknode (
     $disk_nodes_str=join($disk_nodes,' ')
 
     $_gridftp_redirect = num2bool($gridftp_redirect)
-
-    Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
+    
+    if $configure_legacy {
+      Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
+    }
     if($webdav_enabled){
       if $configure_domeadapter {
         Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::dav::service]
@@ -73,47 +81,52 @@ class dpm::disknode (
     } else {
       Class[dmlite::plugins::adapter::install] ~> Class[dmlite::gridftp]
     }
-    # lcgdm configuration.
-    #
-    class{'lcgdm::base':
-      uid => $dpmmgr_uid,
-      gid => $dpmmgr_gid,
-    }
 
-    
-    class{'lcgdm::ns::client':
-      flavor  => 'dpns',
-      dpmhost => $headnode_fqdn
-    }
+    if $configure_legacy {
+      # lcgdm configuration.
+      #
+      class{'lcgdm::base':
+        uid => $dpmmgr_uid,
+        gid => $dpmmgr_gid,
+      }
+      class{'lcgdm::ns::client':
+        flavor  => 'dpns',
+        dpmhost => $headnode_fqdn
+      }
 
-    #
-    # RFIO configuration.
-    #
-    class{'lcgdm::rfio':
-      dpmhost => $headnode_fqdn,
-    }
+      #
+      # RFIO configuration.
+      #
+      class{'lcgdm::rfio':
+        dpmhost => $headnode_fqdn,
+      }
     
-    #
-    # Entries in the shift.conf file, you can add in 'host' below the list of
-    # machines that the DPM should trust (if any).
-    #
-    lcgdm::shift::trust_value{
-      'DPM TRUST':
+      #
+      # Entries in the shift.conf file, you can add in 'host' below the list of
+      # machines that the DPM should trust (if any).
+      #
+      lcgdm::shift::trust_value{
+        'DPM TRUST':
+          component => 'DPM',
+          host      => "$disk_nodes_str $headnode_fqdn";
+        'DPNS TRUST':
+          component => 'DPNS',
+          host      => "$disk_nodes_str $headnode_fqdn";
+        'RFIO TRUST':
+          component => 'RFIOD',
+          host      => "$disk_nodes_str $headnode_fqdn",
+          all       => true
+      }
+      lcgdm::shift::protocol{'PROTOCOLS':
         component => 'DPM',
-        host      => "$disk_nodes_str $headnode_fqdn";
-      'DPNS TRUST':
-        component => 'DPNS',
-        host      => "$disk_nodes_str $headnode_fqdn";
-      'RFIO TRUST':
-        component => 'RFIOD',
-        host      => "$disk_nodes_str $headnode_fqdn",
-        all       => true
+        proto     => 'rfio gsiftp http https xroot'
+      }
+    } else {
+      class{'dmlite::base':
+        uid => $dpmmgr_uid,
+        gid => $dpmmgr_gid,
+      }
     }
-    lcgdm::shift::protocol{'PROTOCOLS':
-      component => 'DPM',
-      proto     => 'rfio gsiftp http https xroot'
-    }
-
     if($configure_vos){
       $newvolist = reject($volist,'\.')
       dpm::util::add_dpm_voms {$newvolist:}
@@ -135,7 +148,8 @@ class dpm::disknode (
       }
     }
     
-    Class[lcgdm::base::config] ->
+    if $configure_legacy {
+     Class[lcgdm::base::config] ->
      file {
     	 $mountpoints:
 	     ensure => directory,
@@ -143,6 +157,17 @@ class dpm::disknode (
 	     group => $dpmmgr_user,
 	     mode =>  '0775';
    	}
+    } else {
+      Class[dmlite::base::config] ->
+       file {
+         $mountpoints:
+             ensure => directory,
+             owner => $dpmmgr_user,
+             group => $dpmmgr_user,
+             mode =>  '0775';
+        }
+
+    }
     #
     # dmlite plugin configuration.
     class{'dmlite::disk':
@@ -151,6 +176,8 @@ class dpm::disknode (
       nshost         => $headnode_fqdn,
       enable_dome    => $configure_dome,
       enable_domeadapter => $configure_domeadapter,
+      legacy         => $configure_legacy,
+      host_dn        => $host_dn,
     }
     
     #
@@ -166,6 +193,7 @@ class dpm::disknode (
         true => 1,
         false => 0,
       },
+      legacy  => $configure_legacy,
     }
 
     #
@@ -176,22 +204,27 @@ class dpm::disknode (
       xrootd_group => $dpmmgr_user
     }
     if $xrd_report or $xrootd_monitor {
-
-	    class{'dmlite::xrootd':
-	      nodetype             => [ 'disk' ],
-	      domain               => $localdomain,
-	      dpm_xrootd_debug     => $debug,
-	      dpm_xrootd_sharedkey => $xrootd_sharedkey,
-	      xrd_report           => $xrd_report,
-	      xrootd_monitor       => $xrootd_monitor,
-    	    }
+      class{'dmlite::xrootd':
+        nodetype             => [ 'disk' ],
+	domain               => $localdomain,
+	dpm_xrootd_debug     => $debug,
+	dpm_xrootd_sharedkey => $xrootd_sharedkey,
+	xrd_report           => $xrd_report,
+	xrootd_monitor       => $xrootd_monitor,
+        legacy               => $configure_legacy,
+        dpm_enable_dome      => $configure_dome,
+        dpm_xrdhttp_secret_key => $token_password
+      }
      } else {
-  	    class{'dmlite::xrootd':
-              nodetype             => [ 'disk' ],
-              domain               => $localdomain,
-              dpm_xrootd_debug     => $debug,
-              dpm_xrootd_sharedkey => $xrootd_sharedkey,
-            }
+       class{'dmlite::xrootd':
+          nodetype             => [ 'disk' ],
+          domain               => $localdomain,
+          dpm_xrootd_debug     => $debug,
+          dpm_xrootd_sharedkey => $xrootd_sharedkey,
+          legacy               => $configure_legacy,
+          dpm_enable_dome      => $configure_dome,
+          dpm_xrdhttp_secret_key => $token_password
+       }
      }
 
 }
