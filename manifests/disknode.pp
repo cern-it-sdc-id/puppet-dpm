@@ -213,7 +213,7 @@ class dpm::disknode (
 	xrootd_monitor       => $xrootd_monitor,
         legacy               => $configure_legacy,
         dpm_enable_dome      => $configure_dome,
-        dpm_xrdhttp_secret_key => $token_password
+        dpm_xrdhttp_secret_key => $xrootd_sharedkey
       }
      } else {
        class{'dmlite::xrootd':
@@ -223,7 +223,7 @@ class dpm::disknode (
           dpm_xrootd_sharedkey => $xrootd_sharedkey,
           legacy               => $configure_legacy,
           dpm_enable_dome      => $configure_dome,
-          dpm_xrdhttp_secret_key => $token_password
+          dpm_xrdhttp_secret_key => $xrootd_sharedkey
        }
      }
 

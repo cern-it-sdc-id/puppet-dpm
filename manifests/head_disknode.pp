@@ -258,7 +258,7 @@ class dpm::head_disknode (
 	site_name            => $site_name,
 	legacy               => $configure_legacy,
         dpm_enable_dome      => $configure_dome,
-        dpm_xrdhttp_secret_key => $token_password
+        dpm_xrdhttp_secret_key => $xrootd_sharedkey
       } 
     }
     else {
@@ -272,7 +272,7 @@ class dpm::head_disknode (
         site_name            => $site_name,
         legacy               => $configure_legacy,
         dpm_enable_dome      => $configure_dome,
-        dpm_xrdhttp_secret_key => $token_password
+        dpm_xrdhttp_secret_key => $xrootd_sharedkey
       }
    }
    #install n2n plugin in case of atlas fed
