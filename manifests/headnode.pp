@@ -78,7 +78,6 @@ class dpm::headnode (
     validate_array($volist)
     validate_hash($mysql_override_options)
    
-    #check length of token_password
     if size($token_password) < 32 {
       fail("token_password should be longer than 32 chars")
     }
