@@ -78,6 +78,19 @@ class dpm::headnode (
     validate_array($volist)
     validate_hash($mysql_override_options)
    
+    #check length of token_password
+    if size($token_password) < 32 {
+      fail("token_password should be longer than 32 chars")
+    }
+
+    if size($xrootd_sharedkey) < 32  {
+      fail("xrootd_sharedkey should be longer than 32 chars and shorter than 64 chars")
+    }
+
+    if size($xrootd_sharedkey) > 64  {
+      fail("xrootd_sharedkey should be longer than 32 chars and shorter than 64 chars")
+    }
+
     $disk_nodes_str=join($disk_nodes,' ')
 
     $_gridftp_redirect = num2bool($gridftp_redirect)
