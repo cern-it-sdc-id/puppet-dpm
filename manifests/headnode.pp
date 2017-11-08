@@ -102,7 +102,6 @@ class dpm::headnode (
     #
     
     if $configure_domeadapter {
-      Class[dmlite::head] -> Class[dmlite::plugins::domeadapter::install]
       Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::gridftp]
     } else {
       if $configure_legacy {
