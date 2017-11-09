@@ -294,7 +294,7 @@ class dpm::head_disknode (
         }
    }
 
-   if($memcached_enabled)
+   if($memcached_enabled and !$configure_domeadapter)
    {
      Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
      Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
