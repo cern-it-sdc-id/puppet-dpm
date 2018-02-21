@@ -232,10 +232,10 @@ voms{"voms::voname":}
 
 ## Compatibility
 
-The module can configure a DPM on SL5 and SL6, CentOS7/SL7 support is ongoing
+The module can configure a DPM on SL6 and CentOS7/SL7 
 
-It has been tested with every version of puppet >= 3.0
+It has been tested with puppet 3 and 4
 
-Puppet 4 is supported by the lcgdm* modules, but some dependencies are still not puppet 4 compatible.
+Mysql 5.1 and 5.5 are supported on SL6
 
-Mysql 5.1 and 5.5 are supported on SL5/Sl6
+MariaDB 5.5 is supported on C7
