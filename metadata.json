@@ -7,7 +7,7 @@
     },
     {
       "name": "lcgdm/dmlite",
-      "version_requirement": ">= 0.5.4 <= 0.5.4"
+      "version_requirement": ">= 0.5.5 <= 0.5.5"
     },
     {
       "name": "lcgdm/lcgdm",
@@ -32,10 +32,6 @@
     {
       "name": "CERNOps/bdii",
       "version_requirement": ">= 0.2.2 <= 0.2.2"
-    },
-    { 
-      "name": "puppetlabs-stdlib",
-      "version_requirement": "<= 4.15.0"
     }
   ],
   "description": "A wrapper for the DPM modules",
@@ -47,5 +43,5 @@
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",
   "tags": [],
-  "version": "0.5.9"
+  "version": "0.5.10"
 }
