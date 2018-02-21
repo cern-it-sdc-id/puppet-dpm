@@ -63,9 +63,9 @@ SELinux must be disabled on every hosts before the installation.
 
 The local firewall is not managed by the module, please check the DPM wiki for information on which ports to open:
 
-https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Admin/InstallationConfigurationPuppetSimple#FirewallConfiguration
+https://twiki.cern.ch/twiki/bin/view/DPM/DpmSetupManualInstallation#Firewall_Configuration
 
-##Usage
+## Usage
 
 
 The module folder tests contains some examples, for instance you can set up a DPM box with both HEAD and DISK nodes with the following code snippet
@@ -154,7 +154,7 @@ The basic Xrootd configuration requires only to specifies the **xrootd_sharedkey
 
 In order to configure the Xrootd Federations and the Xrootd Monitoring via the parameter **dpm_xrootd_fedredirs**, **xrd_report** and **xrd_monitor** please refer to the DPM-Xrootd puppet guide:
 
-https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Xroot/PuppetSetup
+https://twiki.cern.ch/twiki/bin/view/DPM/DPMComponents_Dpm-Xrootd#Puppet_Configuration
 
 #### Other configuration
 
