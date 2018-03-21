@@ -116,14 +116,7 @@ class dpm::headnode (
         override_options => $mysql_override_options,
 	create_root_user => $new_installation,
         }
-    } else {
-     class{'mysql::server':
-       service_enabled   => false,
-     }
-		
     }
-   
-
     #
     # DPM and DPNS daemon configuration.
     #
