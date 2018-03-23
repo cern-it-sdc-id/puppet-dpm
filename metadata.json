@@ -11,11 +11,11 @@
     },
     {
       "name": "lcgdm/lcgdm",
-      "version_requirement": ">= 0.3.8 <= 0.3.8"
+      "version_requirement": ">= 0.3.9 <= 0.3.9"
     },
     {
       "name": "lcgdm/xrootd",
-      "version_requirement": ">= 0.2.3 <= 0.2.3"
+      "version_requirement": ">= 0.2.6 <= 0.2.6"
     },
     {
       "name": "lcgdm/voms",
@@ -31,11 +31,7 @@
     },
     {
       "name": "CERNOps/bdii",
-      "version_requirement": ">= 0.1.0 <= 0.1.0"
-    },
-    { 
-      "name": "puppetlabs-stdlib",
-      "version_requirement": "<= 4.15.0"
+      "version_requirement": ">= 0.2.2 <= 0.2.2"
     }
   ],
   "description": "A wrapper for the DPM modules",
