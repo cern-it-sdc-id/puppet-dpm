@@ -1,4 +1,4 @@
-#puppet-dpm module
+# puppet-dpm module
 
 [![Puppet Forge](http://img.shields.io/puppetforge/v/lcgdm/dpm.svg)](https://forge.puppetlabs.com/lcgdm/xrootd)
 [![Build Status](https://travis-ci.org/cern-it-sdc-id/puppet-dpm.svg?branch=master)]([https://travis-ci.org/cern-it-sdc-id/puppet-dpm.svg)
@@ -17,7 +17,7 @@
 6. [Compatibility](#compatibility)
 
 
-##Description
+## Description
 
 The puppet-dpm module has been developed to ease the set up of a DPM installation via puppet.
 
@@ -27,7 +27,7 @@ It can be used to set up different DPM installations :
  - DPM Disknode
  - DPM Head+Disk Node ( with or without a local MySql DB)
  
-##Dependencies
+## Dependencies
 
 
 It relies on several puppet modules, some of them developed @ CERN and some others available from third party.
@@ -46,7 +46,7 @@ The following modules are needed in order to use this module, and they are autom
  - puppet-fetchcrl
  - puppetlabs-firewall
 
-##Installation
+## Installation
 
 
 The puppet-dpm module can be installed from puppetforge via
@@ -55,7 +55,7 @@ The puppet-dpm module can be installed from puppetforge via
 puppet module install lcgdm-dpm
 ```
 
-##Prerequisites
+## Prerequisites
 
 The DPM components need an X509 host certificate  (PEM format) to be installed on each host under */etc/grid-security/hostcert.pem* and */etc/grid-security/hostkey.pem*
 
@@ -63,9 +63,9 @@ SELinux must be disabled on every hosts before the installation.
 
 The local firewall is not managed by the module, please check the DPM wiki for information on which ports to open:
 
-https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Admin/InstallationConfigurationPuppetSimple#FirewallConfiguration
+https://twiki.cern.ch/twiki/bin/view/DPM/DpmSetupManualInstallation#Firewall_Configuration
 
-##Usage
+## Usage
 
 
 The module folder tests contains some examples, for instance you can set up a DPM box with both HEAD and DISK nodes with the following code snippet
@@ -104,7 +104,7 @@ to have the DPM box installed and configured
  
 Please note that it could be needed to run twice the puppet apply command in order to have all the changes correctly applied
 
-###Headnode
+### Headnode
 
 The Headnode configuration is performed via the **dpm::headnode** class or in case of an installation of a Head+Disk node via the **dpm::head_disknode** class
 
@@ -131,7 +131,7 @@ Each pool and filsystem specified in the pools and filesystems parameter should 
 * pools: 'poolname:defaultSize'
 * filesystems : 'poolname:servername:filesystem_path'
 
-####DB configuration
+#### DB configuration
 
 Depending on the DB installation ( local to the headnode or external ) there are different configuration parameters to set:
 
@@ -148,15 +148,15 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'HEADNODE' IDENTIFIED BY 'MYSQLROOT' WITH 
 
 the *mysql_override_options* parameter can be used to override the mysql server configuration. In general the values provided by default by the module ( via the $dpm::params::mysql_override_options var ) should be fine.
 
-####Xrootd  configuration
+#### Xrootd  configuration
 
 The basic Xrootd configuration requires only to specifies the **xrootd_sharedkey**, which should be a 32 to 64 char long string, the same for all the cluster.
 
 In order to configure the Xrootd Federations and the Xrootd Monitoring via the parameter **dpm_xrootd_fedredirs**, **xrd_report** and **xrd_monitor** please refer to the DPM-Xrootd puppet guide:
 
-https://svnweb.cern.ch/trac/lcgdm/wiki/Dpm/Xroot/PuppetSetup
+https://twiki.cern.ch/twiki/bin/view/DPM/DPMComponents_Dpm-Xrootd#Puppet_Configuration
 
-####Other configuration
+#### Other configuration
 
 The Headnode is configured with the Memcache server and the related DPM plugin. In order to disable it the parameter **memcached_enabled** should be set to *false*.
 
@@ -170,7 +170,7 @@ Other parameters are:
 
 see the Common Configuration section for the rest of configuration options
 
-###Disknode
+### Disknode
 
 The Disknode configuration is performed via the **dpm::disknode** class, as follows:
 
@@ -188,9 +188,9 @@ class{'dpm::disknode':
 In particular the mountpoints var should include the mountpoint paths for the filesystems and the related parent folders. 
 See the Common Configuration section for the rest of configuration options
 
-###Common configuration
+### Common configuration
 
-####VO list and mapfile
+#### VO list and mapfile
 
 Both Head and Disk nodes should be configured vith the list of the VOs supported and the configuration input to generate the mapfile.
 
@@ -221,7 +221,7 @@ voms{"voms::voname":}
 
 
 
-####Other configuration:
+#### Other configuration:
 
 * **configure_vos** : enable/disable the configuration of the VOs ( default = true)
 * **configure_repos** : configure the yum repositories specified in the repos parameter ( default = false)
@@ -230,12 +230,12 @@ voms{"voms::voname":}
 * **dpmmgr_user** , **dpmmgr_uid** and  **dpmmgr_gid** : the dpm user name , gid and uid ( default = dpmmgr, 151 and 151)
 * **debug** : enable/disable installation of the debuginfo packages ( default = false)
 
-##Compatibility
+## Compatibility
 
-The module can configure a DPM on SL5 and SL6, CentOS7/SL7 support is ongoing
+The module can configure a DPM on SL6 and CentOS7/SL7 
 
-It has been tested with every version of puppet >= 3.0
+It has been tested with puppet 3 and 4
 
-Puppet 4 is supported by the lcgdm* modules, but some dependencies are still not puppet 4 compatible.
+Mysql 5.1 and 5.5 are supported on SL6
 
-Mysql 5.1 and 5.5 are supported on SL5/Sl6
+MariaDB 5.5 is supported on C7

@@ -131,10 +131,6 @@ class dpm::head_disknode (
         create_root_user => $new_installation,
         }
 
-    } else {
-      class{'mysql::server':
-        service_enabled   => false,
-    	}
     }
     if $configure_legacy {
       #
