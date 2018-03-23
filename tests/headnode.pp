@@ -30,4 +30,6 @@ class{'dpm::headnode':
    configure_dome		=> false,
    configure_domeadapter        => false,
    dpmmgr_uid                   => 500,
+   db_manage                    => false,
+   local_db                     => true,
 }

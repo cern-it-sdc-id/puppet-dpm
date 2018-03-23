@@ -43,5 +43,5 @@
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",
   "tags": [],
-  "version": "0.5.11"
+  "version": "0.5.12"
 }
