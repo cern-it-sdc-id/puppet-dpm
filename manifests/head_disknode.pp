@@ -281,76 +281,82 @@ class dpm::head_disknode (
         dpm_enable_dome      => $configure_dome,
         dpm_xrdhttp_secret_key => $token_password
       }
-   }
-   #install n2n plugin in case of atlas fed
-   $array_feds =  keys($dpm_xrootd_fedredirs)
-   if member($array_feds, 'atlas') {
+    }
+    #install n2n plugin in case of atlas fed
+    $array_feds =  keys($dpm_xrootd_fedredirs)
+    if member($array_feds, 'atlas') {
         package{'xrootd-server-atlas-n2n-plugin':
           ensure => present,
         }
-   }
-
-   if($memcached_enabled and !$configure_domeadapter)
-   {
-     Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
-     Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
-
-     class{'memcached':
-       max_memory => 2000,
-       listen_ip => '127.0.0.1',
-
-     }
-     ->
-     class{'dmlite::plugins::memcache':
-       expiration_limit => 600,
-       posix            => 'on',
-       func_counter     => 'on',
-     }
-   } else {
-     class{'memcached':
-       package_ensure => 'absent',
-     }
-     class{'dmlite::plugins::memcache':
-       enable_memcache => false,
-     }
-   }
-
-   if ($configure_bdii and $configure_legacy)
-   {
-    #bdii installation and configuration with default values
-    include('bdii')
-
-    # GIP installation and configuration
-    class{'lcgdm::bdii::dpm':
-       sitename => $site_name,
-       vos      => $volist,
     }
 
-   }
-  
-  #pools configuration
-  #
-  if ($configure_default_pool) {
-    dpm::util::add_dpm_pool {$pools:
+    if($memcached_enabled and !$configure_domeadapter)
+    {
+      Class[dmlite::plugins::memcache::install] ~> Class[dmlite::dav::service]
+      Class[dmlite::plugins::memcache::install] ~> Class[dmlite::gridftp]
+
+      class{'memcached':
+        max_memory => 2000,
+        listen_ip => '127.0.0.1',
+
+      }
+      ->
+      class{'dmlite::plugins::memcache':
+        expiration_limit => 600,
+        posix            => 'on',
+        func_counter     => 'on',
+      }
+    } else {
+      class{'memcached':
+        package_ensure => 'absent',
+      }
+      class{'dmlite::plugins::memcache':
+        enable_memcache => false,
+      }
+    }
+
+    if ($configure_bdii)
+    {
+      #bdii installation and configuration with default values
+      include('bdii')
+
+      # GIP installation and configuration
+      if $configure_legacy {
+        class{'lcgdm::bdii::dpm':
+          sitename => $site_name,
+          vos      => $volist ,
+        }
+      }
+      else {
+        class{'dmlite::bdii':
+          site_name => $site_name,
+        }
+      }
+
+    } 
+    #pools configuration
+    #
+    if ($configure_default_pool) {
+      dpm::util::add_dpm_pool {$pools:
         legacy => $configure_legacy,
+      }
     }
-  }
-  #
-  #
-  # You can define your filesystems
-  #
-  if ($configure_default_filesystem) {
-     file{
-      $mountpoints:
-        ensure => directory,
-        owner => $dpmmgr_user,
-        group => $dpmmgr_user,
-        mode =>  '0775';
-     }
-     -> dpm::util::add_dpm_fs {$filesystems:
+    #
+    #
+    # You can define your filesystems
+    #
+    if ($configure_default_filesystem) {
+       file{
+        $mountpoints:
+          ensure => directory,
+          owner => $dpmmgr_user,
+          group => $dpmmgr_user,
+          mode =>  '0775';
+       }
+       -> dpm::util::add_dpm_fs {$filesystems:
             legacy => $configure_legacy,
         }
-  }
+    }
   
- include dmlite::shell
+   include dmlite::shell
 }

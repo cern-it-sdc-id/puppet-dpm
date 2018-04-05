@@ -310,18 +310,26 @@ class dpm::headnode (
      }
    }
 
-   if ($configure_bdii and $configure_legacy)
+   if ($configure_bdii)
    {
-    #bdii installation and configuration with default values
-    include('bdii')
+     #bdii installation and configuration with default values
+     include('bdii')
 
-    # GIP installation and configuration
-    class{'lcgdm::bdii::dpm':
-       sitename => $site_name,
-       vos      => $volist ,
-    }
+     # GIP installation and configuration
+     if $configure_legacy {
+       class{'lcgdm::bdii::dpm':
+         sitename => $site_name,
+         vos      => $volist ,
+       }
+     }
+     else {
+       class{'dmlite::bdii':
+         site_name => $site_name,
+       }
+     }
 
    }
+
    if($configure_default_pool)
    {
        dpm::util::add_dpm_pool {$pools: 
