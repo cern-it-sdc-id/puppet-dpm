@@ -7,6 +7,7 @@ class dpm::disknode (
   $configure_repos = $dpm::params::configure_repos,
   $configure_dome  = $dpm::params::configure_dome,
   $configure_domeadapter = $dpm::params::configure_domeadapter,
+  $configure_mountpoints = $dpm::params::configure_mountpoints,
 
   #repo list
   $repos =  $dpm::params::repos,
@@ -48,7 +49,6 @@ class dpm::disknode (
   )inherits dpm::params {
   
     validate_array($disk_nodes)
-    validate_bool($new_installation)
     validate_array($volist)
     validate_array($mountpoints)
 
@@ -123,7 +123,7 @@ class dpm::disknode (
       #setup the gridmap file
       lcgdm::mkgridmap::file {'lcgdm-mkgridmap':
         configfile   => '/etc/lcgdm-mkgridmap.conf',
-	mapfile      => '/etc/lcgdm-mapfile',
+        mapfile      => '/etc/lcgdm-mapfile',
         localmapfile => '/etc/lcgdm-mapfile-local',
         logfile      => '/var/log/lcgdm-mkgridmap.log',
         groupmap     => $groupmap,
@@ -134,15 +134,16 @@ class dpm::disknode (
       	unless => '/usr/bin/test -s /etc/lcgdm-mapfile',
       }
     }
-    
-    Class[lcgdm::base::config] ->
-     file {
-    	 $mountpoints:
-	     ensure => directory,
-	     owner => $dpmmgr_user,
-	     group => $dpmmgr_user,
-	     mode =>  '0775';
-   	}
+
+    if($configure_mountpoints){
+      Class[lcgdm::base::config] ->
+       file { $mountpoints:
+         ensure => directory,
+         owner => $dpmmgr_user,
+         group => $dpmmgr_user,
+         mode =>  '0775';
+       }
+    }
     #
     # dmlite plugin configuration.
     class{'dmlite::disk':
@@ -177,22 +178,22 @@ class dpm::disknode (
     }
     if $xrd_report or $xrootd_monitor {
 
-	    class{'dmlite::xrootd':
+      class{'dmlite::xrootd':
 	      nodetype             => [ 'disk' ],
 	      domain               => $localdomain,
 	      dpm_xrootd_debug     => $debug,
 	      dpm_xrootd_sharedkey => $xrootd_sharedkey,
 	      xrd_report           => $xrd_report,
 	      xrootd_monitor       => $xrootd_monitor,
-    	    }
-     } else {
-  	    class{'dmlite::xrootd':
-              nodetype             => [ 'disk' ],
-              domain               => $localdomain,
-              dpm_xrootd_debug     => $debug,
-              dpm_xrootd_sharedkey => $xrootd_sharedkey,
-            }
-     }
+      }
+    } else {
+      class{'dmlite::xrootd':
+        nodetype             => [ 'disk' ],
+        domain               => $localdomain,
+        dpm_xrootd_debug     => $debug,
+        dpm_xrootd_sharedkey => $xrootd_sharedkey,
+      }
+    }
 
 }
                                                                                                     

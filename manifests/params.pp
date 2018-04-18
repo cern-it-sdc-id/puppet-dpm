@@ -7,6 +7,7 @@ class dpm::params {
   $configure_repos =  hiera('dpm::params::configure_repos', false)
   $configure_dome = hiera('dpm::params::configure_dome', false)
   $configure_domeadapter = hiera('dpm::params::configure_domeadapter', false)
+  $configure_mountpoints = hiera('dpm::params::configure_mountpoints', true)
   #cluster options
   $headnode_fqdn =  hiera('dpm::params::headnode_fqdn', $::fqdn)
   $disk_nodes =  hiera('dpm::params::disk_nodes',[])

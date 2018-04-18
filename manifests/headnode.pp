@@ -137,7 +137,7 @@ class dpm::headnode (
     # RFIO configuration.
     #
     class{'lcgdm::rfio':
-      dpmhost => $::fqdn,
+      dpmhost => $headnode_fqdn,
     }
 
     #
@@ -164,7 +164,7 @@ class dpm::headnode (
       lcgdm::shift::protocol_head{"GRIDFTP":
              component => "DPM",
              protohead => "FTPHEAD",
-             host      => "${::fqdn}",
+             host      => "${headnode_fqdn}",
       } ~>  Class[dmlite::srm::service]
     }
 
@@ -222,7 +222,7 @@ class dpm::headnode (
     }
     class{'dmlite::srm':}
     class{'dmlite::gridftp':
-      dpmhost => $::fqdn, 
+      dpmhost => $headnode_fqdn, 
       remote_nodes => $_gridftp_redirect ? {
         true => join(suffix($disk_nodes, ':2811'), ','),
         false => undef,
