@@ -74,7 +74,11 @@ class dpm::headnode (
    
     $disk_nodes_str=join($disk_nodes,' ')
 
-    $_gridftp_redirect = num2bool($gridftp_redirect)
+    if(is_integer($gridftp_redirect)){
+      $_gridftp_redirect = num2bool($gridftp_redirect)
+    }else{
+      $_gridftp_redirect = $gridftp_redirect
+    }
 	
     if ($configure_repos){
 	create_resources(yumrepo,$repos)
