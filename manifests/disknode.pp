@@ -76,11 +76,17 @@ class dpm::disknode (
     	
     $disk_nodes_str=join($disk_nodes,' ')
 
-    $_gridftp_redirect = num2bool($gridftp_redirect)
     
     if $configure_legacy {
       Class[lcgdm::base::install] -> Class[lcgdm::rfio::install]
     }
+
+    if(is_integer($gridftp_redirect)){
+      $_gridftp_redirect = num2bool($gridftp_redirect)
+    }else{
+      $_gridftp_redirect = $gridftp_redirect
+    }
+
     if($webdav_enabled){
       if $configure_domeadapter {
         Class[dmlite::plugins::domeadapter::install] ~> Class[dmlite::dav::service]
@@ -105,7 +111,7 @@ class dpm::disknode (
         flavor  => 'dpns',
         dpmhost => $headnode_fqdn
       }
-
+      
       #
       # RFIO configuration.
       #
