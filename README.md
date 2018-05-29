@@ -228,7 +228,7 @@ voms{"voms::voname":}
 * **configure_gridmap** : enable/disable the configuration of gridmap file ( default = true)
 * **gridftp_redirect** : enabled/disabled the GridFTP redirection functionality ( default = 0)
 * **dpmmgr_user** , **dpmmgr_uid** and  **dpmmgr_gid** : the dpm user name , gid and uid ( default = dpmmgr, 151 and 151)
-* **debug** : enable/disable installation of the debuginfo packages ( default = false)
+* **debug** : enable/disable debug logs and coredumps for xrootd ( default = false)
 
 ## Compatibility
 

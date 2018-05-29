@@ -10,7 +10,7 @@ class dpm::disknode (
   
   #install and configure legacy stask
   $configure_legacy =   $dpm::params::configure_legacy,  
-
+  $configure_mountpoints = $dpm::params::configure_mountpoints,
   #repo list
   $repos =  $dpm::params::repos,
 
@@ -54,7 +54,6 @@ class dpm::disknode (
   )inherits dpm::params {
   
     validate_array($disk_nodes)
-    validate_bool($new_installation)
     validate_array($volist)
     validate_array($mountpoints)
     
@@ -154,7 +153,7 @@ class dpm::disknode (
       #setup the gridmap file
       lcgdm::mkgridmap::file {'lcgdm-mkgridmap':
         configfile   => '/etc/lcgdm-mkgridmap.conf',
-	mapfile      => '/etc/lcgdm-mapfile',
+        mapfile      => '/etc/lcgdm-mapfile',
         localmapfile => '/etc/lcgdm-mapfile-local',
         logfile      => '/var/log/lcgdm-mkgridmap.log',
         groupmap     => $groupmap,
@@ -166,25 +165,26 @@ class dpm::disknode (
       }
     }
     
-    if $configure_legacy {
-     Class[lcgdm::base::config] ->
-     file {
+    if($configure_mountpoints){
+      if $configure_legacy {
+       Class[lcgdm::base::config] ->
+       file {
     	 $mountpoints:
 	     ensure => directory,
 	     owner => $dpmmgr_user,
 	     group => $dpmmgr_user,
 	     mode =>  '0775';
    	}
-    } else {
-      Class[dmlite::base::config] ->
-       file {
-         $mountpoints:
+      } else {
+        Class[dmlite::base::config] ->
+         file {
+           $mountpoints:
              ensure => directory,
              owner => $dpmmgr_user,
              group => $dpmmgr_user,
              mode =>  '0775';
-        }
-
+         } 
+      }
     }
     #
     # dmlite plugin configuration.
