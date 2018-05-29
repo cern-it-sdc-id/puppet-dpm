@@ -36,6 +36,8 @@ class dpm::headnode (
     $db_pass =  $dpm::params::db_pass,
     $db_host =  $dpm::params::db_host,
     $db_manage = $dpm::params::db_manage,
+    $dpm_db  =  $dpm::params::dpm_db,
+    $ns_db   =  $dpm::params::ns_db,
     $mysql_root_pass =  $dpm::params::mysql_root_pass,
     $token_password =  $dpm::params::token_password,
     $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
@@ -130,6 +132,8 @@ class dpm::headnode (
       dbpass   => $db_pass,
       dbhost   => $db_host,
       dbmanage => $db_manage,
+      dpm_db   => $dpm_db,
+      ns_db    => $ns_db,
       mysqlrootpass =>  $mysql_root_pass,
       domain   => $localdomain,
       volist   => $volist,
@@ -141,7 +145,7 @@ class dpm::headnode (
     # RFIO configuration.
     #
     class{'lcgdm::rfio':
-      dpmhost => $::fqdn,
+      dpmhost => $headnode_fqdn,
     }
 
     #
@@ -168,7 +172,7 @@ class dpm::headnode (
       lcgdm::shift::protocol_head{"GRIDFTP":
              component => "DPM",
              protohead => "FTPHEAD",
-             host      => "${::fqdn}",
+             host      => "${headnode_fqdn}",
       } ~>  Class[dmlite::srm::service]
     }
 
@@ -204,6 +208,8 @@ class dpm::headnode (
       mysql_username => $db_user,
       mysql_password => $db_pass,
       mysql_host     => $db_host,
+      dpm_db         => $dpm_db,
+      ns_db          => $ns_db,
       enable_dome    => $configure_dome,
       enable_domeadapter => $configure_domeadapter,
     }
@@ -226,7 +232,7 @@ class dpm::headnode (
     }
     class{'dmlite::srm':}
     class{'dmlite::gridftp':
-      dpmhost => $::fqdn, 
+      dpmhost => $headnode_fqdn, 
       remote_nodes => $_gridftp_redirect ? {
         true => join(suffix($disk_nodes, ':2811'), ','),
         false => undef,

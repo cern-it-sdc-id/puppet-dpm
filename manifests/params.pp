@@ -7,6 +7,7 @@ class dpm::params {
   $configure_repos =  hiera('dpm::params::configure_repos', false)
   $configure_dome = hiera('dpm::params::configure_dome', false)
   $configure_domeadapter = hiera('dpm::params::configure_domeadapter', false)
+  $configure_mountpoints = hiera('dpm::params::configure_mountpoints', true)
   #cluster options
   $headnode_fqdn =  hiera('dpm::params::headnode_fqdn', $::fqdn)
   $disk_nodes =  hiera('dpm::params::disk_nodes',[])
@@ -42,6 +43,8 @@ class dpm::params {
   $db_pass =  hiera('dpm::params::db_pass',undef)
   $db_host =  hiera('dpm::params::db_host','localhost')
   $db_manage = hiera('dpm::params::db_manage',true) 
+  $dpm_db  =  hiera('dpm::params::dpm_db','dpm_db')
+  $ns_db   =  hiera('dpm::params::ns_db','cns_db')
   $mysql_root_pass =  hiera('dpm::params::mysql_root_pass',undef)
   $token_password =  hiera('dpm::params::token_password',undef)
   $xrootd_sharedkey =  hiera('dpm::params::xrootd_sharedkey',undef)
