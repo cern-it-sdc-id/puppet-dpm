@@ -17,6 +17,9 @@ class dpm::params {
   $local_db = hiera('dpm::params::local_db',true)
   $gridftp_redirect =  hiera("dpm::params::gridftp_redirect",0)
 
+  #install and configure legacy stask
+  $configure_legacy =  hiera("dpm::params::configure_legacy",true)
+
   #mountpoints list( for disknode mountpoint conf)
   $mountpoints =  hiera("dpm::params::mountpoints",[])
 
@@ -73,6 +76,8 @@ class dpm::params {
 
   #admin dn( needed for http replication/drain)
   $admin_dn = hiera('dpm::params::admin_dn', '') 
+  #host dn
+  $host_dn = hiera('dpm::params::host_dn', '')
   #pools and filesystems
   $pools = hiera('dpm::params::pools',[])
   $filesystems = hiera('dpm::params::filesystems',[])

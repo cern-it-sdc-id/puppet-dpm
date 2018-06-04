@@ -15,5 +15,7 @@ class{"dpm::head_disknode":
    pools => ['mypool:100M'],
    filesystems => ["mypool:${fqdn}:/srv/dpm/01"],
    dpmmgr_uid => "500",
-   db_manage => false,
+   configure_dome => true,
+   configure_domeadapter => true,
+   configure_legacy => false,
 }
