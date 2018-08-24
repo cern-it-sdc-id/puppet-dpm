@@ -226,6 +226,8 @@ class dpm::disknode (
     if $xrd_report or $xrootd_monitor {
       class{'dmlite::xrootd':
         nodetype             => [ 'disk' ],
+        dpmhost              => $headnode_fqdn,
+        nshost               => $headnode_fqdn,
 	domain               => $localdomain,
 	dpm_xrootd_debug     => $debug,
 	dpm_xrootd_sharedkey => $xrootd_sharedkey,
@@ -238,6 +240,8 @@ class dpm::disknode (
      } else {
        class{'dmlite::xrootd':
           nodetype             => [ 'disk' ],
+          dpmhost              => $headnode_fqdn,
+          nshost               => $headnode_fqdn,
           domain               => $localdomain,
           dpm_xrootd_debug     => $debug,
           dpm_xrootd_sharedkey => $xrootd_sharedkey,
