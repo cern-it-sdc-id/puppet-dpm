@@ -32,6 +32,12 @@ class dpm::params {
             'innodb_flush_method' => 'O_DIRECT',
             'innodb_buffer_pool_size' => '1000000000',
             'bind-address' => '0.0.0.0',
+            'innodb_flush_log_at_trx_commit' => '2',
+            'innodb_doublewrite' => '0',
+            'innodb_support_xa' => '0',
+	    'innodb_thread_concurrency' => '8',
+            'innodb_log_buffer_size' => '8M',
+            'max_connect_errors' => '4294967295'
           }
         })
 

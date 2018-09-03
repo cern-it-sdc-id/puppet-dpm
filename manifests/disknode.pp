@@ -12,7 +12,6 @@ class dpm::disknode (
   
   #install and configure legacy stask
   $configure_legacy =   $dpm::params::configure_legacy,  
-  $configure_mountpoints = $dpm::params::configure_mountpoints,
   #repo list
   $repos =  $dpm::params::repos,
 
