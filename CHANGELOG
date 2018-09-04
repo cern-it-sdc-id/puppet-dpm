@@ -1,3 +1,6 @@
+2018-09-4 Andrea Manzi  <andrea.manzi@cern.ch
+        * update voms dependency
+        * update mysql tunings 
 2018-06-4 Andrea Manzi  <andrea.manzi@cern.ch
         * added DPM 1.10.0 configuration
 2018-03-23 Andrea Manzi  <andrea.manzi@cern.ch
