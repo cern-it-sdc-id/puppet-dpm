@@ -18,7 +18,7 @@ class{'dpm::headnode':
    local_db 			=> false,
    dpmmgr_uid                   => 500,
    mysql_root_pass              => 'ROOTPASS',
-   token_password               => 'kwpoMyvcusgdbyyws6gfcxhntkLoh8jilwivnivel',
+   token_password               => 'thetokenpasswordshouldbelongerthan32chars',
    xrootd_sharedkey             => 'A32TO64CHARACTERA32TO64CHARACTER',
    site_name                    => 'CNR_DPM_TEST',
    volist                       => [dteam, lhcb],

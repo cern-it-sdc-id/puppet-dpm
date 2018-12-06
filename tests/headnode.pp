@@ -7,7 +7,7 @@
 # environment (to compare the resulting system state to the desired state).
 #
 # Learn more about module testing here:
-# http://docs.puppetlabs.com/guides/tests_smoke.html
+# https://puppet.com/docs/puppet/5.0/tests_smoke.html
 #
 
 class{'dpm::headnode':
@@ -19,7 +19,7 @@ class{'dpm::headnode':
    db_pass                      => 'PASS',
    db_host 			=> 'localhost',
    mysql_root_pass              => 'mysqlroot',
-   token_password               => 'kwpoMyvcusgdbyyws6gfcxhntkLoh8jilwivnivel',
+   token_password               => 'thetokenpasswordshouldbelongerthan32chars',
    xrootd_sharedkey             => 'A32TO64CHARACTERA32TO64CHARACTER',
    site_name                    => 'CNR_DPM_TEST',
    volist                       => [dteam, lhcb],
@@ -33,5 +33,4 @@ class{'dpm::headnode':
    dpmmgr_uid                   => 500,
    configure_legacy             => true,
    db_manage                    => false,
-   local_db                     => true,
 }
