@@ -8,8 +8,7 @@ class dpm::disknode (
   $configure_dome  = $dpm::params::configure_dome,
   $configure_domeadapter = $dpm::params::configure_domeadapter,
   $configure_mountpoints = $dpm::params::configure_mountpoints,
-
-  
+  $configure_dpm_xrootd_delegation = $dpm::params::configure_dpm_xrootd_delegation,
   #install and configure legacy stask
   $configure_legacy =   $dpm::params::configure_legacy,  
   #repo list
@@ -234,7 +233,8 @@ class dpm::disknode (
 	xrootd_monitor       => $xrootd_monitor,
         legacy               => $configure_legacy,
         dpm_enable_dome      => $configure_dome,
-        dpm_xrdhttp_secret_key => $token_password
+        dpm_xrdhttp_secret_key => $token_password,
+        xrootd_use_delegation => $configure_dpm_xrootd_delegation
       }
      } else {
        class{'dmlite::xrootd':
@@ -246,7 +246,8 @@ class dpm::disknode (
           dpm_xrootd_sharedkey => $xrootd_sharedkey,
           legacy               => $configure_legacy,
           dpm_enable_dome      => $configure_dome,
-          dpm_xrdhttp_secret_key => $token_password
+          dpm_xrdhttp_secret_key => $token_password,
+          xrootd_use_delegation => $configure_dpm_xrootd_delegation         
        }
      }
 

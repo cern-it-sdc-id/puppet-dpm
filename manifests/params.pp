@@ -69,6 +69,8 @@ class dpm::params {
   #Debug Flag
   $debug = hiera('dpm::params::debug',false)
 
+  #Xrootd TPC x509 delegation
+  $configure_dpm_xrootd_delegation = hiera('dpm::params:configure_dpm_xrootd_delegation',false)
   #Xrootd Federations
   $dpm_xrootd_fedredirs = hiera('dpm::params::dpm_xrootd_fedredirs',{})
 

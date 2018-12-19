@@ -7,6 +7,7 @@ class dpm::head_disknode (
     $configure_repos = $dpm::params::configure_repos,
     $configure_dome =  $dpm::params::configure_dome,
     $configure_domeadapter = $dpm::params::configure_domeadapter,
+    $configure_dpm_xrootd_delegation = $dpm::params::configure_dpm_xrootd_delegation,
 
     #install and configure legacy stask
     $configure_legacy =   $dpm::params::configure_legacy,
@@ -265,7 +266,8 @@ class dpm::head_disknode (
 	site_name            => $site_name,
 	legacy               => $configure_legacy,
         dpm_enable_dome      => $configure_dome,
-        dpm_xrdhttp_secret_key => $token_password
+        dpm_xrdhttp_secret_key => $token_password,
+        xrootd_use_delegation => $configure_dpm_xrootd_delegation
       } 
     }
     else {
@@ -279,7 +281,8 @@ class dpm::head_disknode (
         site_name            => $site_name,
         legacy               => $configure_legacy,
         dpm_enable_dome      => $configure_dome,
-        dpm_xrdhttp_secret_key => $token_password
+        dpm_xrdhttp_secret_key => $token_password,
+        xrootd_use_delegation => $configure_dpm_xrootd_delegation
       }
     }
     #install n2n plugin in case of atlas fed
