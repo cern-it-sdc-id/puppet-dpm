@@ -58,7 +58,7 @@ class dpm::params {
   $token_password =  hiera('dpm::params::token_password',undef)
   $xrootd_sharedkey =  hiera('dpm::params::xrootd_sharedkey',undef)
   $xrootd_use_voms = hiera('dpm::params::xrootd_use_voms',true)
-
+  
   #VOs parameters
   $volist =  hiera('dpm::params::volist',[])
   $groupmap =  hiera('dpm::params::groupmap',{
@@ -69,6 +69,9 @@ class dpm::params {
   #Debug Flag
   $debug = hiera('dpm::params::debug',false)
 
+  #xrootd checksum
+  $configure_dpm_xrootd_checksum =  hiera('dpm::params:configure_dpm_xrootd_checksum',false)
+   
   #Xrootd TPC x509 delegation
   $configure_dpm_xrootd_delegation = hiera('dpm::params:configure_dpm_xrootd_delegation',false)
   #Xrootd Federations

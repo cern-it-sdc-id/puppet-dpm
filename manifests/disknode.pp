@@ -9,6 +9,8 @@ class dpm::disknode (
   $configure_domeadapter = $dpm::params::configure_domeadapter,
   $configure_mountpoints = $dpm::params::configure_mountpoints,
   $configure_dpm_xrootd_delegation = $dpm::params::configure_dpm_xrootd_delegation,
+  $configure_dpm_xrootd_checksum = $dpm::params::configure_dpm_xrootd_checksum,
+
   #install and configure legacy stask
   $configure_legacy =   $dpm::params::configure_legacy,  
   #repo list
@@ -221,35 +223,32 @@ class dpm::disknode (
       xrootd_user  => $dpmmgr_user,
       xrootd_group => $dpmmgr_user
     }
-    if $xrd_report or $xrootd_monitor {
-      class{'dmlite::xrootd':
-        nodetype             => [ 'disk' ],
-        dpmhost              => $headnode_fqdn,
-        nshost               => $headnode_fqdn,
-	domain               => $localdomain,
-	dpm_xrootd_debug     => $debug,
-	dpm_xrootd_sharedkey => $xrootd_sharedkey,
-	xrd_report           => $xrd_report,
-	xrootd_monitor       => $xrootd_monitor,
-        legacy               => $configure_legacy,
-        dpm_enable_dome      => $configure_dome,
-        dpm_xrdhttp_secret_key => $token_password,
-        xrootd_use_delegation => $configure_dpm_xrootd_delegation
-      }
-     } else {
-       class{'dmlite::xrootd':
-          nodetype             => [ 'disk' ],
-          dpmhost              => $headnode_fqdn,
-          nshost               => $headnode_fqdn,
-          domain               => $localdomain,
-          dpm_xrootd_debug     => $debug,
-          dpm_xrootd_sharedkey => $xrootd_sharedkey,
-          legacy               => $configure_legacy,
-          dpm_enable_dome      => $configure_dome,
-          dpm_xrdhttp_secret_key => $token_password,
-          xrootd_use_delegation => $configure_dpm_xrootd_delegation         
-       }
-     }
+
+    if $xrd_report {
+        $_xrd_report = $xrd_report
+    } else {
+        $_xrd_report = undef
+    }
+    if $xrootd_monitor {
+        $_xrootd_monitor = $xrootd_monitor
+    } else {
+        $_xrootd_monitor = undef
+    }  
+    class{'dmlite::xrootd':
+      nodetype             => [ 'disk' ],
+      dpmhost              => $headnode_fqdn,
+      nshost               => $headnode_fqdn,
+      domain               => $localdomain,
+      dpm_xrootd_debug     => $debug,
+      dpm_xrootd_sharedkey => $xrootd_sharedkey,
+      xrd_report           => $_xrd_report,
+      xrootd_monitor       => $_xrootd_monitor,
+      legacy               => $configure_legacy,
+      dpm_enable_dome      => $configure_dome,
+      dpm_xrdhttp_secret_key => $token_password,
+      xrootd_use_delegation => $configure_dpm_xrootd_delegation,
+      xrd_checksum_enabled => $configure_dpm_xrootd_checksum
+    }
 
 }
                                                                                                     

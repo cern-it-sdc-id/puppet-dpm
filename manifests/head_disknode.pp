@@ -8,7 +8,7 @@ class dpm::head_disknode (
     $configure_dome =  $dpm::params::configure_dome,
     $configure_domeadapter = $dpm::params::configure_domeadapter,
     $configure_dpm_xrootd_delegation = $dpm::params::configure_dpm_xrootd_delegation,
-
+    $configure_dpm_xrootd_checksum = $dpm::params::configure_dpm_xrootd_checksum,
     #install and configure legacy stask
     $configure_legacy =   $dpm::params::configure_legacy,
     
@@ -253,45 +253,32 @@ class dpm::head_disknode (
       xrootd_user  => $dpmmgr_user,
       xrootd_group => $dpmmgr_user,
     }
-    if $xrd_report or $xrootd_monitor {
-      class{'dmlite::xrootd':
-        nodetype             => [ 'head','disk' ],
-	domain               => $localdomain,
-	dpm_xrootd_debug     => $debug,
-	dpm_xrootd_sharedkey => $xrootd_sharedkey,
-	xrootd_use_voms      => $xrootd_use_voms,
-	dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-	xrd_report           => $xrd_report,
-        xrootd_monitor       => $xrootd_monitor,
-	site_name            => $site_name,
-	legacy               => $configure_legacy,
-        dpm_enable_dome      => $configure_dome,
-        dpm_xrdhttp_secret_key => $token_password,
-        xrootd_use_delegation => $configure_dpm_xrootd_delegation
-      } 
+    if $xrd_report {
+        $_xrd_report = $xrd_report
+    } else {
+        $_xrd_report = undef
     }
-    else {
-      class{'dmlite::xrootd':
-        nodetype             => [ 'head','disk' ],
-        domain               => $localdomain,
-        dpm_xrootd_debug     => $debug,
-        dpm_xrootd_sharedkey => $xrootd_sharedkey,
-        xrootd_use_voms      => $xrootd_use_voms,
-        dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
-        site_name            => $site_name,
-        legacy               => $configure_legacy,
-        dpm_enable_dome      => $configure_dome,
-        dpm_xrdhttp_secret_key => $token_password,
-        xrootd_use_delegation => $configure_dpm_xrootd_delegation
-      }
+    if $xrootd_monitor {
+        $_xrootd_monitor = $xrootd_monitor
+    } else {
+        $_xrootd_monitor = undef
     }
-    #install n2n plugin in case of atlas fed
-    $array_feds =  keys($dpm_xrootd_fedredirs)
-    if member($array_feds, 'atlas') {
-        package{'xrootd-server-atlas-n2n-plugin':
-          ensure => present,
-        }
-    }
+    class{'dmlite::xrootd':
+      nodetype             => [ 'head','disk' ],
+      domain               => $localdomain, 
+      dpm_xrootd_debug     => $debug,
+      dpm_xrootd_sharedkey => $xrootd_sharedkey,
+      xrootd_use_voms      => $xrootd_use_voms,
+      dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
+      xrd_report           => $xrd_report,
+      xrootd_monitor       => $xrootd_monitor,
+      site_name            => $site_name,
+      legacy               => $configure_legacy,
+      dpm_enable_dome      => $configure_dome,
+      dpm_xrdhttp_secret_key => $token_password,
+      xrootd_use_delegation => $configure_dpm_xrootd_delegation,
+      xrd_checksum_enabled => $configure_dpm_xrootd_checksum
+    } 
 
     if($memcached_enabled and !$configure_domeadapter)
     {

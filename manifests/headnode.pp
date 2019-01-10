@@ -10,7 +10,7 @@ class dpm::headnode (
     $configure_repos = $dpm::params::configure_repos,
     $configure_dome =  $dpm::params::configure_dome,
     $configure_domeadapter = $dpm::params::configure_domeadapter, 
-
+    $configure_dpm_xrootd_checksum = $dpm::params::configure_dpm_xrootd_checksum,
     #install and configure legacy stask
     $configure_legacy =   $dpm::params::configure_legacy,
 
@@ -284,14 +284,8 @@ class dpm::headnode (
       site_name            => $site_name,
       legacy               => $configure_legacy,
       dpm_enable_dome      => $configure_dome,
-      dpm_xrdhttp_secret_key => $token_password
-   }
-   #install n2n plugin in case of atlas fed
-   $array_feds =  keys($dpm_xrootd_fedredirs)
-   if member($array_feds, 'atlas') {
-     package{'xrootd-server-atlas-n2n-plugin': 
-       ensure => present,
-     }
+      dpm_xrdhttp_secret_key => $token_password,
+      xrd_checksum_enabled => $configure_dpm_xrootd_checksum
    }
 
    if($memcached_enabled and !$configure_domeadapter)
