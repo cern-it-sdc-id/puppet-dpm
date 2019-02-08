@@ -193,6 +193,11 @@ class dpm::headnode (
              protohead => "FTPHEAD",
              host      => "${headnode_fqdn}",
         } ~>  Class[dmlite::srm::service]
+      } else {
+        lcgdm::shift::unset{"GRIDFTP":
+             component => "DPM",
+             type      => "FTPHEAD",
+        } ~>  Class[dmlite::srm::service]
       }
     }
     if($configure_vos){
