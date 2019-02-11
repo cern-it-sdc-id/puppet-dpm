@@ -7,7 +7,7 @@
     },
     {
       "name": "lcgdm/dmlite",
-      "version_requirement": ">=1.11.1 <=1.11.1"
+      "version_requirement": ">=1.11.2 <=1.11.2"
     },
     {
       "name": "lcgdm/lcgdm",
