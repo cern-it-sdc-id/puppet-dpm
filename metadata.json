@@ -11,7 +11,7 @@
     },
     {
       "name": "lcgdm/lcgdm",
-      "version_requirement": ">= 0.3.9 <= 0.3.9"
+      "version_requirement": ">= 0.3.10 <= 0.3.10"
     },
     {
       "name": "lcgdm/xrootd",
@@ -31,7 +31,7 @@
     },
     {
       "name": "CERNOps/bdii",
-      "version_requirement": ">= 0.2.2 <= 0.2.2"
+      "version_requirement": ">= 1.2.2 <= 1.2.2"
     }
   ],
   "description": "A wrapper for the DPM modules",
@@ -43,5 +43,5 @@
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",
   "tags": [],
-  "version": "1.11.1"
+  "version": "1.11.2"
 }

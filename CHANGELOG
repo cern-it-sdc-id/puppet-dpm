@@ -1,32 +1,36 @@
-2019-01-10 Andrea Manzi  <andrea.manzi@cern.ch
+2019-02-11 Petr Vokac  <petr.vokac@cern.ch>
+        * properly disable gridftp redirection
+2019-02-11 Andrea Manzi  <andrea.manzi@cern.ch>
+       * update BDII module version
+2019-01-10 Andrea Manzi  <andrea.manzi@cern.ch>
         * add conf for xrootd delegation
         * add conf to disable xrootd checksum
         * remove installation of n2n plugin for atlas
-2018-11-13 Andrea Manzi  <andrea.manzi@cern.ch
+2018-11-13 Andrea Manzi  <andrea.manzi@cern.ch>
         * aligned version to DPM version
-2018-09-4 Andrea Manzi  <andrea.manzi@cern.ch
+2018-09-4 Andrea Manzi  <andrea.manzi@cern.ch>
         * update voms dependency
         * update mysql tunings 
-2018-06-4 Andrea Manzi  <andrea.manzi@cern.ch
+2018-06-4 Andrea Manzi  <andrea.manzi@cern.ch>
         * added DPM 1.10.0 configuration
-2018-03-23 Andrea Manzi  <andrea.manzi@cern.ch
+2018-03-23 Andrea Manzi  <andrea.manzi@cern.ch>
         * fix for LCGDM-2589
-2018-02-21 Andrea Manzi  <andrea.manzi@cern.ch
+2018-02-21 Andrea Manzi  <andrea.manzi@cern.ch>
         * update dependencies
-2018-01-18 Andrea Manzi  <andrea.manzi@cern.ch
+2018-01-18 Andrea Manzi  <andrea.manzi@cern.ch>
         * update dependencies
-2017-11-23 Andrea Manzi  <andrea.manzi@cern.ch
+2017-11-23 Andrea Manzi  <andrea.manzi@cern.ch>
         * update dependencies
-2017-06-26 Andrea Manzi  <andrea.manzi@cern.ch
+2017-06-26 Andrea Manzi  <andrea.manzi@cern.ch>
         * update dependencies
         * fix Readme
-2017-05-29 Andrea Manzi  <andrea.manzi@cern.ch
+2017-05-29 Andrea Manzi  <andrea.manzi@cern.ch>
         * update dependencies
-2017-04-12 Andrea Manzi  <andrea.manzi@cern.ch
+2017-04-12 Andrea Manzi  <andrea.manzi@cern.ch>
         * don't configure gridftp redirection if DOME is enabled
-2017-04-10 Andrea Manzi  <andrea.manzi@cern.ch
+2017-04-10 Andrea Manzi  <andrea.manzi@cern.ch>
         * force stdlib version to be <= 4.15
-2017-02-15 Andrea Manzi  <andrea.manzi@cern.ch
+2017-02-15 Andrea Manzi  <andrea.manzi@cern.ch>
         * added admin_dn and db_manage parameters
         * updated deps
 2016-12-15 Andrea Manzi  <andrea.manzi@cern.ch>
