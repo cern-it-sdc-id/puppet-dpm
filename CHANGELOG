@@ -1,4 +1,7 @@
-2019-02-11 Petr Vokac  <petr.vokac@cern.ch>
+2019-05-09 Andrea Manzi  <andrea.manzi@cern.ch>
+       * add http_macaroon_secret parameter
+       * remove default mapping
+2019-02-11 Petr Vokac  <petr.vokac@.ch>
         * properly disable gridftp redirection
 2019-02-11 Andrea Manzi  <andrea.manzi@cern.ch>
        * update BDII module version

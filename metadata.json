@@ -7,7 +7,7 @@
     },
     {
       "name": "lcgdm/dmlite",
-      "version_requirement": ">=1.12.0 <=1.12.0"
+      "version_requirement": ">=1.13.0 <=1.13.0"
     },
     {
       "name": "lcgdm/lcgdm",
@@ -43,5 +43,5 @@
   "source": "https://github.com/cern-it-sdc-id/puppet-dpm",
   "summary": "Official DPM module",
   "tags": [],
-  "version": "1.12.0"
+  "version": "1.13.0"
 }

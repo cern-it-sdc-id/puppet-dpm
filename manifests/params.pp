@@ -58,14 +58,15 @@ class dpm::params {
   $token_password =  hiera('dpm::params::token_password',undef)
   $xrootd_sharedkey =  hiera('dpm::params::xrootd_sharedkey',undef)
   $xrootd_use_voms = hiera('dpm::params::xrootd_use_voms',true)
-  
+  $http_macaroon_secret =  hiera('dpm::params::http_macaroon_secret',undef) 
+
   #VOs parameters
   $volist =  hiera('dpm::params::volist',[])
   $groupmap =  hiera('dpm::params::groupmap',{
         'vomss://voms.hellasgrid.gr:8443/voms/dteam?/dteam'                 => 'dteam',
       'vomss://voms2.hellasgrid.gr:8443/voms/dteam?/dteam'                 => 'dteam',
       })
-  $localmap =  hiera('dpm::params::localmap',{'nobody'        => 'nogroup'})
+  $localmap =  hiera('dpm::params::localmap',{})
   #Debug Flag
   $debug = hiera('dpm::params::debug',false)
 

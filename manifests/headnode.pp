@@ -47,6 +47,7 @@ class dpm::headnode (
     $token_password =  $dpm::params::token_password,
     $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
     $xrootd_use_voms =  $dpm::params::xrootd_use_voms,
+    $http_macaroon_secret = $dpm::params::http_macaroon_secret,
 
     #VOs parameters
     $volist =  $dpm::params::volist,
@@ -259,7 +260,9 @@ class dpm::headnode (
       Class[dmlite::plugins::mysql::install] ~> Class[dmlite::dav]
       Class[dmlite::install] ~> Class[dmlite::dav::config]
 
-      class{'dmlite::dav':}
+      class{'dmlite::dav':
+        ns_macaroon_secret => $http_macaroon_secret,
+      }
     }
 
     class{'dmlite::gridftp':
