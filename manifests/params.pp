@@ -70,10 +70,10 @@ class dpm::params {
   $debug = hiera('dpm::params::debug',false)
 
   #xrootd checksum
-  $configure_dpm_xrootd_checksum =  hiera('dpm::params:configure_dpm_xrootd_checksum',false)
+  $configure_dpm_xrootd_checksum =  hiera('dpm::params::configure_dpm_xrootd_checksum',false)
    
   #Xrootd TPC x509 delegation
-  $configure_dpm_xrootd_delegation = hiera('dpm::params:configure_dpm_xrootd_delegation',false)
+  $configure_dpm_xrootd_delegation = hiera('dpm::params::configure_dpm_xrootd_delegation',false)
   #Xrootd Federations
   $dpm_xrootd_fedredirs = hiera('dpm::params::dpm_xrootd_fedredirs',{})
 
