@@ -82,6 +82,8 @@ class dpm::params {
   $xrd_report = hiera('dpm::params::xrd_report',undef)
   $xrootd_monitor = hiera('dpm::params::xrootd_monitor',undef)
 
+  $xrootd_tpc_options = hiera('dpm::params:xrootd_tpc_options','xfr 25')
+
   $site_name = hiera('dpm::params::site_name',undef)
 
   $new_installation = hiera('dpm::params::new_installation',true)

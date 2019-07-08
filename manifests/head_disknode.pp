@@ -56,6 +56,7 @@ class dpm::head_disknode (
     #xrootd monitoring
     $xrd_report = $dpm::params::xrd_report,
     $xrootd_monitor = $dpm::params::xrootd_monitor,
+    $xrootd_tpc_options = $dpm::params::xrootd_tpc_options,
 
     $site_name = $dpm::params::site_name,
  
@@ -275,6 +276,7 @@ class dpm::head_disknode (
       dpm_xrootd_fedredirs => $dpm_xrootd_fedredirs,
       xrd_report           => $_xrd_report,
       xrootd_monitor       => $_xrootd_monitor,
+      xrootd_tpc_options   => $xrootd_tpc_options,
       site_name            => $site_name,
       legacy               => $configure_legacy,
       dpm_enable_dome      => $configure_dome,
