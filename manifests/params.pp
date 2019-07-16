@@ -58,28 +58,31 @@ class dpm::params {
   $token_password =  hiera('dpm::params::token_password',undef)
   $xrootd_sharedkey =  hiera('dpm::params::xrootd_sharedkey',undef)
   $xrootd_use_voms = hiera('dpm::params::xrootd_use_voms',true)
-  
+  $http_macaroon_secret =  hiera('dpm::params::http_macaroon_secret',undef) 
+
   #VOs parameters
   $volist =  hiera('dpm::params::volist',[])
   $groupmap =  hiera('dpm::params::groupmap',{
         'vomss://voms.hellasgrid.gr:8443/voms/dteam?/dteam'                 => 'dteam',
       'vomss://voms2.hellasgrid.gr:8443/voms/dteam?/dteam'                 => 'dteam',
       })
-  $localmap =  hiera('dpm::params::localmap',{'nobody'        => 'nogroup'})
+  $localmap =  hiera('dpm::params::localmap',{})
   #Debug Flag
   $debug = hiera('dpm::params::debug',false)
 
   #xrootd checksum
-  $configure_dpm_xrootd_checksum =  hiera('dpm::params::configure_dpm_xrootd_checksum',false)
+  $configure_dpm_xrootd_checksum =  hiera('dpm::params::configure_dpm_xrootd_checksum',true)
    
   #Xrootd TPC x509 delegation
-  $configure_dpm_xrootd_delegation = hiera('dpm::params::configure_dpm_xrootd_delegation',false)
+  $configure_dpm_xrootd_delegation = hiera('dpm::params::configure_dpm_xrootd_delegation',true)
   #Xrootd Federations
   $dpm_xrootd_fedredirs = hiera('dpm::params::dpm_xrootd_fedredirs',{})
 
   #Xrootd Monitoring
   $xrd_report = hiera('dpm::params::xrd_report',undef)
   $xrootd_monitor = hiera('dpm::params::xrootd_monitor',undef)
+
+  $xrootd_tpc_options = hiera('dpm::params:xrootd_tpc_options','xfr 25')
 
   $site_name = hiera('dpm::params::site_name',undef)
 

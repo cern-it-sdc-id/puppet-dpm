@@ -50,6 +50,8 @@ class dpm::disknode (
   $xrd_report = $dpm::params::xrd_report,
   $xrootd_monitor = $dpm::params::xrootd_monitor,
   
+  $xrootd_tpc_options = $dpm::params::xrootd_tpc_options,
+ 
   #host dn
   $host_dn = $dpm::params::host_dn
 
@@ -243,6 +245,7 @@ class dpm::disknode (
       dpm_xrootd_sharedkey => $xrootd_sharedkey,
       xrd_report           => $_xrd_report,
       xrootd_monitor       => $_xrootd_monitor,
+      xrootd_tpc_options   => $xrootd_tpc_options,
       legacy               => $configure_legacy,
       dpm_enable_dome      => $configure_dome,
       dpm_xrdhttp_secret_key => $token_password,
