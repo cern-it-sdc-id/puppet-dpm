@@ -1,0 +1,26 @@
+mod 'CERNOps/bdii', '1.2.2'
+mod 'nanliu/staging','1.0.3'
+mod 'puppet/fetchcrl', '2.1.0'
+mod 'puppetlabs/concat', '4.2.0'
+mod 'puppetlabs/firewall', '1.8.2'
+mod 'puppetlabs/mysql', '3.4.0'
+mod 'puppetlabs/stdlib', '4.25.0'
+mod 'saz/memcached', '2.8.1'
+mod 'dpm',
+  :git => 'https://github.com/cern-it-sdc-id/puppet-dpm',
+  :ref => 'develop'
+mod 'dmlite',
+  :git => 'https://github.com/cern-it-sdc-id/puppet-dmlite',
+  :ref => 'develop'
+mod 'lcgdm',
+  :git => 'https://github.com/cern-it-sdc-id/puppet-lcgdm',
+  :ref => 'develop'
+mod 'xrootd',
+  :git => 'https://github.com/cern-it-sdc-id/puppet-xrootd',
+  :ref => 'develop'
+mod 'gridftp',
+  :git => 'https://github.com/cern-it-sdc-id/puppet-gridftp',
+  :ref => 'develop'
+mod 'voms',
+  :git => 'https://github.com/cern-it-sdc-id/puppet-voms',
+  :ref => 'develop'
