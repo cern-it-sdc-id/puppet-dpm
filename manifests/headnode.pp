@@ -327,15 +327,14 @@ class dpm::headnode (
      include('bdii')
 
      # GIP installation and configuration
-     if $configure_legacy {
+     if $configure_dome {
+       class{'dmlite::bdii':
+         site_name => $site_name,
+       }
+     } else {
        class{'lcgdm::bdii::dpm':
          sitename => $site_name,
          vos      => $volist ,
-       }
-     }
-     else {
-       class{'dmlite::bdii':
-         site_name => $site_name,
        }
      }
 
