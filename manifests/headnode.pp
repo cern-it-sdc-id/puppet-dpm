@@ -342,18 +342,16 @@ class dpm::headnode (
 
    }
 
-   if ($configure_star)
-   {
-     class{'dmlite::accounting':
-       site_name => $site_name,
-       dbuser => $db_user,
-       dbpwd => $db_pass,
-       dbhost => $db_host,
-       nsdbname => $ns_db,
-       dpmdbname => $dpm_db,  
-     }
+   class{'dmlite::accounting':
+     enabled => $configure_star,
+     site_name => $site_name,
+     dbuser => $db_user,
+     dbpwd => $db_pass,
+     dbhost => $db_host,
+     nsdbname => $ns_db,
+     dpmdbname => $dpm_db,  
    }
-
+   
    if($configure_default_pool)
    {
        dpm::util::add_dpm_pool {$pools: 

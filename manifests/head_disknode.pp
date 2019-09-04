@@ -330,17 +330,17 @@ class dpm::head_disknode (
       }
     } 
 
-    if ($configure_star)
-    {
-      class{'dmlite::accounting':
-        site_name => $site_name,
-        dbuser => $db_user,
-        dbpwd => $db_pass,
-        dbhost => $db_host,
-        nsdbname => $ns_db,
-        dpmdbname  => $dpm_db,
-      }
+
+    class{'dmlite::accounting':
+      enabled => $configure_star,
+      site_name => $site_name,
+      dbuser => $db_user,
+      dbpwd => $db_pass,
+      dbhost => $db_host,
+      nsdbname => $ns_db,
+      dpmdbname => $dpm_db,  
     }
+    
     #pools configuration
     #
     if ($configure_default_pool) {
