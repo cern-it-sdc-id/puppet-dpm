@@ -335,7 +335,7 @@ class dpm::head_disknode (
       class{'dmlite::accounting':
         site_name => $site_name,
         dbuser => $db_user,
-        dbpass => $db_pass,
+        dbpwd => $db_pass,
         dbhost => $db_host,
         nsdbname => $ns_db,
         dpmdbname  => $dpm_db,
