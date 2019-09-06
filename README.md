@@ -165,7 +165,7 @@ As well for the WedDav frontend, installed and enabled by default but it can be 
 Other parameters are:
 
 * **configure_bdii** :  enabled/disabled the configuration of Resource BDII ( default = true)
-* **configure_star** :  enabled/disabled the configuration of APEL StAR accounting ( default = true)
+* **configure_star** :  enabled/disabled the configuration of APEL StAR accounting ( default = false)
 * **configure_default_pool** : create the pools specified in the pools paramter ( default = false)
 * **configure_default_filesystem** : create the filesytems  specified in the filesystems parameter ( default = false)
 
