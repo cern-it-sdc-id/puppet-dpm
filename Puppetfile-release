@@ -8,19 +8,19 @@ mod 'puppetlabs/stdlib', '4.25.0'
 mod 'saz/memcached', '2.8.1'
 mod 'dpm',
   :git => 'https://github.com/cern-it-sdc-id/puppet-dpm',
-  :tag => 'v1.13.0'
+  :tag => 'v1.13.2'
 mod 'dmlite',
   :git => 'https://github.com/cern-it-sdc-id/puppet-dmlite',
-  :tag => 'v1.13.0'
+  :tag => 'v1.13.2'
 mod 'lcgdm',
   :git => 'https://github.com/cern-it-sdc-id/puppet-lcgdm',
-  :tag => 'v0.3.10'
+  :tag => 'v0.3.11'
 mod 'xrootd',
   :git => 'https://github.com/cern-it-sdc-id/puppet-xrootd',
-  :tag => 'v0.2.6'
+  :tag => 'v0.2.7'
 mod 'gridftp',
   :git => 'https://github.com/cern-it-sdc-id/puppet-gridftp',
-  :tag => 'v0.2.5'
+  :tag => 'v0.2.6'
 mod 'voms',
   :git => 'https://github.com/cern-it-sdc-id/puppet-voms',
   :tag => 'v0.3.3'

@@ -11,8 +11,8 @@
 #
 
 class{'dpm::headnode':
-   configure_repos		=> true,
-   configure_default_pool	=> true,
+   configure_repos		=> false,
+   configure_default_pool	=> false,
    configure_default_filesystem => true,
    localdomain                  => 'cern.ch',
    db_user			=> 'dpmdbuser',
@@ -32,5 +32,5 @@ class{'dpm::headnode':
    configure_domeadapter        => false,
    dpmmgr_uid                   => 500,
    configure_legacy             => true,
-   db_manage                    => false,
+   host_dn                      => 'your host dn'
 }

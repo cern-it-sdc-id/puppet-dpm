@@ -2,6 +2,7 @@ class dpm::head_disknode (
     $configure_vos =  $dpm::params::configure_vos,
     $configure_gridmap =  $dpm::params::configure_gridmap,
     $configure_bdii = $dpm::params::configure_bdii,
+    $configure_star = $dpm::params::configure_star,
     $configure_default_pool = $dpm::params::configure_default_pool,
     $configure_default_filesystem = $dpm::params::configure_default_filesystem,
     $configure_repos = $dpm::params::configure_repos,
@@ -327,8 +328,19 @@ class dpm::head_disknode (
           site_name => $site_name,
         }
       }
-
     } 
+
+
+    class{'dmlite::accounting':
+      enabled => $configure_star,
+      site_name => $site_name,
+      dbuser => $db_user,
+      dbpwd => $db_pass,
+      dbhost => $db_host,
+      nsdbname => $ns_db,
+      dpmdbname => $dpm_db,  
+    }
+    
     #pools configuration
     #
     if ($configure_default_pool) {
